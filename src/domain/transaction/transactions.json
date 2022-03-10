@@ -1,0 +1,121 @@
+[
+  {
+    "id": "AZUL4F PN N2",
+    "quantity": 2,
+    "unitPrice": 40.85,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "BBAS3F ON NM",
+    "quantity": 1,
+    "unitPrice": 34.34,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "CVCB3F ON NM",
+    "quantity": 1,
+    "unitPrice": 19.12,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "EGIE3F ON NM",
+    "quantity": 1,
+    "unitPrice": 43.07,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "GOLL4F PN N2",
+    "quantity": 2,
+    "unitPrice": 24.17,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "ITUB3F ON EDJ N1",
+    "quantity": 1,
+    "unitPrice": 26.33,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "MRVE3F ON NM",
+    "quantity": 1,
+    "unitPrice": 19.17,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "PETR4F PN N2",
+    "quantity": 4,
+    "unitPrice": 27.1,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "ITUB3F ON EDJ N1",
+    "quantity": 1,
+    "unitPrice": 26.73,
+    "date": "2021/06/01",
+    "type": "SELL"
+  },
+  {
+    "id": "PETZ3F ON NM",
+    "quantity": 13,
+    "unitPrice": 21.76,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "GOLL4F PN N2",
+    "quantity": 4,
+    "unitPrice": 27.34,
+    "date": "2021/04/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "TIET11F UNT N2",
+    "quantity": 2,
+    "unitPrice": 16.83,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "VALE3F ON NM",
+    "quantity": 2,
+    "unitPrice": 89.76,
+    "date": "2021/02/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "INTB3F ON NM",
+    "quantity": 2,
+    "unitPrice": 18.84,
+    "date": "2021/03/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "MOSI3F ON NM",
+    "quantity": 1,
+    "unitPrice": 29.34,
+    "date": "2021/03/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "TOTS3F ON NM",
+    "quantity": 1,
+    "unitPrice": 31.76,
+    "date": "2021/03/01",
+    "type": "PURCHASE"
+  },
+  {
+    "id": "ENEV3F ON NM",
+    "quantity": 8,
+    "unitPrice": 18.46,
+    "date": "2021/06/01",
+    "type": "PURCHASE"
+  }
+]

@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "svelte.svelte-vscode",
+        "auchenberg.vscode-browser-preview",
+        "mikehanson.auto-barrel"
+    ]
+}
