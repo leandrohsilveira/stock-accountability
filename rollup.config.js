@@ -9,18 +9,23 @@ import css from 'rollup-plugin-css-only'
 import json from 'rollup-plugin-json'
 import serve from 'rollup-plugin-serve'
 import copy from 'rollup-plugin-copy'
+import cleaner from 'rollup-plugin-cleaner'
 
 const production = !process.env.ROLLUP_WATCH
 
 export default {
   input: 'src/main.ts',
   output: {
-    sourcemap: true,
+    sourcemap: !production,
     format: 'iife',
     name: 'app',
     file: 'public/build/bundle.js',
   },
   plugins: [
+    cleaner({
+      targets: production ? ['public/build'] : [],
+    }),
+
     svelte({
       preprocess: sveltePreprocess({ sourceMap: !production }),
       compilerOptions: {
@@ -71,7 +76,8 @@ export default {
     commonjs(),
     typescript({
       sourceMap: !production,
-      inlineSources: !production,
+      inlineSources: false,
+      resolveJsonModule: true,
     }),
 
     // In dev mode, call `npm run start` once

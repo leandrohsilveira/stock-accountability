@@ -4,12 +4,12 @@ import { transactionStore } from '../transaction/transaction.store'
 
 export const stockStore = derived(transactionStore, (transactions) =>
   transactions.reduce((acc, transaction) => {
-    const stock = acc.find(({ id }) => id === transaction.id)
+    const stock = acc.find(({ id }) => id === transaction.stockId)
     if (!stock)
       return [
         ...acc,
         {
-          id: transaction.id,
+          id: transaction.stockId,
           quantity: transaction.quantity, //TODO: somar
         },
       ]

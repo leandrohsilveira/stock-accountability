@@ -3,12 +3,14 @@
   import { formatNumber, parseNumber } from './formatNumber'
 
   export let name: string | undefined = undefined
-  export let value: number
+  export let tabindex: number | undefined = undefined
+  export let value: number | undefined
   export let precision = 2
   export let thousandsSeparator = '.'
   export let decimalSeparator = ','
-  let formatted = formatNumber(
-    value,
+
+  $: formatted = formatNumber(
+    value ?? 0,
     precision,
     thousandsSeparator,
     decimalSeparator
@@ -16,17 +18,14 @@
 
   function handleChange({ target }: Event) {
     const input = target as HTMLInputElement
-    const inputValue = input.value
-    value = parseNumber(inputValue ?? formatNumber(0, precision), precision)
-    formatted = formatNumber(
-      value,
+    value = parseNumber(input.value ?? formatNumber(0, precision), precision)
+    input.value = formatNumber(
+      value ?? 0,
       precision,
       thousandsSeparator,
       decimalSeparator
     )
-
-    input.value = formatted
   }
 </script>
 
-<Input {name} on:input={handleChange} value={formatted} />
+<Input {name} {tabindex} on:input={handleChange} value={formatted} />

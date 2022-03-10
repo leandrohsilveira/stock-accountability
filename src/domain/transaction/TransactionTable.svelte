@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Column, Table } from 'sveltestrap'
+  import { Column, Row, Table } from 'sveltestrap'
   import CurrencyText from '../../components/CurrencyText.svelte'
   import type { Transaction } from './Transaction'
 
@@ -9,18 +9,35 @@
   $: filtered = filter(items, stockId)
 
   function filter(collection: Transaction[], search: string | undefined) {
-    if (stockId) return collection.filter(({ id }) => id === search)
+    if (stockId) return collection.filter((item) => item.stockId === search)
     return collection
   }
 </script>
 
-<Table rows={filtered} let:row responsive striped>
-  <Column header="Data">{row.date.toLocaleDateString('pt-br')}</Column>
-  <Column header="ID">{row.id}</Column>
-  <Column header="Operação">{row.type}</Column>
-  <Column header="Qtd">{row.quantity}</Column>
-  <Column header="Valor"><CurrencyText value={row.unitPrice} /></Column>
-  <Column header="Total">
-    <CurrencyText value={row.unitPrice * row.quantity} />
-  </Column>
+<Table responsive striped>
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>ID da Ação</th>
+      <th>Operação</th>
+      <th>Qth</th>
+      <th>Valor</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    {#if filtered.length === 0}
+      <tr><td colspan="6">Nenhuma movimentação encontrada</td></tr>
+    {/if}
+    {#each filtered as row (row.id)}
+      <tr>
+        <td>{row.date.toLocaleDateString('pt-br')}</td>
+        <td>{row.stockId}</td>
+        <td>{row.type}</td>
+        <td>{row.quantity}</td>
+        <td><CurrencyText value={row.unitPrice} /></td>
+        <td><CurrencyText value={row.unitPrice * row.quantity} /></td>
+      </tr>
+    {/each}
+  </tbody>
 </Table>
