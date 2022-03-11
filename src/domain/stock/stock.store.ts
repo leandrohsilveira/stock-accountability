@@ -1,5 +1,5 @@
 import { derived } from 'svelte/store'
-import type { Stock } from './Stock'
+import type { EditStock, Stock } from './Stock'
 import { transactionStore } from '../transaction/transaction.store'
 
 export const stockStore = derived(transactionStore, (transactions) =>
@@ -18,3 +18,18 @@ export const stockStore = derived(transactionStore, (transactions) =>
     return acc
   }, [] as Stock[])
 )
+
+export function editStock(stock: EditStock) {
+  transactionStore.update((transactions) => {
+    if (transactions.some((transaction) => transaction.stockId === stock.newId))
+      throw new Error('Já existe uma ação com esse ID')
+    return transactions.map((transaction) => {
+      if (transaction.stockId === stock.previousId)
+        return {
+          ...transaction,
+          stockId: stock.newId,
+        }
+      return transaction
+    })
+  })
+}

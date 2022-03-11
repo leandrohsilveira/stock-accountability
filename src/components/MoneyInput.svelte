@@ -1,13 +1,17 @@
 <script lang="ts">
-  import { Input } from 'sveltestrap'
+  import { Input, InputGroup, InputGroupText } from 'sveltestrap'
   import { formatNumber, parseNumber } from './formatNumber'
 
   export let name: string | undefined = undefined
   export let tabindex: number | undefined = undefined
+  export let valid: boolean | undefined = undefined
+  export let invalid: boolean | undefined = undefined
+  export let feedback: string | string[] | undefined = undefined
   export let value: number | undefined
   export let precision = 2
   export let thousandsSeparator = '.'
   export let decimalSeparator = ','
+  export let currency = 'R$'
 
   $: formatted = formatNumber(
     value ?? 0,
@@ -28,4 +32,15 @@
   }
 </script>
 
-<Input {name} {tabindex} on:input={handleChange} value={formatted} />
+<InputGroup>
+  <InputGroupText>{currency}</InputGroupText>
+  <Input
+    {name}
+    {tabindex}
+    {valid}
+    {invalid}
+    {feedback}
+    on:input={handleChange}
+    value={formatted}
+  />
+</InputGroup>

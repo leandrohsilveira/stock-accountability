@@ -22,12 +22,9 @@ export function formatNumber(
   thousandsSeparator = '.',
   decimalSeparator = ','
 ) {
-  const [digits, decimals = ''] = String(value).split('.')
+  const [digits, decimals = ''] = value.toFixed(precision).split('.')
   const separatedDigits = formatInteger(Number(digits), thousandsSeparator)
-  return `${separatedDigits}${decimalSeparator}${decimals.padEnd(
-    precision,
-    '0'
-  )}`
+  return `${separatedDigits}${decimalSeparator}${decimals}`
 }
 
 export function parseNumber(value: string, precision = 2) {

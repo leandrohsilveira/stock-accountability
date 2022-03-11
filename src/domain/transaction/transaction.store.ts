@@ -1,28 +1,56 @@
 import { derived, writable } from 'svelte/store'
+import { lastItem } from '../../util/array'
 import { toDate } from '../../util/date'
 import { generateUniqueUUID } from '../../util/uuid'
-import type {
+import { periodRef, periodStore } from '../period/period.store'
+import {
   AddTransaction,
+  calculate,
+  ComputedTransaction,
+  computeAccruedCost,
   Transaction,
-  TransactionType,
 } from './Transaction'
-
-let selectedYear: number = new Date().getFullYear()
-
-export const yearStore = writable(selectedYear)
 
 export const transactionStore = writable<Transaction[]>([])
 
 export const computedTransactionStore = derived(
   transactionStore,
-  (transactions) =>
-    [...transactions].sort(
+  (transactions) => {
+    const sortedTransactions = transactions.sort(
       (a, b) => toDate(a.date).getTime() - toDate(b.date).getTime()
     )
+
+    const computedTransactions: ComputedTransaction[] = []
+    sortedTransactions.forEach((transaction) => {
+      const previousTransactionsOfStock = computedTransactions.filter(
+        ({ stockId }) => stockId === transaction.stockId
+      )
+      const previousTransaction = lastItem(previousTransactionsOfStock)
+      const total = transaction.quantity * transaction.unitPrice
+      const amount = calculate(
+        previousTransaction?.amount ?? 0,
+        transaction.quantity,
+        transaction.type
+      )
+      const accruedCost = computeAccruedCost(transaction, previousTransaction)
+      const averageCost = accruedCost / amount
+      computedTransactions.push({
+        ...transaction,
+        total,
+        amount,
+        accruedCost,
+        averageCost,
+        profit:
+          transaction.type === 'SELL'
+            ? total - averageCost * transaction.quantity
+            : undefined,
+      })
+    })
+    return computedTransactions
+  }
 )
 
-yearStore.subscribe((year) => {
-  selectedYear = year
+periodStore.subscribe(({ year }) => {
   const json = window.localStorage.getItem(`transactions#${year}`)
   if (json)
     transactionStore.set(
@@ -35,7 +63,7 @@ yearStore.subscribe((year) => {
 
 transactionStore.subscribe((transactions) => {
   window.localStorage.setItem(
-    `transactions#${selectedYear}`,
+    `transactions#${periodRef.current.year}`,
     JSON.stringify(transactions)
   )
 })
