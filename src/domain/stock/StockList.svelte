@@ -13,6 +13,7 @@
   } from 'sveltestrap'
   import type { EditStock, Stock } from './Stock'
 
+  export let tabindex: number
   export let selected: string | undefined = undefined
   export let items: Stock[] = []
   let filter = ''
@@ -91,7 +92,7 @@
   <ListGroup>
     <ListGroupItem>
       <Input
-        tabindex={1}
+        {tabindex}
         type="search"
         placeholder="Encontrar ação"
         bind:inner={filterInput}
@@ -110,20 +111,20 @@
           <Form on:submit={handleSaveStock}>
             <InputGroup>
               <Input
-                tabindex={2}
+                {tabindex}
                 type="text"
                 bind:inner={inputEditStock}
                 bind:value={newStockId}
               />
               <Button
-                tabindex={2}
+                {tabindex}
                 type="submit"
                 color="primary"
                 on:click={handleSaveStock}
               >
                 <Icon name="check2" />
               </Button>
-              <Button tabindex={2} on:click={handleCancelEditStock}>
+              <Button {tabindex} on:click={handleCancelEditStock}>
                 <Icon name="x-circle" />
               </Button>
             </InputGroup>
@@ -132,7 +133,7 @@
       {:else}
         <ListGroupItem
           action
-          tabindex={2}
+          {tabindex}
           tag="button"
           active={item.id === selected}
           on:click={() => handleFilterTransactions(item.id)}
@@ -146,7 +147,7 @@
             </div>
             <div class="add">
               <Button
-                tabindex={2}
+                {tabindex}
                 class={item.id === selected ? 'link-light' : 'link-primary'}
                 size="sm"
                 color="link"
@@ -169,9 +170,9 @@
     {/each}
     {#if filter}
       <ListGroupItem
+        {tabindex}
         action
         tag="button"
-        tabindex={3}
         on:click={handleAddStockWithTransaction}
       >
         <Icon name="plus-circle" />

@@ -13,44 +13,75 @@
     ModalHeader,
   } from 'sveltestrap'
   import MoneyInput from '../../components/MoneyInput.svelte'
-  import { toDate } from '../../util/date'
-  import { all, isValid, min, required, messages } from '../../util/validate'
-  import type { AddTransaction, TransactionType } from './Transaction'
+  import { toDate, toISODateString } from '../../util/date'
+  import {
+    all,
+    isValid,
+    min,
+    required,
+    messages,
+    fixedYear,
+  } from '../../util/validate'
+  import type {
+    SubmitTransaction,
+    Transaction,
+    TransactionType,
+  } from './Transaction'
 
-  export let stockId: string
+  export let tabindex: number
+  export let customerId: string
+  export let edit: Transaction | undefined = undefined
+  export let stockId: string | undefined = undefined
+  export let year: number = new Date().getFullYear()
+  export let editStockId = false
 
-  let date: Date | string
-  let quantity: number
-  let unitPrice: number
-  let type: TransactionType
+  let date: Date | string | undefined
+  let quantity: number | undefined
+  let unitPrice: number | undefined
+  let type: TransactionType | undefined
+  let addMore = false
+  let dirty: Partial<Record<keyof SubmitTransaction, boolean>> = {}
+  let stockIdInput: HTMLInputElement
   let dateInput: HTMLInputElement
-  const dirty: Partial<Record<keyof AddTransaction, boolean>> = {}
 
-  const dispatcher = createEventDispatcher<{ addTransaction: AddTransaction }>()
+  const dispatcher = createEventDispatcher<{ submit: SubmitTransaction }>()
 
-  $: dateErrors = messages(all(required())(date))
+  $: stockIdErrors = messages(all(required())(stockId))
+  $: dateErrors = messages(all(required(), fixedYear(year))(date))
   $: quantityErrors = messages(all(required(), min(1))(quantity))
   $: unitPriceErrors = messages(all(required(), min(0.01))(unitPrice))
   $: typeErrors = messages(all(required())(type))
   $: valid = isValid(dateErrors, quantityErrors, unitPriceErrors, typeErrors)
   $: isOpen = stockId !== undefined
 
+  $: if (edit) {
+    stockId = edit.stockId
+  }
+
+  function focus() {
+    if (editStockId) stockIdInput.focus()
+    else dateInput.focus()
+  }
+
   function clear() {
+    edit = undefined
     date = undefined
     quantity = undefined
     unitPrice = undefined
     type = undefined
+    dirty = {}
   }
 
   function close() {
     stockId = undefined
+    addMore = false
   }
 
-  function save(e: Event) {
-    e.preventDefault()
+  function save() {
     if (valid) {
-      dispatcher('addTransaction', {
+      dispatcher('submit', {
         date: toDate(date),
+        customerId,
         quantity,
         unitPrice,
         stockId,
@@ -62,18 +93,23 @@
   }
 
   function handleSubmit(e: Event) {
-    if (save(e)) close()
-  }
-
-  function handleSaveAndNew(e: Event) {
-    if (save(e)) {
-      clear()
-      dateInput.focus()
+    e.preventDefault()
+    if (save()) {
+      if (addMore) {
+        clear()
+        focus()
+      } else {
+        close()
+      }
     }
   }
 
   function handleOpen() {
-    dateInput.focus()
+    date = toISODateString(edit?.date)
+    quantity = edit?.quantity
+    unitPrice = edit?.unitPrice
+    type = edit?.type
+    focus()
   }
 
   function handleKeyDown(e: KeyboardEvent) {
@@ -88,31 +124,41 @@
       <Form on:submit={handleSubmit}>
         <FormGroup>
           <Label for="stockId">ID da Ação</Label>
-          <Input name="stockId" type="text" disabled value={stockId} />
+          <Input
+            {tabindex}
+            name="stockId"
+            type="text"
+            feedback={stockIdErrors}
+            invalid={dirty.stockId && stockIdErrors.length > 0}
+            disabled={!editStockId}
+            bind:inner={stockIdInput}
+            bind:value={stockId}
+            on:input={() => (dirty = { ...dirty, stockId: true })}
+          />
         </FormGroup>
         <FormGroup>
           <Label for="date">Data</Label>
           <Input
-            tabindex={1}
+            {tabindex}
             name="date"
             type="date"
             feedback={dateErrors}
-            invalid={dateErrors.length > 0}
+            invalid={dirty.date && dateErrors.length > 0}
             bind:inner={dateInput}
             bind:value={date}
-            on:input={() => (dirty.date = true)}
+            on:input={() => (dirty = { ...dirty, date: true })}
           />
         </FormGroup>
         <FormGroup>
           <Label for="type">Tipo da operação</Label>
           <Input
-            tabindex={1}
+            {tabindex}
             name="type"
             type="select"
             feedback={typeErrors}
-            invalid={typeErrors.length > 0}
+            invalid={dirty.type && typeErrors.length > 0}
             bind:value={type}
-            on:input={() => (dirty.type = true)}
+            on:input={() => (dirty = { ...dirty, type: true })}
           >
             <option value="PURCHASE">Compra</option>
             <option value="SELL">Venda</option>
@@ -121,24 +167,33 @@
         <FormGroup>
           <Label for="quantity">Quantidade</Label>
           <Input
-            tabindex={1}
+            {tabindex}
             name="quantity"
             type="number"
             feedback={quantityErrors}
-            invalid={quantityErrors.length > 0}
+            invalid={dirty.quantity && quantityErrors.length > 0}
             bind:value={quantity}
-            on:input={() => (dirty.quantity = true)}
+            on:input={() => (dirty = { ...dirty, quantity: true })}
           />
         </FormGroup>
         <FormGroup>
           <Label for="unitPrice">Preço unitário</Label>
           <MoneyInput
-            tabindex={1}
-            feedback={unitPriceErrors}
-            invalid={unitPriceErrors.length > 0}
+            {tabindex}
             name="unitPrice"
+            feedback={unitPriceErrors}
+            invalid={dirty.unitPrice && unitPriceErrors.length > 0}
             bind:value={unitPrice}
-            on:input={() => (dirty.unitPrice = true)}
+            on:input={() => (dirty = { ...dirty, unitPrice: true })}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Input
+            {tabindex}
+            type="checkbox"
+            name="addNew"
+            label="Continuar adicionando"
+            bind:checked={addMore}
           />
         </FormGroup>
         <button type="submit" hidden />
@@ -146,22 +201,14 @@
     </div>
   </ModalBody>
   <ModalFooter>
+    <Button {tabindex} outline on:click={close}>Cancelar</Button>
     <Button
-      tabindex={1}
+      {tabindex}
       color="primary"
       disabled={!valid}
       on:click={handleSubmit}
     >
       Salvar
-    </Button>
-    <Button
-      tabindex={1}
-      color="primary"
-      disabled={!valid}
-      outline
-      on:click={handleSaveAndNew}
-    >
-      Salvar e Novo
     </Button>
   </ModalFooter>
 </Modal>

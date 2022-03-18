@@ -1,69 +1,56 @@
 <script lang="ts">
-  import { Col, Container, Row } from 'sveltestrap'
-  import {
-    addErrorMessage,
-    addSuccessMessage,
-    messageStore,
-  } from './domain/message/message.store'
+  import Layout from './components/Layout.svelte'
+  import { messageStore } from './domain/message/message.store'
   import Messages from './domain/message/Messages.svelte'
-  import type { EditStock } from './domain/stock/Stock'
-  import { editStock, stockStore } from './domain/stock/stock.store'
-  import StockList from './domain/stock/StockList.svelte'
-  import type { AddTransaction } from './domain/transaction/Transaction'
-  import {
-    addTransaction,
-    computedTransactionStore,
-  } from './domain/transaction/transaction.store'
-  import TransactionForm from './domain/transaction/TransactionForm.svelte'
-  import TransactionTable from './domain/transaction/TransactionTable.svelte'
+  import Customers from './pages/Customers.svelte'
+  import CustomerTransactions from './pages/CustomerTransactions.svelte'
+  import Maintenance from './pages/Maintenance.svelte'
+  import appNavigator from './routes'
+  import BrowserRouter from './util/router/BrowserRouter.svelte'
+  import RequireMatch from './util/router/RequireMatch.svelte'
+  import Route from './util/router/Route.svelte'
 
-  let addTransactionStockId: string | undefined = undefined
-  let stockId: string | undefined = undefined
+  let year = new Date().getFullYear() - 1
 
-  function handleAddTransaction(event: CustomEvent<string>) {
-    addTransactionStockId = event.detail
-    stockId = event.detail
+  function handleViewCustomer(e: CustomEvent<string>) {
+    appNavigator.handlers.customerTransactions({
+      customerId: e.detail,
+      year,
+    })
   }
 
-  function handleAddStockWithTransaction(event: CustomEvent<string>) {
-    addTransactionStockId = event.detail
+  function handleChangeYear(e: CustomEvent<number>, customerId: string) {
+    year = e.detail
+    appNavigator.handlers.customerTransactions({
+      customerId,
+      year,
+    })
   }
 
-  function handleSubmitTransaction(event: CustomEvent<AddTransaction>) {
-    addTransaction(event.detail)
-    addSuccessMessage('Movimentação adicionada com sucesso')
-    stockId = event.detail.stockId
-  }
-
-  function handleEditStock(event: CustomEvent<EditStock>) {
-    try {
-      editStock(event.detail)
-      addSuccessMessage('Ação renomeada com sucesso')
-    } catch (error) {
-      addErrorMessage(error.message)
-    }
+  function handleNoMatch() {
+    appNavigator.handlers.customers()
   }
 </script>
 
-<Container fluid>
-  <Row>
-    <Col xs="12" md="6" lg="3">
-      <StockList
-        items={$stockStore}
-        bind:selected={stockId}
-        on:addTransaction={handleAddTransaction}
-        on:addStockWithTransaction={handleAddStockWithTransaction}
-        on:editStock={handleEditStock}
-      />
-    </Col>
-    <Col>
-      <h2>Movimentações</h2>
-      <TransactionTable items={$computedTransactionStore} {stockId} />
-    </Col>
-  </Row>
-</Container>
-<TransactionForm
-  bind:stockId={addTransactionStockId}
-  on:addTransaction={handleSubmitTransaction}
-/>
+<BrowserRouter>
+  <Layout>
+    <RequireMatch on:noMatch={handleNoMatch}>
+      <Route path={appNavigator.routes.customers} exact>
+        <Customers on:view={handleViewCustomer} />
+      </Route>
+      <Route path={appNavigator.routes.customerTransactions} let:params>
+        <CustomerTransactions
+          customerId={params.customerId}
+          year={Number(params.year)}
+          on:back={() => appNavigator.handlers.customers()}
+          on:changeYear={(e) => handleChangeYear(e, params.customerId)}
+        />
+      </Route>
+      <Route path={appNavigator.routes.maintenance} exact>
+        <Maintenance />
+      </Route>
+    </RequireMatch>
+  </Layout>
+</BrowserRouter>
+
 <Messages messages={$messageStore} />

@@ -1,3 +1,5 @@
+import { toDate } from './date'
+
 type Input = string | number | Date | undefined
 
 type Validator = (value: Input) => boolean
@@ -55,6 +57,16 @@ export function all(...validators: ValidationFn[]): ValidationFn {
       (acc, validator) => [...acc, ...validator(value)],
       [] as Error[]
     )
+}
+
+export function fixedYear(
+  year: number,
+  message = `O ano preenchido deve ser igual a ${year}`
+): ValidationFn {
+  return validate(
+    { error: { key: 'fixedYear', message } },
+    optional((value) => toDate(value).getFullYear() === year)
+  )
 }
 
 export function isValid<T>(...errors: T[][]) {

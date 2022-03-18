@@ -3,6 +3,7 @@ export type TransactionType = 'PURCHASE' | 'SELL'
 export interface Transaction {
   id: string
   stockId: string
+  customerId: string
   quantity: number
   unitPrice: number
   date: Date
@@ -17,7 +18,17 @@ export interface ComputedTransaction extends Transaction {
   profit?: number
 }
 
-export type AddTransaction = Omit<Transaction, 'id'>
+export type SubmitTransaction = Omit<Transaction, 'id'>
+
+export type Summary = {
+  year: number
+  stockId: string
+  customerId: string
+  amount: number
+  averageCost: number
+  accruedCost: number
+  totalProfit: number
+}
 
 export function calculate(acc: number, value: number, type: TransactionType) {
   switch (type) {
@@ -31,17 +42,26 @@ export function calculate(acc: number, value: number, type: TransactionType) {
 
 export function computeAccruedCost(
   transaction: Transaction,
-  previousTransaction?: ComputedTransaction
+  previous?: ComputedTransaction | Summary
 ) {
-  const previousSum = previousTransaction?.accruedCost ?? 0
+  const prevAccruedCost = previous?.accruedCost ?? 0
   switch (transaction.type) {
     case 'PURCHASE':
-      return previousSum + transaction.quantity * transaction.unitPrice
+      return prevAccruedCost + transaction.quantity * transaction.unitPrice
     case 'SELL':
-      return (
-        previousSum - transaction.quantity * previousTransaction.averageCost
-      )
+      return prevAccruedCost - transaction.quantity * previous.averageCost
     default:
       throw new Error(`Unrecognized transaction type "${transaction.type}"`)
   }
+}
+
+export function isComputedTransaction(
+  transaction: Transaction
+): transaction is ComputedTransaction {
+  return (
+    'total' in transaction &&
+    'amount' in transaction &&
+    'averageCost' in transaction &&
+    'accruedCost' in transaction
+  )
 }
