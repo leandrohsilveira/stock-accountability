@@ -1,15 +1,12 @@
 <script lang="ts">
   import { Modal, ModalBody, ModalHeader } from 'sveltestrap'
-  import { restoreCustomers } from '../customer/customer.store'
+  import { availableYearsStorage } from '../availableYear/availableYear.store'
+  import { customerStorage } from '../customer/customer.store'
   import CustomerTable from '../customer/CustomerTable.svelte'
+  import { summaryStorage } from '../summary/summary.store'
   import SummaryTable from '../transaction/SummaryTable.svelte'
-  import {
-    restoreAvailableYears,
-    restoreSummaries,
-    restoreTransactions,
-  } from '../transaction/transaction.store'
+  import { transactionStorage } from '../transaction/transaction.store'
   import TransactionTable from '../transaction/TransactionTable.svelte'
-
   import type { StorageKey } from './Maintenance'
   import YearTable from './YearTable.svelte'
   export let item: StorageKey | undefined
@@ -17,15 +14,17 @@
   $: isOpen = item !== undefined
   $: transactions =
     item?.entity === 'transactions'
-      ? restoreTransactions(item.customerId, item.year)
+      ? transactionStorage.restore([item.customerId, item.year])
       : []
   $: summaries =
     item?.entity === 'summaries'
-      ? restoreSummaries(item.customerId, item.year)
+      ? summaryStorage.restore([item.customerId, item.year])
       : []
   $: availableYears =
-    item?.entity === 'years' ? restoreAvailableYears(item.customerId) : []
-  $: customers = item?.entity === 'customers' ? restoreCustomers() : []
+    item?.entity === 'years'
+      ? availableYearsStorage.restore([item.customerId])
+      : []
+  $: customers = item?.entity === 'customers' ? customerStorage.restore([]) : []
 
   function close() {
     item = undefined

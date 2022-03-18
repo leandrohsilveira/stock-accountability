@@ -1,3 +1,8 @@
+import { lastItem } from '../../util/array'
+import { toDate } from '../../util/date'
+import { findBy } from '../../util/storage'
+import type { Summary } from '../summary/Summary'
+
 export type TransactionType = 'PURCHASE' | 'SELL'
 
 export interface Transaction {
@@ -19,16 +24,6 @@ export interface ComputedTransaction extends Transaction {
 }
 
 export type SubmitTransaction = Omit<Transaction, 'id'>
-
-export type Summary = {
-  year: number
-  stockId: string
-  customerId: string
-  amount: number
-  averageCost: number
-  accruedCost: number
-  totalProfit: number
-}
 
 export function calculate(acc: number, value: number, type: TransactionType) {
   switch (type) {
@@ -64,4 +59,44 @@ export function isComputedTransaction(
     'averageCost' in transaction &&
     'accruedCost' in transaction
   )
+}
+
+export function computeTransactions(
+  transactions: Transaction[],
+  previousSummaries: Summary[]
+) {
+  const sortedTransactions = transactions.sort(
+    (a, b) => toDate(a.date).getTime() - toDate(b.date).getTime()
+  )
+
+  const computedTransactions: ComputedTransaction[] = []
+  sortedTransactions.forEach((transaction) => {
+    const previousTransactionsOfStock = computedTransactions.filter(
+      ({ stockId }) => stockId === transaction.stockId
+    )
+    const previousTransaction =
+      lastItem(previousTransactionsOfStock) ??
+      findBy(previousSummaries, 'stockId', transaction.stockId)
+    const total = transaction.quantity * transaction.unitPrice
+    const amount = calculate(
+      previousTransaction?.amount ?? 0,
+      transaction.quantity,
+      transaction.type
+    )
+    const accruedCost = computeAccruedCost(transaction, previousTransaction)
+    const averageCost = amount > 0 ? accruedCost / amount : 0
+    computedTransactions.push({
+      ...transaction,
+      total,
+      amount,
+      accruedCost,
+      averageCost,
+      profit:
+        transaction.type === 'SELL'
+          ? total -
+            (previousTransaction?.averageCost ?? 0) * transaction.quantity
+          : undefined,
+    })
+  })
+  return computedTransactions
 }

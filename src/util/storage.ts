@@ -1,4 +1,10 @@
+import { format } from './string'
 import { generateUniqueUUID } from './uuid'
+
+type PersistentStorageConfig<T> = {
+  beforePersist: (input: T[]) => T[]
+  restoreParser: (input: T) => T
+}
 
 type Entity = {
   id?: string
@@ -73,5 +79,43 @@ function validate(validator?: () => string) {
   if (validator) {
     const result = validator()
     if (result) throw new Error(result)
+  }
+}
+
+export class PersistentStorage<T, K extends Array<unknown> = []> {
+  constructor(
+    private keyTemplate: string,
+    private config?: Partial<PersistentStorageConfig<T>>
+  ) {}
+
+  restore<R = T>(key: K): R[] {
+    const raw: T[] = JSON.parse(
+      window.localStorage.getItem(this.getKey(key)) ?? '[]'
+    )
+    return raw.map(this.restoreParser.bind(this))
+  }
+
+  persist(data: T[], key: K): T[] {
+    window.localStorage.setItem(
+      this.getKey(key),
+      JSON.stringify(this.beforePersist(data))
+    )
+    return data
+  }
+
+  private getKey(key: K) {
+    return format(this.keyTemplate, ...key)
+  }
+
+  private beforePersist(input: T[]) {
+    return typeof this.config?.beforePersist === 'function'
+      ? this.config.beforePersist(input)
+      : input
+  }
+
+  private restoreParser(input: T) {
+    return typeof this.config?.restoreParser === 'function'
+      ? this.config.restoreParser(input)
+      : input
   }
 }

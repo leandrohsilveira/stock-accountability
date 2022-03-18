@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatNumber } from './formatNumber'
+  import { formatNumber } from '../util/number'
 
   export let value: number | undefined
   export let currency = 'R$'

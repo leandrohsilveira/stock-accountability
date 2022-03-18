@@ -3,10 +3,7 @@
   import { Col, Row } from 'sveltestrap'
   import Page from '../components/Page.svelte'
   import YearInput from '../components/YearInput.svelte'
-  import {
-    findCustomerById,
-    loadCustomers,
-  } from '../domain/customer/customer.store'
+  import { findCustomerById } from '../domain/customer/customer.store'
   import {
     addErrorMessage,
     addSuccessMessage,
@@ -45,7 +42,6 @@
   $: customer = findCustomerById(customerId)
 
   $: {
-    loadCustomers()
     loadTransactions(customerId, year)
   }
 
@@ -97,7 +93,7 @@
 </script>
 
 <Page
-  title={`Movimentações de ${$customer.name}`}
+  title={`Movimentações de ${customer.name}`}
   fluid
   back
   on:back={handleBackClick}

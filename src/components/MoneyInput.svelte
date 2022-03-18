@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Input, InputGroup, InputGroupText } from 'sveltestrap'
-  import { formatNumber, parseNumber } from './formatNumber'
+  import { formatNumber, parseNumber } from '../util/number'
 
   export let name: string | undefined = undefined
   export let tabindex: number | undefined = undefined
