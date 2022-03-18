@@ -39,18 +39,35 @@
   }
 </script>
 
-<span class="spacing">({symbol}{value.quantity})</span>
-<span class="spacing right">{previousAmount}</span>
-<TextColor {color}><Icon name="arrow-right-short" /></TextColor>
-<span class="spacing">{value.amount}</span>
+<div class="host">
+  <span class="number change">({symbol}{value.quantity})</span>
+  <span class="number right">{previousAmount}</span>
+  <div class="arrow">
+    <TextColor {color}><Icon name="arrow-right-short" /></TextColor>
+  </div>
+  <span class="number">{value.amount}</span>
+</div>
 
 <style>
-  .spacing {
-    display: inline-block;
-    width: 30px;
+  .host {
+    display: flex;
+    justify-content: center;
   }
 
-  .spacing.right {
+  .number {
+    flex: 3;
+    white-space: nowrap;
+  }
+
+  .number.change {
+    flex: 1;
+  }
+
+  .number.right {
     text-align: right;
+  }
+
+  .arrow {
+    width: 16px;
   }
 </style>

@@ -23,12 +23,12 @@
 <Table responsive striped>
   <thead>
     <tr>
+      <th>#</th>
       {#if showId}
         <th>ID</th>
       {/if}
       <th>Nome</th>
       <th>CPF/CNPJ</th>
-      <th>#</th>
     </tr>
   </thead>
   <tbody>
@@ -37,11 +37,6 @@
     {/if}
     {#each items as item (item.id)}
       <tr>
-        {#if showId}
-          <th>{item.id}</th>
-        {/if}
-        <td>{item.name}</td>
-        <td>{item.document ?? ''}</td>
         <td style="width: 100px">
           <Button
             size="sm"
@@ -60,6 +55,11 @@
             <Icon name="pencil" />
           </Button>
         </td>
+        {#if showId}
+          <th>{item.id}</th>
+        {/if}
+        <td>{item.name}</td>
+        <td>{item.document ?? ''}</td>
       </tr>
     {/each}
   </tbody>

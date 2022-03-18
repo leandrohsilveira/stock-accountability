@@ -22,8 +22,8 @@
   }
 </script>
 
-<Navbar color="primary" dark {expand}>
-  <a class="navbar-brand" href="/" use:link>Stocks Acc</a>
+<Navbar container color="primary" dark {expand}>
+  <a class="navbar-brand" href="/" use:link>StockAcc</a>
   <NavbarToggler on:click={toggleNavbar} />
   <Collapse {isOpen} {expand} on:update={handleNavbarUpdate} navbar>
     <Nav navbar>

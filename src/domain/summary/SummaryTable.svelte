@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Table } from 'sveltestrap'
   import CurrencyText from '../../components/CurrencyText.svelte'
-  import type { Summary } from './Transaction'
+  import type { Summary } from './Summary'
 
   export let noRecordMessage = 'Nenhum registro encontrado'
   export let showProfit = false

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import { Button, Icon } from 'sveltestrap'
+  import { Button, Card, CardBody, Icon } from 'sveltestrap'
   import Page from '../components/Page.svelte'
   import type { SubmitCustomer, Customer } from '../domain/customer/Customer'
   import {
@@ -53,14 +53,18 @@
 </script>
 
 <Page title="Clientes">
-  <Button class="mb-2" color="primary" tabindex={1} on:click={handleAddClick}>
+  <Button color="primary" tabindex={1} on:click={handleAddClick}>
     <Icon name="plus-circle" />
     Adicionar cliente
   </Button>
-  <CustomerTable
-    items={$customerStore}
-    on:view={handleViewClick}
-    on:edit={handleEditClick}
-  />
+  <Card class="mt-3">
+    <CardBody>
+      <CustomerTable
+        items={$customerStore}
+        on:view={handleViewClick}
+        on:edit={handleEditClick}
+      />
+    </CardBody>
+  </Card>
 </Page>
 <CustomerForm bind:edit bind:open={adding} on:submit={handleSubmit} />

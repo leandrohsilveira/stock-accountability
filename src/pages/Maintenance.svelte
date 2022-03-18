@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Card, CardBody } from 'sveltestrap'
+
   import Page from '../components/Page.svelte'
   import { loadCustomers } from '../domain/customer/customer.store'
   import type { StorageKey } from '../domain/maintenance/Maintenance'
@@ -13,7 +15,11 @@
   }
 </script>
 
-<Page title="Visão de manutenção" fluid>
-  <StorageKeyTable items={$storageKeyStore} bind:view={viewKey} />
+<Page title="Visão de manutenção">
+  <Card>
+    <CardBody>
+      <StorageKeyTable items={$storageKeyStore} bind:view={viewKey} />
+    </CardBody>
+  </Card>
 </Page>
 <StorageKeyDetail bind:item={viewKey} />

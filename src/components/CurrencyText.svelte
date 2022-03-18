@@ -7,4 +7,10 @@
   $: formatted = value !== undefined ? `${currency} ${formatNumber(value)}` : ''
 </script>
 
-{formatted}
+<div class="currency">{formatted}</div>
+
+<style>
+  .currency {
+    white-space: nowrap;
+  }
+</style>

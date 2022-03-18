@@ -12,14 +12,14 @@
   }
 </script>
 
-<Table responsive>
+<Table borderless responsive>
   <thead>
     <tr>
+      <th style="min-width: 30px; max-width: 30px;">#</th>
       <th style="min-width: 600px;">Chave</th>
       <th style="min-width: 100px; max-width: 100px;">Entidade</th>
       <th style="min-width: 350px; max-width: 350px;">ID do cliente</th>
       <th style="min-width: 50px; max-width: 50px;">Ano</th>
-      <th style="min-width: 30px; max-width: 30px;">#</th>
     </tr>
   </thead>
   <tbody>
@@ -37,6 +37,15 @@
         {/if}
         {#each item.entities as entity (entity.key)}
           <tr>
+            <td>
+              <Button
+                size="sm"
+                color="link"
+                on:click={() => handleViewClick(entity)}
+              >
+                <Icon name="eye-fill" />
+              </Button>
+            </td>
             <td
               class="customer"
               class:entity={typeof entity.year === 'number'}
@@ -47,15 +56,6 @@
             <td>{entity.entity}</td>
             <td>{entity.customerId ?? ''}</td>
             <td>{entity.year ?? ''}</td>
-            <td>
-              <Button
-                size="sm"
-                color="link"
-                on:click={() => handleViewClick(entity)}
-              >
-                <Icon name="eye-fill" />
-              </Button>
-            </td>
           </tr>
         {/each}
       {/each}

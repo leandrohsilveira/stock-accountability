@@ -4,7 +4,7 @@
   import { customerStorage } from '../customer/customer.store'
   import CustomerTable from '../customer/CustomerTable.svelte'
   import { summaryStorage } from '../summary/summary.store'
-  import SummaryTable from '../transaction/SummaryTable.svelte'
+  import SummaryTable from '../summary/SummaryTable.svelte'
   import { transactionStorage } from '../transaction/transaction.store'
   import TransactionTable from '../transaction/TransactionTable.svelte'
   import type { StorageKey } from './Maintenance'

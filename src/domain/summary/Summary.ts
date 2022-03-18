@@ -1,3 +1,4 @@
+import { findBy } from '../../util/storage'
 import type { ComputedTransaction } from '../transaction/Transaction'
 
 export interface Summary {
@@ -7,6 +8,17 @@ export interface Summary {
   amount: number
   averageCost: number
   accruedCost: number
+  totalProfit: number
+}
+
+export interface MergedSummary {
+  stockId: string
+  previousAmount: number
+  currentAmount: number
+  previousAccruedCost: number
+  currentAccruedCost: number
+  previousAverageCost: number
+  currentAverageCost: number
   totalProfit: number
 }
 
@@ -43,5 +55,36 @@ export function updateSummaries(
       totalProfit: 0,
       year,
     }))
+  )
+}
+
+export function toMergedSummary(
+  previous: Summary | undefined,
+  current: Summary | undefined
+): MergedSummary {
+  return {
+    stockId: current?.stockId ?? previous?.stockId ?? '',
+    totalProfit: current?.totalProfit ?? 0,
+    currentAmount: current?.amount ?? 0,
+    currentAccruedCost: current?.accruedCost ?? 0,
+    currentAverageCost: current?.averageCost ?? 0,
+    previousAmount: previous?.amount ?? 0,
+    previousAccruedCost: previous?.accruedCost ?? 0,
+    previousAverageCost: previous?.averageCost ?? 0,
+  }
+}
+
+export function mergeSummaries(
+  previousSummaries: Summary[],
+  currentSummaries: Summary[]
+) {
+  const stocks = new Set<string>()
+  previousSummaries.forEach((item) => stocks.add(item.stockId))
+  currentSummaries.forEach((item) => stocks.add(item.stockId))
+  return [...stocks.values()].map((stock) =>
+    toMergedSummary(
+      findBy(previousSummaries, 'stockId', stock),
+      findBy(currentSummaries, 'stockId', stock)
+    )
   )
 }

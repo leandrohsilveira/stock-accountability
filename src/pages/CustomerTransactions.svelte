@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import { Col, Row } from 'sveltestrap'
+  import { Card, CardBody, CardHeader, Col, Row } from 'sveltestrap'
+  import NumberChange from '../components/NumberChange.svelte'
   import Page from '../components/Page.svelte'
   import YearInput from '../components/YearInput.svelte'
   import { findCustomerById } from '../domain/customer/customer.store'
@@ -11,7 +12,8 @@
   import type { EditStock } from '../domain/stock/Stock'
   import { editStock, stockStore } from '../domain/stock/stock.store'
   import StockList from '../domain/stock/StockList.svelte'
-  import SummaryTable from '../domain/transaction/SummaryTable.svelte'
+  import SummaryChangeTable from '../domain/summary/SummaryChangeTable.svelte'
+  import SummaryTable from '../domain/summary/SummaryTable.svelte'
   import type {
     SubmitTransaction,
     Transaction,
@@ -19,6 +21,7 @@
   import {
     addTransaction,
     computedTransactionStore,
+    deleteTransaction,
     loadTransactions,
     previousSummaryStore,
     summaryStore,
@@ -74,6 +77,15 @@
     }
   }
 
+  function handleDeleteTransaction(event: CustomEvent<Transaction>) {
+    try {
+      deleteTransaction(event.detail.id)
+      addSuccessMessage('Movimentação excluída com sucesso')
+    } catch (e) {
+      addErrorMessage(e.message)
+    }
+  }
+
   function handleEditStock(event: CustomEvent<EditStock>) {
     try {
       editStock(event.detail)
@@ -94,7 +106,6 @@
 
 <Page
   title={`Movimentações de ${customer.name}`}
-  fluid
   back
   on:back={handleBackClick}
 >
@@ -104,7 +115,7 @@
     </Col>
   </Row>
   <Row>
-    <Col xs="12" md="6" lg="3">
+    <Col class="mt-3" md="12" lg="3">
       <StockList
         tabindex={2}
         items={$stockStore}
@@ -114,26 +125,36 @@
         on:editStock={handleEditStock}
       />
     </Col>
-    <Col>
+    <Col class="mt-3" md="12" lg="9">
       <Row>
-        <Col xs="12" md="6">
-          <h4>Resumo do ano {year - 1}</h4>
-          <SummaryTable {stockId} items={$previousSummaryStore} />
-        </Col>
-        <Col xs="12" md="6">
-          <h4>Resumo do ano {year}</h4>
-          <SummaryTable {stockId} items={$summaryStore} showProfit />
+        <Col>
+          <Card>
+            <CardBody>
+              <strong><NumberChange start={year - 1} end={year} /></strong>
+              <SummaryChangeTable
+                previousSummaries={$previousSummaryStore}
+                currentSummaries={$summaryStore}
+              />
+            </CardBody>
+          </Card>
         </Col>
       </Row>
-      <Row>
-        <h4>Movimentações</h4>
-        <TransactionTable
-          tabindex={4}
-          items={$computedTransactionStore}
-          {stockId}
-          on:edit={handleEditTransaction}
-          computed
-        />
+      <Row class="mt-3">
+        <Col>
+          <Card>
+            <CardBody>
+              <h4>Movimentações</h4>
+              <TransactionTable
+                tabindex={4}
+                items={$computedTransactionStore}
+                {stockId}
+                computed
+                on:edit={handleEditTransaction}
+                on:delete={handleDeleteTransaction}
+              />
+            </CardBody>
+          </Card>
+        </Col>
       </Row>
     </Col>
   </Row>

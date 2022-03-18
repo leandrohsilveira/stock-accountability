@@ -57,6 +57,16 @@ export function update<T extends Entity, D extends Omit<T, 'id'>>(
   throw new Error(`Registro com id "${id}" não encontrado`)
 }
 
+export function remove<T extends Entity>(id: string, collection: T[]) {
+  const index = collection.findIndex((e) => e.id === id)
+  if (index >= 0) {
+    const result = [...collection]
+    result.splice(index)
+    return result
+  }
+  throw new Error(`Registro com id "${id}" não encontrado`)
+}
+
 export function unique<T extends Entity>(
   data: T,
   collection: T[],

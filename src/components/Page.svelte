@@ -15,7 +15,7 @@
 </script>
 
 <svelte:head>
-  <title>{title}</title>
+  <title>StockAcc - {title}</title>
 </svelte:head>
 
 <Container {fluid}>

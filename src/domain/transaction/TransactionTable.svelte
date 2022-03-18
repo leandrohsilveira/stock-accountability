@@ -9,6 +9,10 @@
     Icon,
     Input,
     Label,
+    Modal,
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
     Row,
     Table,
   } from 'sveltestrap'
@@ -26,10 +30,12 @@
   export let computed = false
   export let showId = false
 
+  let confirmDelete: Transaction
   let month: number | null = null
   let type: string | null = null
 
-  const dispatch = createEventDispatcher<{ edit: Transaction }>()
+  const dispatch =
+    createEventDispatcher<{ edit: Transaction; delete: Transaction }>()
 
   $: filtered = filter(items, stockId, month, type)
   $: cols = computed ? (showId ? 11 : 10) : showId ? 7 : 6
@@ -52,6 +58,19 @@
 
   function handleEditTransaction(transaction: Transaction) {
     dispatch('edit', transaction)
+  }
+
+  function handleDeleteTransaction(transaction: Transaction) {
+    confirmDelete = transaction
+  }
+
+  function handleConfirmDeleteTransaction() {
+    dispatch('delete', confirmDelete)
+    closeDeleteConfirmation()
+  }
+
+  function closeDeleteConfirmation() {
+    confirmDelete = undefined
   }
 </script>
 
@@ -90,14 +109,15 @@
   </Row>
 </Form>
 
-<Table responsive striped>
+<Table borderless responsive striped>
   <thead>
     <tr>
+      <th>#</th>
       {#if showId}
         <th>ID</th>
       {/if}
       <th>Data</th>
-      <th>ID da Ação</th>
+      <th>Ação</th>
       <th>Operação</th>
       <th>Preço</th>
       <th>Quantidade</th>
@@ -107,7 +127,6 @@
         <th>Custo médio</th>
         <th>Lucro</th>
       {/if}
-      <th>#</th>
     </tr>
   </thead>
   <tbody>
@@ -116,6 +135,24 @@
     {/if}
     {#each filtered as transaction (transaction.id)}
       <tr>
+        <td width="100">
+          <Button
+            size="sm"
+            color="link"
+            {tabindex}
+            on:click={() => handleEditTransaction(transaction)}
+          >
+            <Icon name="pencil" />
+          </Button>
+          <Button
+            size="sm"
+            color="link"
+            class="text-danger"
+            on:click={() => handleDeleteTransaction(transaction)}
+          >
+            <Icon name="trash-fill" />
+          </Button>
+        </td>
         {#if showId}
           <th>{transaction.id}</th>
         {/if}
@@ -132,17 +169,21 @@
         {:else}
           <td colspan={computed ? 5 : 1}>{transaction.quantity}</td>
         {/if}
-        <td width="50">
-          <Button
-            size="sm"
-            color="link"
-            {tabindex}
-            on:click={() => handleEditTransaction(transaction)}
-          >
-            <Icon name="pencil" />
-          </Button>
-        </td>
       </tr>
     {/each}
   </tbody>
 </Table>
+<Modal isOpen={!!confirmDelete}>
+  <ModalHeader toggle={closeDeleteConfirmation}>
+    Excluir movimentação
+  </ModalHeader>
+  <ModalBody>
+    Confirma a exclusão da movimentação da ação {confirmDelete.stockId} na data {confirmDelete.date.toLocaleDateString()}?
+  </ModalBody>
+  <ModalFooter>
+    <Button outline on:click={closeDeleteConfirmation}>Cancelar</Button>
+    <Button color="danger" on:click={handleConfirmDeleteTransaction}>
+      Excluir
+    </Button>
+  </ModalFooter>
+</Modal>

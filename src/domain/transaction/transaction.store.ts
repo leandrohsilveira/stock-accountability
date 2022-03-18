@@ -1,6 +1,6 @@
 import { derived, writable } from 'svelte/store'
 import { toDate } from '../../util/date'
-import { create, PersistentStorage, update } from '../../util/storage'
+import { create, PersistentStorage, remove, update } from '../../util/storage'
 import { availableYearsStorage } from '../availableYear/availableYear.store'
 import { Summary, updateSummaries } from '../summary/Summary'
 import { findPreviousSummary, summaryStorage } from '../summary/summary.store'
@@ -68,26 +68,7 @@ export function addTransaction(transaction: SubmitTransaction) {
       create(transaction, data.transactions),
       [data.customerId, data.year]
     )
-    const computedTransactions = computeTransactions(
-      transactions,
-      data.previousSummaries
-    )
-    const summaries = summaryStorage.persist(
-      updateSummaries(data.year, computedTransactions, data.previousSummaries),
-      [data.customerId, data.year]
-    )
-    const availableYears = availableYearsStorage.persist(
-      [...data.availableYears, data.year],
-      [data.customerId]
-    )
-    updateNextYears(data.customerId, data.year)
-    return {
-      ...data,
-      transactions,
-      computedTransactions,
-      summaries,
-      availableYears,
-    }
+    return computeData(transactions, data)
   })
 }
 
@@ -97,26 +78,17 @@ export function updateTransaction(id: string, transaction: SubmitTransaction) {
       update(id, transaction, data.transactions),
       [data.customerId, data.year]
     )
-    const computedTransactions = computeTransactions(
-      transactions,
-      data.previousSummaries
-    )
-    const summaries = summaryStorage.persist(
-      updateSummaries(data.year, computedTransactions, data.previousSummaries),
+    return computeData(transactions, data)
+  })
+}
+
+export function deleteTransaction(id: string) {
+  dataStore.update((data) => {
+    const transactions = transactionStorage.persist(
+      remove(id, data.transactions),
       [data.customerId, data.year]
     )
-    const availableYears = availableYearsStorage.persist(
-      [...data.availableYears, data.year],
-      [data.customerId]
-    )
-    updateNextYears(data.customerId, data.year)
-    return {
-      ...data,
-      transactions,
-      computedTransactions,
-      summaries,
-      availableYears,
-    }
+    return computeData(transactions, data)
   })
 }
 
@@ -173,6 +145,29 @@ function restoreData(customerId: string, year: number): Data {
     previousSummaries,
     summaries: summaries.length ? summaries : previousSummaries,
     computedTransactions,
+    availableYears,
+  }
+}
+
+function computeData(transactions: Transaction[], data: Data) {
+  const computedTransactions = computeTransactions(
+    transactions,
+    data.previousSummaries
+  )
+  const summaries = summaryStorage.persist(
+    updateSummaries(data.year, computedTransactions, data.previousSummaries),
+    [data.customerId, data.year]
+  )
+  const availableYears = availableYearsStorage.persist(
+    [...data.availableYears, data.year],
+    [data.customerId]
+  )
+  updateNextYears(data.customerId, data.year)
+  return {
+    ...data,
+    transactions,
+    computedTransactions,
+    summaries,
     availableYears,
   }
 }
