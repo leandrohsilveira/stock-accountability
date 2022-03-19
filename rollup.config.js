@@ -29,8 +29,8 @@ export default {
 
     generateSW({
       swDest: 'public/build/serviceWorker.js',
-      cleanupOutdatedCaches: true,
       globDirectory: 'public',
+      globPatterns: ['**/*.{js,css,html,png,woff,woff2}'],
     }),
 
     svelte({
