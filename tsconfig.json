@@ -2,8 +2,8 @@
   "extends": "@tsconfig/svelte/tsconfig.json",
 
   "compilerOptions": {
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
-  "include": ["src/**/*", "svelte-app-master/src"],
+  "include": ["src/**/*", "public/serviceWorker.js"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }

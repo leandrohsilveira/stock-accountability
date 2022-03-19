@@ -10,6 +10,7 @@ import json from 'rollup-plugin-json'
 import serve from 'rollup-plugin-serve'
 import copy from 'rollup-plugin-copy'
 import cleaner from 'rollup-plugin-cleaner'
+import { generateSW } from 'rollup-plugin-workbox'
 
 const production = !process.env.ROLLUP_WATCH
 
@@ -24,6 +25,12 @@ export default {
   plugins: [
     cleaner({
       targets: production ? ['public/build'] : [],
+    }),
+
+    generateSW({
+      swDest: 'public/build/serviceWorker.js',
+      cleanupOutdatedCaches: true,
+      globDirectory: 'public',
     }),
 
     svelte({
