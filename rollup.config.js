@@ -33,6 +33,7 @@ export default {
         globDirectory: 'public',
         globPatterns: ['**/*.{js,css,html,png,woff,woff2,json}'],
         navigateFallback: '/index.html',
+        dontCacheBustURLsMatching: /(woff|woff2)\?/,
         sourcemap: false,
       }),
 
