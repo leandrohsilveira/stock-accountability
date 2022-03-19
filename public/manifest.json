@@ -6,7 +6,7 @@
   "dir": "ltr",
   "display": "standalone",
   "orientation": "any",
-  "start_url": "/customers",
+  "start_url": "/",
   "scope": "/",
   "theme_color": "#0d6efd",
   "lang": "pt-BR",
