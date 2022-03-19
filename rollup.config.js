@@ -32,7 +32,7 @@ export default {
         swDest: 'public/serviceWorker.js',
         globDirectory: 'public',
         globPatterns: ['**/*.{js,css,html,png,woff,woff2,json}'],
-        navigateFallback: '/',
+        navigateFallback: '/index.html',
         sourcemap: false,
       }),
 
