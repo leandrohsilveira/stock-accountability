@@ -27,11 +27,12 @@ export default {
       targets: production ? ['public/build'] : [],
     }),
 
-    generateSW({
-      swDest: 'public/build/serviceWorker.js',
-      globDirectory: 'public',
-      globPatterns: ['**/*.{js,css,html,png,woff,woff2}'],
-    }),
+    production &&
+      generateSW({
+        swDest: 'public/serviceWorker.js',
+        globDirectory: 'public',
+        globPatterns: ['**/*.{js,css,html,png,woff,woff2}'],
+      }),
 
     svelte({
       preprocess: sveltePreprocess({ sourceMap: !production }),

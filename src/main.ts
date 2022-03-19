@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
 if (!/^localhost/.test(window.location.host) && 'serviceWorker' in navigator) {
-  navigator.serviceWorker.register('build/serviceWorker.js')
+  navigator.serviceWorker.register('serviceWorker.js')
 }
 
 const app = new App({
