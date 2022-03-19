@@ -31,7 +31,9 @@ export default {
       generateSW({
         swDest: 'public/serviceWorker.js',
         globDirectory: 'public',
-        globPatterns: ['**/*.{js,css,html,png,woff,woff2}'],
+        globPatterns: ['**/*.{js,css,html,png,woff,woff2,json}'],
+        navigateFallback: '/',
+        sourcemap: false,
       }),
 
     svelte({
