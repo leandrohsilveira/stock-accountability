@@ -1,4 +1,5 @@
-import { derived, writable } from 'svelte/store'
+import { writable } from 'svelte/store'
+import { createImperativeTranslator } from '../../config'
 import {
   create,
   findById,
@@ -7,6 +8,9 @@ import {
   update,
 } from '../../util/storage'
 import type { Customer, SubmitCustomer } from './Customer'
+import i18n from './customer.store.i18n.json'
+
+const messages = createImperativeTranslator(i18n)
 
 export const customerStorage = new PersistentStorage<Customer>('customers')
 
@@ -22,7 +26,7 @@ export function addCustomer(customer: SubmitCustomer) {
           { ...customer, id: undefined },
           customers,
           'document',
-          'Já existe um cliente cadastrado com o CPF/CNPJ informado!'
+          messages.t('thereIsAlreadyCustomerWithProvidedDocument')
         )
       ),
       []
@@ -41,7 +45,7 @@ export function updateCustomer(id: string, customer: SubmitCustomer) {
           { id, ...customer },
           customers,
           'document',
-          'Já existe um outro cliente cadastrado com o CPF/CNPJ informado!'
+          messages.t('thereIsAnotherCustomerWithProvidedDocument')
         )
       ),
       []

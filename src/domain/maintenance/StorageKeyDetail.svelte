@@ -9,6 +9,9 @@
   import TransactionTable from '../transaction/TransactionTable.svelte'
   import type { StorageKey } from './Maintenance'
   import YearTable from './YearTable.svelte'
+  import i18n from './StorageKeyDetail.i18n.json'
+  import { useTranslate } from '../../config'
+
   export let item: StorageKey | undefined
 
   $: isOpen = item !== undefined
@@ -26,13 +29,15 @@
       : []
   $: customers = item?.entity === 'customers' ? customerStorage.restore([]) : []
 
+  const t = useTranslate(i18n)
+
   function close() {
     item = undefined
   }
 </script>
 
 <Modal size="lg" bind:isOpen>
-  <ModalHeader toggle={close}>Chave: {item.key}</ModalHeader>
+  <ModalHeader toggle={close}>{$t('key')}: {item.key}</ModalHeader>
   <ModalBody>
     {#if item?.entity === 'transactions'}
       <TransactionTable showId tabindex={1} items={transactions} />

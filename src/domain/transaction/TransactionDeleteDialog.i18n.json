@@ -1,0 +1,8 @@
+{
+  "pt-br": {
+    "deleteTransaction": "Excluir movimentação",
+    "confirmMessage": "Confirma a exclusão da movimentação da ação {0} na data {1}?",
+    "cancel": "Cancelar",
+    "delete": "Excluir"
+  }
+}

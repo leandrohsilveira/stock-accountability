@@ -1,0 +1,8 @@
+{
+  "pt-br": {
+    "id": "ID",
+    "name": "Nome",
+    "document": "CPF/CNPJ",
+    "noClientRegistered": "Nenhum cliente cadastrado"
+  }
+}

@@ -2,12 +2,13 @@
   import { Input, InputGroup, InputGroupText } from 'sveltestrap'
   import { formatNumber, parseNumber } from '../util/number'
 
+  export let value: number | undefined
   export let name: string | undefined = undefined
   export let tabindex: number | undefined = undefined
   export let valid: boolean | undefined = undefined
   export let invalid: boolean | undefined = undefined
   export let feedback: string | string[] | undefined = undefined
-  export let value: number | undefined
+  export let placeholder: string | undefined = undefined
   export let precision = 2
   export let thousandsSeparator = '.'
   export let decimalSeparator = ','
@@ -40,6 +41,7 @@
     {valid}
     {invalid}
     {feedback}
+    {placeholder}
     on:input={handleChange}
     value={formatted}
   />

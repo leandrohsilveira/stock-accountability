@@ -1,0 +1,10 @@
+{
+  "pt-br": {
+    "addClient": "Adicionar cliente",
+    "name": "Nome",
+    "document": "CPF/CNPJ",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "continue": "Continuar adicionando"
+  }
+}

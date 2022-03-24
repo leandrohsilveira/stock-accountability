@@ -13,6 +13,7 @@
     ModalHeader,
   } from 'sveltestrap'
   import MoneyInput from '../../components/MoneyInput.svelte'
+  import { useTranslate } from '../../config'
   import { toDate, toISODateString } from '../../util/date'
   import {
     all,
@@ -27,6 +28,7 @@
     Transaction,
     TransactionType,
   } from './Transaction'
+  import i18n from './TransactionForm.i18n.json'
 
   export let tabindex: number
   export let customerId: string
@@ -57,6 +59,8 @@
   $: if (edit) {
     stockId = edit.stockId
   }
+
+  const t = useTranslate(i18n)
 
   function focus() {
     if (editStockId) stockIdInput.focus()
@@ -123,7 +127,7 @@
     <div on:keydown={handleKeyDown}>
       <Form on:submit={handleSubmit}>
         <FormGroup>
-          <Label for="stockId">ID da Ação</Label>
+          <Label for="stockId">{$t('stockId')}</Label>
           <Input
             {tabindex}
             name="stockId"
@@ -131,58 +135,63 @@
             feedback={stockIdErrors}
             invalid={dirty.stockId && stockIdErrors.length > 0}
             disabled={!editStockId}
+            placeholder={$t('stockId.placeholder')}
             bind:inner={stockIdInput}
             bind:value={stockId}
             on:input={() => (dirty = { ...dirty, stockId: true })}
           />
         </FormGroup>
         <FormGroup>
-          <Label for="date">Data</Label>
+          <Label for="date">{$t('date')}</Label>
           <Input
             {tabindex}
             name="date"
             type="date"
             feedback={dateErrors}
             invalid={dirty.date && dateErrors.length > 0}
+            placeholder={$t('date.placeholder')}
             bind:inner={dateInput}
             bind:value={date}
             on:input={() => (dirty = { ...dirty, date: true })}
           />
         </FormGroup>
         <FormGroup>
-          <Label for="type">Tipo da operação</Label>
+          <Label for="type">{$t('type')}</Label>
           <Input
             {tabindex}
             name="type"
             type="select"
             feedback={typeErrors}
             invalid={dirty.type && typeErrors.length > 0}
+            placeholder={$t('type.placeholder')}
             bind:value={type}
             on:input={() => (dirty = { ...dirty, type: true })}
           >
-            <option value="PURCHASE">Compra</option>
-            <option value="SELL">Venda</option>
+            <option value="PURCHASE">{$t('PURCHASE')}</option>
+            <option value="SELL">{$t('SELL')}</option>
           </Input>
         </FormGroup>
         <FormGroup>
-          <Label for="quantity">Quantidade</Label>
+          <Label for="quantity">{$t('quantity')}</Label>
           <Input
             {tabindex}
             name="quantity"
             type="number"
             feedback={quantityErrors}
             invalid={dirty.quantity && quantityErrors.length > 0}
+            placeholder={$t('quantity.placeholder')}
             bind:value={quantity}
             on:input={() => (dirty = { ...dirty, quantity: true })}
           />
         </FormGroup>
         <FormGroup>
-          <Label for="unitPrice">Preço unitário</Label>
+          <Label for="unitPrice">{$t('unitPrice')}</Label>
           <MoneyInput
             {tabindex}
             name="unitPrice"
             feedback={unitPriceErrors}
             invalid={dirty.unitPrice && unitPriceErrors.length > 0}
+            placeholder={$t('unitPrice.placeholder')}
             bind:value={unitPrice}
             on:input={() => (dirty = { ...dirty, unitPrice: true })}
           />
@@ -192,7 +201,7 @@
             {tabindex}
             type="checkbox"
             name="addNew"
-            label="Continuar adicionando"
+            label={$t('continue')}
             bind:checked={addMore}
           />
         </FormGroup>
@@ -201,14 +210,14 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button {tabindex} outline on:click={close}>Cancelar</Button>
+    <Button {tabindex} outline on:click={close}>{$t('cancel')}</Button>
     <Button
       {tabindex}
       color="primary"
       disabled={!valid}
       on:click={handleSubmit}
     >
-      Salvar
+      {$t('save')}
     </Button>
   </ModalFooter>
 </Modal>

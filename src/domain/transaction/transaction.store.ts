@@ -1,4 +1,5 @@
 import { derived, writable } from 'svelte/store'
+import { createImperativeTranslator } from '../../config'
 import { toDate } from '../../util/date'
 import { create, PersistentStorage, remove, update } from '../../util/storage'
 import { availableYearsStorage } from '../availableYear/availableYear.store'
@@ -10,6 +11,7 @@ import {
   SubmitTransaction,
   Transaction,
 } from './Transaction'
+import i18n from './transaction.store.i18n.json'
 
 type Data = {
   customerId?: string
@@ -20,6 +22,8 @@ type Data = {
   transactions: Transaction[]
   computedTransactions: ComputedTransaction[]
 }
+
+const messages = createImperativeTranslator(i18n)
 
 export const transactionStorage = new PersistentStorage<
   Transaction,
@@ -95,7 +99,7 @@ export function deleteTransaction(id: string) {
 export function updateStockId(previousStockId: string, stockId: string) {
   dataStore.update((data) => {
     if (checkForStockId(data.customerId, data.availableYears, stockId))
-      throw new Error('Já existe uma ação com o ID informado!')
+      throw new Error(messages.t('thereIsAlreadyStockWithProvidedId'))
 
     data.availableYears.forEach((year) => {
       const transactions = transactionStorage.persist(

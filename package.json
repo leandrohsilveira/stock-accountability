@@ -12,7 +12,9 @@
     "start": "sirv public --no-clear",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "test": "jest src",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "link:i18nlite": "npm link @i18nlite/core @i18nlite/svelte",
+    "unlink:i18nlite": "npm unlink @i18nlite/core @i18nlite/svelte"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^19.0.0",
@@ -43,6 +45,8 @@
     "typescript": "^4.0.0"
   },
   "dependencies": {
+    "@i18nlite/core": "^1.0.0",
+    "@i18nlite/svelte": "^1.0.0",
     "bootstrap": "^5.1.3",
     "bootstrap-icons": "^1.8.1",
     "rollup-plugin-workbox": "^6.2.0",

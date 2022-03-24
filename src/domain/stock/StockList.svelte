@@ -11,7 +11,10 @@
     ListGroup,
     ListGroupItem,
   } from 'sveltestrap'
+  import { useTranslate } from '../../config'
   import type { EditStock, Stock } from './Stock'
+
+  import i18n from './StockList.i18n.json'
 
   export let tabindex: number
   export let selected: string | undefined = undefined
@@ -35,6 +38,8 @@
   $: if (inputEditStock) {
     inputEditStock.focus()
   }
+
+  const t = useTranslate(i18n)
 
   onMount(() => {
     filterInput.focus()
@@ -94,15 +99,14 @@
       <Input
         {tabindex}
         type="search"
-        placeholder="Encontrar ação"
+        placeholder={$t('findStock')}
         bind:inner={filterInput}
         bind:value={filter}
       />
     </ListGroupItem>
     {#if !filter && items.length === 0}
       <ListGroupItem disabled>
-        Nenhuma ação encontrada, preencha um ID de Ação acima para adicionar uma
-        movimentação
+        {$t('noStockFoundTypeAnIdToAddNewTransaction')}
       </ListGroupItem>
     {/if}
     {#each filtered as item}
@@ -140,9 +144,9 @@
         >
           <div class="acao">
             <div class="desc">
-              <Badge color={item.id === selected ? 'dark' : 'primary'}
-                >{item.quantity}</Badge
-              >
+              <Badge color={item.id === selected ? 'dark' : 'primary'}>
+                {item.quantity}
+              </Badge>
               {item.id}
             </div>
             <div class="add">
@@ -176,7 +180,7 @@
         on:click={handleAddStockWithTransaction}
       >
         <Icon name="plus-circle" />
-        Adicionar "{filter.toUpperCase()}"
+        {$t('addStock', filter.toUpperCase())}
       </ListGroupItem>
     {/if}
   </ListGroup>

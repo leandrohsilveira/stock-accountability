@@ -1,0 +1,7 @@
+{
+  "pt-br": {
+    "findStock": "Encontrar ação",
+    "noStockFoundTypeAnIdToAddNewTransaction": "Nenhuma ação encontrada, preencha um ID de Ação acima para adicionar uma movimentação",
+    "addStock": "Adicionar \"{0}\""
+  }
+}

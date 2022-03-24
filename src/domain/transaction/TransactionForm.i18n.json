@@ -1,0 +1,19 @@
+{
+  "pt-br": {
+    "cancel": "Cancelar",
+    "continue": "Continuar adicionando",
+    "date": "Data",
+    "date.placeholder": "Preencha a data",
+    "PURCHASE": "Compra",
+    "quantity": "Quantidae",
+    "quantity.placeholder": "Preencha a quantidade",
+    "save": "Salvar",
+    "SELL": "Venda",
+    "stockId": "ID da ação",
+    "stockId.placeholder": "Preencha o id da ação",
+    "type": "Tipo",
+    "type.placeholder": "Preencha o tipo",
+    "unitPrice": "Preço unitário",
+    "unitPrice.placeholder": "Preencha o preço unitário"
+  }
+}

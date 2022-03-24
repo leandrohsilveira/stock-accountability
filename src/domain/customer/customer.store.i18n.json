@@ -1,0 +1,6 @@
+{
+  "pt-br": {
+    "thereIsAlreadyCustomerWithProvidedDocument": "Já existe um cliente cadastrado com o CPF/CNPJ informado!",
+    "thereIsAnotherCustomerWithProvidedDocument": "Já existe um outro cliente cadastrado com o CPF/CNPJ informado!"
+  }
+}

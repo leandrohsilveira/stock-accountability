@@ -1,0 +1,10 @@
+{
+  "pt-br": {
+    "key": "Chave",
+    "entity": "Entidade",
+    "customer": "Cliente",
+    "customerId": "ID do cliente",
+    "year": "Ano",
+    "noEntityFound": "Nenhuma entidade encontrada"
+  }
+}

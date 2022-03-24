@@ -1,9 +1,10 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import { Card, CardBody, CardHeader, Col, Row } from 'sveltestrap'
+  import { Card, CardBody, Col, Row } from 'sveltestrap'
   import NumberChange from '../components/NumberChange.svelte'
   import Page from '../components/Page.svelte'
   import YearInput from '../components/YearInput.svelte'
+  import { useTranslate } from '../config'
   import { findCustomerById } from '../domain/customer/customer.store'
   import {
     addErrorMessage,
@@ -13,7 +14,6 @@
   import { editStock, stockStore } from '../domain/stock/stock.store'
   import StockList from '../domain/stock/StockList.svelte'
   import SummaryChangeTable from '../domain/summary/SummaryChangeTable.svelte'
-  import SummaryTable from '../domain/summary/SummaryTable.svelte'
   import type {
     SubmitTransaction,
     Transaction,
@@ -27,6 +27,7 @@
     summaryStore,
     updateTransaction,
   } from '../domain/transaction/transaction.store'
+  import TransactionDeleteDialog from '../domain/transaction/TransactionDeleteDialog.svelte'
   import TransactionForm from '../domain/transaction/TransactionForm.svelte'
   import TransactionTable from '../domain/transaction/TransactionTable.svelte'
 
@@ -34,6 +35,7 @@
   export let year: number
 
   let transactionToEdit: Transaction | undefined = undefined
+  let transactionToDelete: Transaction | undefined = undefined
   let addTransactionStockId: string | undefined = undefined
   let stockId: string | undefined = undefined
 
@@ -41,6 +43,16 @@
     back: undefined
     changeYear: number
   }>()
+
+  const t = useTranslate({
+    'pt-br': {
+      addTransactionSuccessful: 'Movimentação adicionada com sucesso',
+      updateTransactionSuccessful: 'Movimentação atualizada com sucesso',
+      deleteTransactionSuccessful: 'Movimentação excluída com sucesso',
+      stockRenameSuccessful: 'Ação renomeada com sucesso',
+      transactionOfCustomer: 'Movimentações de {0}',
+    },
+  })
 
   $: customer = findCustomerById(customerId)
 
@@ -66,10 +78,10 @@
     try {
       if (transactionToEdit) {
         updateTransaction(transactionToEdit.id, event.detail)
-        addSuccessMessage('Movimentação atualizada com sucesso')
+        addSuccessMessage($t('updateTransactionSuccessful'))
       } else {
         addTransaction(event.detail)
-        addSuccessMessage('Movimentação adicionada com sucesso')
+        addSuccessMessage($t('addTransactionSuccessful'))
         stockId = event.detail.stockId
       }
     } catch (e) {
@@ -78,9 +90,13 @@
   }
 
   function handleDeleteTransaction(event: CustomEvent<Transaction>) {
+    transactionToDelete = event.detail
+  }
+
+  function handleConfirmTransactionDelete(event: CustomEvent<Transaction>) {
     try {
       deleteTransaction(event.detail.id)
-      addSuccessMessage('Movimentação excluída com sucesso')
+      addSuccessMessage($t('deleteTransactionSuccessful'))
     } catch (e) {
       addErrorMessage(e.message)
     }
@@ -89,7 +105,7 @@
   function handleEditStock(event: CustomEvent<EditStock>) {
     try {
       editStock(event.detail)
-      addSuccessMessage('Ação renomeada com sucesso')
+      addSuccessMessage($t('stockRenameSuccessful'))
     } catch (error) {
       addErrorMessage(error.message)
     }
@@ -105,7 +121,7 @@
 </script>
 
 <Page
-  title={`Movimentações de ${customer.name}`}
+  title={$t('transactionOfCustomer', customer.name)}
   back
   on:back={handleBackClick}
 >
@@ -166,4 +182,8 @@
   bind:edit={transactionToEdit}
   bind:stockId={addTransactionStockId}
   on:submit={handleSubmitTransaction}
+/>
+<TransactionDeleteDialog
+  bind:transaction={transactionToDelete}
+  on:confirm={handleConfirmTransactionDelete}
 />

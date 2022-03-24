@@ -1,14 +1,16 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-
   import { Button, Icon, Table } from 'sveltestrap'
+  import { useTranslate } from '../../config'
   import type { Customer } from './Customer'
+  import i18n from './CustomerTable.i18n.json'
 
   export let showId = false
   export let items: Customer[] = []
 
   $: cols = showId ? 4 : 3
 
+  const t = useTranslate(i18n)
   const dispatch = createEventDispatcher<{ view: string; edit: Customer }>()
 
   function handleViewClick(id: string) {
@@ -25,15 +27,15 @@
     <tr>
       <th>#</th>
       {#if showId}
-        <th>ID</th>
+        <th>{$t('id')}</th>
       {/if}
-      <th>Nome</th>
-      <th>CPF/CNPJ</th>
+      <th>{$t('name')}</th>
+      <th>{$t('document')}</th>
     </tr>
   </thead>
   <tbody>
     {#if items.length === 0}
-      <tr><td colspan={cols}>Nenhum cliente cadastrado</td></tr>
+      <tr><td colspan={cols}>{$t('noClientRegistered')}</td></tr>
     {/if}
     {#each items as item (item.id)}
       <tr>

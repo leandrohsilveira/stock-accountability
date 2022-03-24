@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte'
   import { Button, Card, CardBody, Icon } from 'sveltestrap'
   import Page from '../components/Page.svelte'
+  import { useTranslate } from '../config'
   import type { SubmitCustomer, Customer } from '../domain/customer/Customer'
   import {
     addCustomer,
@@ -20,6 +21,15 @@
   let adding = false
 
   const dispatch = createEventDispatcher<{ view: string }>()
+
+  const t = useTranslate({
+    'pt-br': {
+      addCustomer: 'Adicionar cliente',
+      addCustomerSuccessful: 'Cliente adicionado com sucesso',
+      customers: 'Clientes',
+      updateCustomerSuccessful: 'Cliente atualizado com sucesso',
+    },
+  })
 
   $: {
     loadCustomers()
@@ -41,10 +51,10 @@
     try {
       if (edit) {
         updateCustomer(edit.id, e.detail)
-        addSuccessMessage('Cliente atualizado com sucesso')
+        addSuccessMessage($t('updateCustomerSuccessful'))
       } else {
         addCustomer(e.detail)
-        addSuccessMessage('Cliente adicionado com sucesso')
+        addSuccessMessage($t('addCustomerSuccessful'))
       }
     } catch (e) {
       addErrorMessage(e.message)
@@ -52,10 +62,10 @@
   }
 </script>
 
-<Page title="Clientes">
+<Page title={$t('customers')}>
   <Button color="primary" tabindex={1} on:click={handleAddClick}>
     <Icon name="plus-circle" />
-    Adicionar cliente
+    {$t('addCustomer')}
   </Button>
   <Card class="mt-3">
     <CardBody>

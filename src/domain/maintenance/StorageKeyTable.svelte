@@ -1,11 +1,15 @@
 <script lang="ts">
   import { Button, Icon, Table } from 'sveltestrap'
+  import { useTranslate } from '../../config'
   import { groupStorageKeys, StorageKey } from './Maintenance'
+  import i18n from './StorageKeyTable.i18n.json'
 
   export let view: StorageKey | undefined = undefined
   export let items: StorageKey[] = []
 
   $: grouped = groupStorageKeys(items)
+
+  const t = useTranslate(i18n)
 
   function handleViewClick(key: StorageKey) {
     view = key
@@ -16,23 +20,30 @@
   <thead>
     <tr>
       <th style="min-width: 30px; max-width: 30px;">#</th>
-      <th style="min-width: 600px;">Chave</th>
-      <th style="min-width: 100px; max-width: 100px;">Entidade</th>
-      <th style="min-width: 350px; max-width: 350px;">ID do cliente</th>
-      <th style="min-width: 50px; max-width: 50px;">Ano</th>
+      <th style="min-width: 600px;">{$t('key')}</th>
+      <th style="min-width: 100px; max-width: 100px;">{$t('entity')}</th>
+      <th style="min-width: 350px; max-width: 350px;">{$t('customerId')}</th>
+      <th style="min-width: 50px; max-width: 50px;">{$t('year')}</th>
     </tr>
   </thead>
   <tbody>
+    {#if grouped.length === 0}
+      <tr>
+        <td colspan="5">{$t('noEntityFound')}</td>
+      </tr>
+    {/if}
     {#each grouped as group (group.customerId)}
       {#if group.customerId}
         <tr class="group">
-          <th class="customer" colspan="5">Cliente: {group.customerId}</th>
+          <th class="customer" colspan="5">
+            {$t('customer')}: {group.customerId}
+          </th>
         </tr>
       {/if}
       {#each group.years as item (item.year)}
         {#if typeof item.year === 'number'}
           <tr class="group">
-            <th class="year" colspan="5">Ano: {item.year}</th>
+            <th class="year" colspan="5">{$t('year')}: {item.year}</th>
           </tr>
         {/if}
         {#each item.entities as entity (entity.key)}

@@ -1,15 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-
-  import {
-    Button,
-    Form,
-    FormGroup,
-    Icon,
-    Input,
-    InputGroup,
-    Label,
-  } from 'sveltestrap'
+  import { Button, FormGroup, Icon, Input, InputGroup } from 'sveltestrap'
 
   export let tabindex: number
   export let value: number

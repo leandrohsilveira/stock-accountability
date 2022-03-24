@@ -1,0 +1,12 @@
+{
+  "pt-br": {
+    "year": "Ano",
+    "customerId": "ID do cliente",
+    "stockId": "ID da ação",
+    "amount": "Estoque",
+    "accruedCost": "Custo acumulado",
+    "averageCost": "Custo médio",
+    "totalProfit": "Lucro total",
+    "noRecordMessage": "Nenhum registro encontrado"
+  }
+}

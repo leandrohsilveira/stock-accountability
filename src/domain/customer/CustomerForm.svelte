@@ -11,6 +11,8 @@
     ModalFooter,
     ModalHeader,
   } from 'sveltestrap'
+  import { useTranslate } from '../../config'
+  import i18n from './CustomerForm.i18n.json'
   import { all, isValid, messages, required } from '../../util/validate'
   import type { SubmitCustomer, Customer } from './Customer'
 
@@ -30,6 +32,7 @@
     open = true
   }
 
+  const t = useTranslate(i18n)
   const dispatch = createEventDispatcher<{ submit: SubmitCustomer }>()
 
   function handleOpen() {
@@ -74,11 +77,11 @@
 </script>
 
 <Modal bind:isOpen={open} on:open={handleOpen} on:close={clear}>
-  <ModalHeader toggle={close}>Adicionar cliente</ModalHeader>
+  <ModalHeader toggle={close}>{$t('addClient')}</ModalHeader>
   <ModalBody>
     <Form on:submit={handleSubmit}>
       <FormGroup>
-        <Label for="name">Nome:</Label>
+        <Label for="name">{$t('name')}:</Label>
         <Input
           tabindex={3}
           name="name"
@@ -91,7 +94,7 @@
         />
       </FormGroup>
       <FormGroup>
-        <Label for="document">CPF/CNPJ</Label>
+        <Label for="document">{$t('document')}</Label>
         <Input tabindex={3} name="document" type="text" bind:value={document} />
       </FormGroup>
       <FormGroup>
@@ -99,7 +102,7 @@
           tabindex={3}
           type="checkbox"
           name="addNew"
-          label="Continuar adicionando"
+          label={$t('continue')}
           bind:checked={addMore}
         />
       </FormGroup>
@@ -107,14 +110,14 @@
     </Form>
   </ModalBody>
   <ModalFooter>
-    <Button tabindex={3} outline on:click={close}>Cancelar</Button>
+    <Button tabindex={3} outline on:click={close}>{$t('cancel')}</Button>
     <Button
       tabindex={3}
       color="primary"
       disabled={!valid}
       on:click={handleSubmit}
     >
-      Salvar
+      {$t('save')}
     </Button>
   </ModalFooter>
 </Modal>
