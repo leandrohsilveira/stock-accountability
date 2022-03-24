@@ -10,7 +10,7 @@ import {
 import type { Customer, SubmitCustomer } from './Customer'
 import i18n from './customer.store.i18n.json'
 
-const messages = createImperativeTranslator(i18n)
+const t = createImperativeTranslator(i18n)
 
 export const customerStorage = new PersistentStorage<Customer>('customers')
 
@@ -26,7 +26,7 @@ export function addCustomer(customer: SubmitCustomer) {
           { ...customer, id: undefined },
           customers,
           'document',
-          messages.t('thereIsAlreadyCustomerWithProvidedDocument')
+          t('thereIsAlreadyCustomerWithProvidedDocument')
         )
       ),
       []
@@ -45,7 +45,7 @@ export function updateCustomer(id: string, customer: SubmitCustomer) {
           { id, ...customer },
           customers,
           'document',
-          messages.t('thereIsAnotherCustomerWithProvidedDocument')
+          t('thereIsAnotherCustomerWithProvidedDocument')
         )
       ),
       []

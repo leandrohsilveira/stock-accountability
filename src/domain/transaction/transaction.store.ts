@@ -23,7 +23,7 @@ type Data = {
   computedTransactions: ComputedTransaction[]
 }
 
-const messages = createImperativeTranslator(i18n)
+const t = createImperativeTranslator(i18n)
 
 export const transactionStorage = new PersistentStorage<
   Transaction,
@@ -99,7 +99,7 @@ export function deleteTransaction(id: string) {
 export function updateStockId(previousStockId: string, stockId: string) {
   dataStore.update((data) => {
     if (checkForStockId(data.customerId, data.availableYears, stockId))
-      throw new Error(messages.t('thereIsAlreadyStockWithProvidedId'))
+      throw new Error(t('thereIsAlreadyStockWithProvidedId'))
 
     data.availableYears.forEach((year) => {
       const transactions = transactionStorage.persist(
