@@ -1,31 +1,11 @@
 <script lang="ts">
-  import { Alert } from 'sveltestrap'
-  import type { Color } from 'sveltestrap/src/shared'
-
-  import type { Message, MessageType } from './Message'
-
+  import type { Message } from './Message'
   export let message: Message
-
-  $: color = getColor(message.type)
-
-  function getColor(type: MessageType): Color {
-    switch (type) {
-      case 'success':
-        return 'success'
-      case 'warning':
-        return 'warning'
-      case 'error':
-        return 'danger'
-      case 'info':
-      default:
-        return 'info'
-    }
-  }
 </script>
 
-<Alert {color} dismissible>
+<div class={`alert ${message.type}`}>
   {#if message.title}
-    <h6>{message.title}</h6>
+    <h6 class="alert-title">{message.title}</h6>
   {/if}
-  {message.description}
-</Alert>
+  <p class="alert-description">{message.description}</p>
+</div>
