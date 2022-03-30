@@ -1,0 +1,151 @@
+@import '@fontsource/fira-mono';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #fcfcfd;
+}
+
+select.input {
+  padding-right: 1.7rem;
+}
+
+/* input[type='date']::-webkit-calendar-picker-indicator, */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  display: none;
+  -webkit-appearance: none !important;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+@layer base {
+  .input {
+    @apply w-full rounded border-gray-300 focus:border-violet-600 focus:ring-violet-600 hover:ring-2 hover:ring-gray-300 block sm:text-sm transition-colors ease-in-out duration-300;
+  }
+
+  .input-group > .input-group-addon {
+    @apply text-gray-700;
+  }
+
+  .input-group > .input-group-addon .icon-fill {
+    @apply fill-gray-700;
+  }
+
+  .input-group > .input-group-addon .icon-stroke {
+    @apply stroke-gray-700;
+  }
+
+  .field.error .input-group > .input-group-addon,
+  .field.error .input,
+  .field.error > p,
+  .field.error > label {
+    @apply text-red-500;
+  }
+
+  .field.error input {
+    @apply border-red-500 focus:ring-red-500;
+  }
+
+  .field.error .input-group > .input-group-addon .icon-fill {
+    @apply fill-red-500;
+  }
+
+  .field.error .input-group > .input-group-addon .icon-stroke {
+    @apply stroke-red-500;
+  }
+
+  .btn {
+    min-width: 100px;
+    @apply p-2 text-xs transition-colors ease-in-out duration-300 rounded-full uppercase text-center;
+  }
+  .btn.btn-sm {
+    min-width: none;
+    @apply p-1;
+  }
+  .btn:disabled {
+    @apply opacity-20 cursor-not-allowed;
+  }
+
+  .btn-link.primary {
+    @apply text-violet-500 hover:text-violet-700;
+  }
+  .btn-link.primary .icon-fill {
+    @apply fill-violet-500 hover:fill-violet-700;
+  }
+  .btn-link.primary .icon-stroke {
+    @apply stroke-violet-500 hover:stroke-violet-700;
+  }
+  .btn-link.default {
+    @apply text-gray-600 hover:text-gray-900;
+  }
+  .btn-link.default .icon-fill {
+    @apply fill-gray-500 hover:fill-gray-700;
+  }
+  .btn-link.default .icon-stroke {
+    @apply stroke-gray-500 hover:stroke-gray-700;
+  }
+
+  .btn-outline {
+    @apply border;
+  }
+  .btn-outline.primary {
+    @apply border-violet-500 text-violet-500  hover:border-violet-700 hover:text-violet-700  hover:bg-violet-100;
+  }
+  .btn-outline.primary .icon-fill {
+    @apply fill-violet-500 hover:fill-violet-700;
+  }
+  .btn-outline.primary .icon-stroke {
+    @apply stroke-violet-500 hover:stroke-violet-700;
+  }
+  .btn-outline.default {
+    @apply border-gray-600 text-gray-600 hover:border-gray-900 hover:text-gray-900 hover:bg-gray-100;
+  }
+  .btn-outline.default .icon-fill {
+    @apply fill-gray-500 hover:fill-gray-700;
+  }
+  .btn-outline.default .icon-stroke {
+    @apply stroke-gray-500 hover:stroke-gray-700;
+  }
+  .btn-full {
+    @apply text-white;
+  }
+  .btn-full .icon-fill {
+    @apply fill-white;
+  }
+  .btn-full .icon-stroke {
+    @apply stroke-white;
+  }
+  .btn-full.primary {
+    @apply bg-violet-500 hover:bg-violet-400;
+  }
+  .btn-full.default {
+    @apply bg-gray-600 hover:bg-gray-500;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  .icon {
+    @apply w-5;
+  }
+
+  .icon-fill {
+    @apply fill-gray-700;
+  }
+
+  .icon-stroke {
+    @apply stroke-gray-700;
+  }
+
+  .overlay {
+    @apply fixed left-0 right-0 top-0 bottom-0 bg-black bg-opacity-40 transition-opacity ease-in-out;
+  }
+}

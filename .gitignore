@@ -1,6 +1,10 @@
-/node_modules/
-/public/build/
-/public/serviceWorker.*
-/public/workbox-*
-
 .DS_Store
+node_modules
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+.vercel
+.output
