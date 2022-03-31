@@ -128,7 +128,7 @@
   <div class="flex justify-center">
     <YearInput tabindex={3} value={year} on:change={handleChangeYear} />
   </div>
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-3 pt-3">
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 pt-3">
     <StockList
       tabindex={2}
       items={$stockStore}
@@ -137,24 +137,30 @@
       on:addStockWithTransaction={handleAddStockWithTransaction}
       on:editStock={handleEditStock}
     />
-    <div class="lg:col-span-3 flex flex-col gap-3">
+    <div class="lg:col-span-3 flex flex-col gap-6">
       <Card>
-        <strong><NumberChange start={year - 1} end={year} /></strong>
-        <SummaryChangeTable
-          previousSummaries={$previousSummaryStore}
-          currentSummaries={$summaryStore}
-        />
+        <div class="flex flex-col justify-center gap-6">
+          <strong class="text-primary-base">
+            <NumberChange start={year - 1} end={year} />
+          </strong>
+          <SummaryChangeTable
+            previousSummaries={$previousSummaryStore}
+            currentSummaries={$summaryStore}
+          />
+        </div>
       </Card>
       <Card>
-        <h4>Movimentações</h4>
-        <TransactionTable
-          tabindex={4}
-          items={$computedTransactionStore}
-          {stockId}
-          computed
-          on:edit={handleEditTransaction}
-          on:delete={handleDeleteTransaction}
-        />
+        <div class="flex flex-col gap-6">
+          <h4>Movimentações</h4>
+          <TransactionTable
+            tabindex={4}
+            items={$computedTransactionStore}
+            {stockId}
+            computed
+            on:edit={handleEditTransaction}
+            on:delete={handleDeleteTransaction}
+          />
+        </div>
       </Card>
     </div>
   </div>

@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { Card, CardBody } from 'sveltestrap'
-
+  import Card from '$lib/components/Card.svelte'
   import Page from '$lib/components/Page.svelte'
   import { useTranslate } from '$lib/config'
   import { loadCustomers } from '$lib/domain/customer/customer.store'
@@ -24,9 +23,7 @@
 
 <Page title={$t('maintenanceView')}>
   <Card>
-    <CardBody>
-      <StorageKeyTable items={$storageKeyStore} bind:view={viewKey} />
-    </CardBody>
+    <StorageKeyTable items={$storageKeyStore} bind:view={viewKey} />
   </Card>
 </Page>
 <StorageKeyDetail bind:item={viewKey} />

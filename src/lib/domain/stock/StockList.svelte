@@ -141,7 +141,7 @@
         {:else}
           <button
             {tabindex}
-            class="flex justify-between"
+            class="flex justify-between items-center"
             class:selected={selected === item.id}
             on:click={() => handleFilterTransactions(item.id)}
           >

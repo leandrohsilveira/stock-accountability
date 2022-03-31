@@ -21,7 +21,7 @@
   {#if isOpen}
     <div use:mount class="modal bg-white rounded w-[95%]">
       {#if $$slots.header}
-        <div class="w-full p-6 border-b border-gray-100">
+        <div class="w-full p-6 border-b border-default-lighter">
           <slot name="header" />
         </div>
       {/if}

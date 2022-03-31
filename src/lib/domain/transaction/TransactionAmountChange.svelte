@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CaretRightIcon from '$lib/icons/caret-right.svg?component'
   import {
     calculate,
     type ComputedTransaction,
@@ -22,16 +23,16 @@
   }
 </script>
 
-<div class="flex justify-center">
+<div class="flex justify-center items-center">
   <span class="number change">({symbol}{value.quantity})</span>
   <span class="number text-right">{previousAmount}</span>
   <div
     class="arrow"
-    class:text-green-600={previousAmount < value.quantity}
-    class:text-red-500={previousAmount > value.quantity}
-    class:text-gray-700={previousAmount === value.quantity}
+    class:fill-green-600={previousAmount < value.quantity}
+    class:fill-danger-base={previousAmount > value.quantity}
+    class:fill-default-darker={previousAmount === value.quantity}
   >
-    {'>'}
+    <CaretRightIcon class="icon icon-sm" />
   </div>
   <span class="number">{value.amount}</span>
 </div>

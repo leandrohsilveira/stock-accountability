@@ -12,11 +12,11 @@
   }
 
   .icon-fill {
-    @apply fill-gray-700;
+    @apply fill-default-darker;
   }
 
   .icon-stroke {
-    @apply stroke-gray-700;
+    @apply stroke-default-darker;
   }
 
   .icon-rounded {

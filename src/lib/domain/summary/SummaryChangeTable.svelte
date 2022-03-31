@@ -17,7 +17,7 @@
 </script>
 
 <div class="table-responsive">
-  <table>
+  <table class="stripped">
     <thead>
       <tr>
         <th>{$t('stockId')}</th>

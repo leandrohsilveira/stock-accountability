@@ -64,22 +64,24 @@
 </script>
 
 <Page title={$t('customers')}>
-  <button
-    class="btn btn-full btn-icon primary"
-    tabindex={1}
-    on:click={handleAddClick}
-  >
-    <IconAdd class="icon icon-fill" />
-    {$t('addCustomer')}
-  </button>
-  <div class="mt-2">
-    <Card>
+  <Card>
+    <div class="flex flex-col gap-6">
+      <div>
+        <button
+          class="btn btn-full btn-icon primary"
+          tabindex={1}
+          on:click={handleAddClick}
+        >
+          <IconAdd class="icon icon-fill" />
+          {$t('addCustomer')}
+        </button>
+      </div>
       <CustomerTable
         items={$customerStore}
         on:view={handleViewClick}
         on:edit={handleEditClick}
       />
-    </Card>
-  </div>
+    </div>
+  </Card>
 </Page>
 <CustomerForm bind:edit bind:open={adding} on:submit={handleSubmit} />

@@ -8,7 +8,7 @@
   }
 
   table th {
-    @apply text-left text-violet-500;
+    @apply text-left text-primary-base;
   }
 
   table tr {
@@ -17,7 +17,7 @@
 
   table tr > th,
   table tr > td {
-    @apply p-2;
+    @apply px-3 py-1;
   }
 
   table tr:first-child > td:first-child {
@@ -36,11 +36,11 @@
     @apply rounded-br-2xl;
   }
 
-  table tr:nth-child(even) td {
-    @apply bg-violet-100;
+  table tr td {
+    @apply bg-primary-lightest;
   }
 
-  table tr:nth-child(odd) td {
-    @apply bg-violet-50;
+  table.stripped tr:nth-child(even) td {
+    @apply bg-primary-lighter;
   }
 }

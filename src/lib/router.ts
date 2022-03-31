@@ -1,5 +1,5 @@
 export const ROUTES = {
-  customers: () => '/',
+  customers: () => '/customers',
   maintenance: () => '/maintenance',
   transactionsOfCustomer: (customerId: string, year: number) =>
     `/customers/${customerId}/${year}`,

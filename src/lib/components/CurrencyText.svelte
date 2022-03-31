@@ -3,11 +3,19 @@
 
   export let value: number | undefined
   export let currency = 'R$'
+  let formatted: string
 
-  $: formatted = value !== undefined ? `${currency} ${formatNumber(value)}` : ''
+  $: if (value !== undefined) {
+    formatted =
+      value >= 0
+        ? `${currency} ${formatNumber(value)}`
+        : `- ${currency} ${formatNumber(Math.abs(value))}`
+  } else {
+    formatted = ''
+  }
 </script>
 
-<div class="currency">{formatted}</div>
+<div class="currency" class:text-danger-base={value < 0}>{formatted}</div>
 
 <style>
   .currency {

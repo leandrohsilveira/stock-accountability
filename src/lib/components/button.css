@@ -2,7 +2,7 @@
   .btn {
     min-width: 100px;
     @apply p-2 text-xs transition-colors ease-in-out duration-300 rounded-full uppercase text-center;
-    @apply focus-visible:outline-violet-500 focus-visible:ring-offset-1 focus-visible:ring focus-visible:ring-offset-violet-500 focus-visible:ring-violet-500;
+    @apply focus-visible:outline-primary-base focus-visible:ring-offset-1 focus-visible:ring focus-visible:ring-offset-primary-base focus-visible:ring-primary-base;
   }
   .btn.btn-sm {
     @apply p-1;
@@ -19,85 +19,85 @@
   }
 
   .btn-link.primary {
-    @apply text-violet-500 hover:text-violet-700 disabled:text-violet-500;
+    @apply text-primary-base hover:text-primary-darker disabled:text-primary-base;
   }
   .btn-link.primary .icon-fill {
-    @apply fill-violet-500 hover:fill-violet-700 disabled:fill-violet-500;
+    @apply fill-primary-base hover:fill-primary-darker disabled:fill-primary-base;
   }
   .btn-link.primary .icon-stroke {
-    @apply stroke-violet-500 hover:stroke-violet-700 disabled:stroke-violet-500;
+    @apply stroke-primary-base hover:stroke-primary-darker disabled:stroke-primary-base;
   }
   .btn-link.primary .icon-rounded {
-    @apply border-violet-500 hover:border-violet-700 disabled:border-violet-500;
+    @apply border-primary-base hover:border-primary-darker disabled:border-primary-base;
   }
   .btn-link.default {
-    @apply text-gray-600 hover:text-gray-900 disabled:text-gray-600;
+    @apply text-default-dark hover:text-default-darkest disabled:text-default-dark;
   }
   .btn-link.default .icon-fill {
-    @apply fill-gray-500 hover:fill-gray-700 disabled:fill-gray-500;
+    @apply fill-default-base hover:fill-default-darker disabled:fill-default-base;
   }
   .btn-link.default .icon-stroke {
-    @apply stroke-gray-500 hover:stroke-gray-700 disabled:stroke-gray-500;
+    @apply stroke-default-base hover:stroke-default-darker disabled:stroke-default-base;
   }
   .btn-link.default .icon-rounded {
-    @apply border-gray-500 hover:border-gray-700 disabled:border-gray-500;
+    @apply border-default-base hover:border-default-darker disabled:border-default-base;
   }
   .btn-link.danger {
-    @apply text-red-600 hover:text-red-900 disabled:text-red-600;
+    @apply text-danger-dark hover:text-danger-darkest disabled:text-danger-dark;
   }
   .btn-link.danger .icon-fill {
-    @apply fill-red-500 hover:fill-red-700 disabled:fill-red-500;
+    @apply fill-danger-base hover:fill-danger-darker disabled:fill-danger-base;
   }
   .btn-link.danger .icon-stroke {
-    @apply stroke-red-500 hover:stroke-red-700 disabled:stroke-red-500;
+    @apply stroke-danger-base hover:stroke-danger-darker disabled:stroke-danger-base;
   }
   .btn-link.danger .icon-rounded {
-    @apply border-red-500 hover:border-red-700 disabled:border-gray-500;
+    @apply border-danger-base hover:border-danger-darker disabled:border-default-base;
   }
 
   .btn-outline {
     @apply border;
   }
   .btn-outline.primary {
-    @apply border-violet-500 text-violet-500 hover:border-violet-700 hover:text-violet-700  hover:bg-violet-100 disabled:border-violet-500 disabled:text-violet-500 disabled:bg-transparent;
+    @apply border-primary-base text-primary-base hover:border-primary-darker hover:text-primary-darker  hover:bg-primary-lighter disabled:border-primary-base disabled:text-primary-base disabled:bg-transparent;
   }
   .btn-outline.primary .icon-fill {
-    @apply fill-violet-500 hover:fill-violet-700 disabled:fill-violet-500;
+    @apply fill-primary-base hover:fill-primary-darker disabled:fill-primary-base;
   }
   .btn-outline.primary .icon-stroke {
-    @apply stroke-violet-500 hover:stroke-violet-700 disabled:stroke-violet-500;
+    @apply stroke-primary-base hover:stroke-primary-darker disabled:stroke-primary-base;
   }
   .btn-outline.primary .icon-rounded {
-    @apply border-violet-500 hover:border-violet-700 disabled:border-violet-500;
+    @apply border-primary-base hover:border-primary-darker disabled:border-primary-base;
   }
   .btn-outline.default {
-    @apply border-gray-600 text-gray-600 hover:border-gray-900 hover:text-gray-900 hover:bg-gray-100 disabled:border-gray-600 disabled:text-gray-600 disabled:bg-transparent;
+    @apply border-default-dark text-default-dark hover:border-default-darkest hover:text-default-darkest hover:bg-default-lighter disabled:border-default-dark disabled:text-default-dark disabled:bg-transparent;
   }
   .btn-outline.default .icon-fill {
-    @apply fill-gray-500 hover:fill-gray-700 disabled:fill-gray-500;
+    @apply fill-default-base hover:fill-default-darker disabled:fill-default-base;
   }
   .btn-outline.default .icon-stroke {
-    @apply stroke-gray-500 hover:stroke-gray-700 disabled:stroke-gray-500;
+    @apply stroke-default-base hover:stroke-default-darker disabled:stroke-default-base;
   }
   .btn-outline.default .icon-rounded {
-    @apply border-gray-500 hover:border-gray-700 disabled:border-gray-500;
+    @apply border-default-base hover:border-default-darker disabled:border-default-base;
   }
 
   .btn-outline.danger {
-    @apply border-red-600 text-red-600 hover:border-red-900 hover:text-red-900 hover:bg-red-100 disabled:border-red-600 disabled:text-red-600 disabled:bg-transparent;
+    @apply border-danger-dark text-danger-dark hover:border-danger-darkest hover:text-danger-darkest hover:bg-danger-lighter disabled:border-danger-dark disabled:text-danger-dark disabled:bg-transparent;
   }
   .btn-outline.danger .icon-fill {
-    @apply fill-red-500 hover:fill-red-700 disabled:fill-red-500;
+    @apply fill-danger-base hover:fill-danger-darker disabled:fill-danger-base;
   }
   .btn-outline.danger .icon-stroke {
-    @apply stroke-red-500 hover:stroke-red-700 disabled:stroke-red-500;
+    @apply stroke-danger-base hover:stroke-danger-darker disabled:stroke-danger-base;
   }
   .btn-outline.danger .icon-rounded {
-    @apply border-red-500 hover:border-red-700 disabled:border-red-500;
+    @apply border-danger-base hover:border-danger-darker disabled:border-danger-base;
   }
 
   .btn-full {
-    @apply text-white focus-visible:outline-white focus-visible:ring focus-visible:ring-violet-500 focus-visible:ring-offset-violet-500 focus-visible:ring-offset-1;
+    @apply text-white focus-visible:outline-white focus-visible:ring focus-visible:ring-primary-base focus-visible:ring-offset-primary-base focus-visible:ring-offset-1;
   }
   .btn-full .icon-fill {
     @apply fill-white;
@@ -109,12 +109,12 @@
     @apply border-white;
   }
   .btn-full.primary {
-    @apply bg-violet-500 hover:bg-violet-400 disabled:bg-violet-500;
+    @apply bg-primary-base hover:bg-primary-light disabled:bg-primary-base;
   }
   .btn-full.default {
-    @apply bg-gray-600 hover:bg-gray-500 disabled:bg-gray-600;
+    @apply bg-default-dark hover:bg-default-base disabled:bg-default-dark;
   }
   .btn-full.danger {
-    @apply bg-red-600 hover:bg-red-500 disabled:bg-red-600;
+    @apply bg-danger-dark hover:bg-danger-base disabled:bg-danger-dark;
   }
 }

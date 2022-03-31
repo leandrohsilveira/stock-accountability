@@ -32,7 +32,7 @@
 </script>
 
 <InputGroup>
-  <span slot="before" class="w-8 text-center text-sm text-gray-700">
+  <span slot="before" class="w-8 text-center text-sm">
     {currency}
   </span>
   <input

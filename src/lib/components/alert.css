@@ -24,6 +24,6 @@
   }
 
   .alert.warning {
-    @apply border-red-400 bg-red-300 text-red-800;
+    @apply border-danger-light bg-danger-lighter text-danger-darkest;
   }
 }

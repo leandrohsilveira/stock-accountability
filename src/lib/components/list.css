@@ -4,7 +4,7 @@
   }
   .list > button,
   .list > li {
-    @apply w-full p-3 focus-visible:outline-violet-500;
+    @apply w-full p-3 focus-visible:outline-primary-base;
   }
 
   .list > button:first-child,
@@ -19,10 +19,10 @@
 
   .list > button:not(:last-child),
   .list > li:not(:last-child) {
-    @apply border-b border-gray-100;
+    @apply border-b border-default-lighter;
   }
   .list > button:not(:disabled) {
-    @apply hover:bg-gray-100 hover:cursor-pointer;
+    @apply hover:bg-default-lighter hover:cursor-pointer;
   }
 
   .list > button:disabled {
@@ -31,16 +31,16 @@
 
   .list > button.selected,
   .list > li.selected {
-    @apply bg-violet-500 hover:bg-violet-500 hover:text-white text-white transition-colors ease-in-out duration-300;
+    @apply bg-primary-base hover:bg-primary-base hover:text-white text-white transition-colors ease-in-out duration-300;
   }
 
   .list > button.selected .icon-fill,
   .list > li.selected .icon-fill {
-    @apply fill-white hover:fill-gray-300;
+    @apply fill-white hover:fill-default-lighter;
   }
 
   .list > button.selected .icon-stroke,
   .list > li.selected .icon-stroke {
-    @apply stroke-white hover:stroke-gray-300;
+    @apply stroke-white hover:stroke-default-lighter;
   }
 }

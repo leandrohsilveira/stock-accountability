@@ -1,3 +1,4 @@
+import { browser } from '$app/env'
 import { compareStrings, multiCompare } from '$lib/util/compare'
 
 export interface StorageKey {
@@ -20,8 +21,10 @@ export interface StorageKeyGroupCustomer {
 
 export function getStorageKeys(): string[] {
   const keys: string[] = []
-  for (let i = 0; i < window.localStorage.length; i++) {
-    keys.push(window.localStorage.key(i))
+  if (browser) {
+    for (let i = 0; i < window.localStorage.length; i++) {
+      keys.push(window.localStorage.key(i))
+    }
   }
   return keys
 }
