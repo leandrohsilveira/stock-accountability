@@ -1,18 +1,9 @@
 <script lang="ts">
+  import InputContainer from '$lib/components/InputContainer.svelte'
+
   import { useTranslate } from '$lib/config'
-  import CurrencyText from '$lib/domain/components/CurrencyText.svelte'
+  import CurrencyText from '$lib/components/CurrencyText.svelte'
   import { createEventDispatcher } from 'svelte'
-  import {
-    Button,
-    Col,
-    Form,
-    FormGroup,
-    Icon,
-    Input,
-    Label,
-    Row,
-    Table,
-  } from 'sveltestrap'
   import {
     isComputedTransaction,
     type ComputedTransaction,
@@ -30,8 +21,10 @@
   let month: number | null = null
   let type: string | null = null
 
-  const dispatch =
-    createEventDispatcher<{ edit: Transaction; delete: Transaction }>()
+  const dispatch = createEventDispatcher<{
+    edit: Transaction
+    delete: Transaction
+  }>()
 
   $: filtered = filter(items, stockId, month, type)
   $: cols = computed ? (showId ? 11 : 10) : showId ? 7 : 6
@@ -63,54 +56,48 @@
   }
 </script>
 
-<Form inline>
-  <Row>
-    <Col xs="6" sm="4" lg="3" xl="2">
-      <FormGroup>
-        <Label for="month">{$t('month')}</Label>
-        <Input
-          {tabindex}
-          type="select"
-          name="month"
-          placeholder={$t('month.placeholder')}
-          bind:value={month}
-        >
-          <option value={null}>{$t('theEntireYear')}</option>
-          <option value={0}>{$t('january')}</option>
-          <option value={1}>{$t('february')}</option>
-          <option value={2}>{$t('march')}</option>
-          <option value={3}>{$t('april')}</option>
-          <option value={4}>{$t('may')}</option>
-          <option value={5}>{$t('june')}</option>
-          <option value={6}>{$t('july')}</option>
-          <option value={7}>{$t('august')}</option>
-          <option value={8}>{$t('september')}</option>
-          <option value={9}>{$t('october')}</option>
-          <option value={10}>{$t('november')}</option>
-          <option value={11}>{$t('december')}</option>
-        </Input>
-      </FormGroup>
-    </Col>
-    <Col xs="6" sm="4" lg="3" xl="2">
-      <FormGroup>
-        <Label for="type">{$t('operation')}</Label>
-        <Input
-          {tabindex}
-          type="select"
-          name="type"
-          placeholder={$t('operation.placeholder')}
-          bind:value={type}
-        >
-          <option value={null}>{$t('all')}</option>
-          <option value="PURCHASE">{$t('PURCHASE')}</option>
-          <option value="SELL">{$t('SELL')}</option>
-        </Input>
-      </FormGroup>
-    </Col>
-  </Row>
-</Form>
+<form>
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+    <InputContainer labelFor="month" label={$t('month')}>
+      <select
+        {tabindex}
+        type="select"
+        name="month"
+        placeholder={$t('month.placeholder')}
+        bind:value={month}
+      >
+        <option value={null}>{$t('theEntireYear')}</option>
+        <option value={0}>{$t('january')}</option>
+        <option value={1}>{$t('february')}</option>
+        <option value={2}>{$t('march')}</option>
+        <option value={3}>{$t('april')}</option>
+        <option value={4}>{$t('may')}</option>
+        <option value={5}>{$t('june')}</option>
+        <option value={6}>{$t('july')}</option>
+        <option value={7}>{$t('august')}</option>
+        <option value={8}>{$t('september')}</option>
+        <option value={9}>{$t('october')}</option>
+        <option value={10}>{$t('november')}</option>
+        <option value={11}>{$t('december')}</option>
+      </select>
+    </InputContainer>
+    <InputContainer labelFor="type" label={$t('operation')}>
+      <select
+        {tabindex}
+        type="select"
+        name="type"
+        placeholder={$t('operation.placeholder')}
+        bind:value={type}
+      >
+        <option value={null}>{$t('all')}</option>
+        <option value="PURCHASE">{$t('PURCHASE')}</option>
+        <option value="SELL">{$t('SELL')}</option>
+      </select>
+    </InputContainer>
+  </div>
+</form>
 
-<Table borderless responsive striped>
+<table>
   <thead>
     <tr>
       <th>#</th>
@@ -137,22 +124,19 @@
     {#each filtered as transaction (transaction.id)}
       <tr>
         <td width="100">
-          <Button
-            size="sm"
-            color="link"
+          <button
+            class="btn btn-sm btn-link primary"
             {tabindex}
             on:click={() => handleEditTransaction(transaction)}
           >
-            <Icon name="pencil" />
-          </Button>
-          <Button
-            size="sm"
-            color="link"
-            class="text-danger"
+            E
+          </button>
+          <button
+            class="btn btn-sm btn-link default"
             on:click={() => handleDeleteTransaction(transaction)}
           >
-            <Icon name="trash-fill" />
-          </Button>
+            x
+          </button>
         </td>
         {#if showId}
           <th>{transaction.id}</th>
@@ -173,4 +157,4 @@
       </tr>
     {/each}
   </tbody>
-</Table>
+</table>

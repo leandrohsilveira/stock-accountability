@@ -1,13 +1,8 @@
 <script lang="ts">
+  import Modal from '$lib/components/Modal.svelte'
+
   import { useTranslate } from '$lib/config'
   import { createEventDispatcher } from 'svelte'
-  import {
-    Button,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-  } from 'sveltestrap'
   import type { Transaction } from './Transaction'
   import i18n from './TransactionDeleteDialog.i18n.json'
 
@@ -28,16 +23,14 @@
 </script>
 
 <Modal {isOpen}>
-  <ModalHeader toggle={close}>{$t('deleteTransaction')}</ModalHeader>
-  <ModalBody>
-    {$t(
-      'confirmMessage',
-      transaction.stockId,
-      transaction.date.toLocaleDateString()
-    )}
-  </ModalBody>
-  <ModalFooter>
-    <Button outline on:click={close}>{$t('cancel')}</Button>
-    <Button color="danger" on:click={handleConfirm}>{$t('delete')}</Button>
-  </ModalFooter>
+  <div slot="header">{$t('deleteTransaction')}</div>
+  {$t(
+    'confirmMessage',
+    transaction.stockId,
+    transaction.date.toLocaleDateString()
+  )}
+  <div slot="footer">
+    <button on:click={close}>{$t('cancel')}</button>
+    <button on:click={handleConfirm}>{$t('delete')}</button>
+  </div>
 </Modal>

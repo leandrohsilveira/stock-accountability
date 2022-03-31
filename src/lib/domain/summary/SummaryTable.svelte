@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { Table } from 'sveltestrap'
-  import CurrencyText from '$lib/domain/components/CurrencyText.svelte'
   import { useTranslate } from '$lib/config'
+  import CurrencyText from '$lib/components/CurrencyText.svelte'
   import type { Summary } from './Summary'
   import i18n from './SummaryTable.i18n.json'
 
@@ -20,7 +19,7 @@
   const t = useTranslate(i18n)
 </script>
 
-<Table responsive striped>
+<table class="overflow-x-auto">
   <thead>
     <tr>
       {#if showYear}
@@ -62,4 +61,4 @@
       </tr>
     {/each}
   </tbody>
-</Table>
+</table>

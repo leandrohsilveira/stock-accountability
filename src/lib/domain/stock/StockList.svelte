@@ -1,16 +1,8 @@
 <script lang="ts">
+  import InputGroup from '$lib/components/InputGroup.svelte'
+
   import { useTranslate } from '$lib/config'
   import { createEventDispatcher, onMount } from 'svelte'
-  import {
-    Badge,
-    Button,
-    Form,
-    Icon,
-    Input,
-    InputGroup,
-    ListGroup,
-    ListGroupItem,
-  } from 'sveltestrap'
   import type { EditStock, Stock } from './Stock'
   import i18n from './StockList.i18n.json'
 
@@ -92,106 +84,80 @@
 </script>
 
 <div on:keydown={handleKeyDown}>
-  <ListGroup>
-    <ListGroupItem>
-      <Input
+  <ul>
+    <li>
+      <input
         {tabindex}
         type="search"
         placeholder={$t('findStock')}
-        bind:inner={filterInput}
+        bind:this={filterInput}
         bind:value={filter}
       />
-    </ListGroupItem>
+    </li>
     {#if !filter && items.length === 0}
-      <ListGroupItem disabled>
+      <li disabled>
         {$t('noStockFoundTypeAnIdToAddNewTransaction')}
-      </ListGroupItem>
+      </li>
     {/if}
     {#each filtered as item}
       {#if editing === item.id}
-        <ListGroupItem>
-          <Form on:submit={handleSaveStock}>
+        <li>
+          <form on:submit={handleSaveStock}>
             <InputGroup>
-              <Input
+              <input
                 {tabindex}
                 type="text"
-                bind:inner={inputEditStock}
+                bind:this={inputEditStock}
                 bind:value={newStockId}
               />
-              <Button
-                {tabindex}
-                type="submit"
-                color="primary"
-                on:click={handleSaveStock}
-              >
-                <Icon name="check2" />
-              </Button>
-              <Button {tabindex} on:click={handleCancelEditStock}>
-                <Icon name="x-circle" />
-              </Button>
+              <div slot="after">
+                <button
+                  class="btn btn-sm btn-link primary"
+                  {tabindex}
+                  type="submit"
+                  on:click={handleSaveStock}
+                >
+                  S
+                </button>
+                <button
+                  class="btn btn-sm btn-link default"
+                  {tabindex}
+                  on:click={handleCancelEditStock}
+                >
+                  C
+                </button>
+              </div>
             </InputGroup>
-          </Form>
-        </ListGroupItem>
+          </form>
+        </li>
       {:else}
-        <ListGroupItem
-          action
-          {tabindex}
-          tag="button"
-          active={item.id === selected}
-          on:click={() => handleFilterTransactions(item.id)}
-        >
-          <div class="acao">
-            <div class="desc">
-              <Badge color={item.id === selected ? 'dark' : 'primary'}>
-                {item.quantity}
-              </Badge>
-              {item.id}
-            </div>
-            <div class="add">
-              <Button
+        <li {tabindex} on:click={() => handleFilterTransactions(item.id)}>
+          <div class="flex justify-between">
+            <p>{item.id}</p>
+            <div class="flex flex-row">
+              <button
+                class="btn btn-sm btn-link primary"
                 {tabindex}
-                class={item.id === selected ? 'link-light' : 'link-primary'}
-                size="sm"
-                color="link"
                 on:click={(e) => handleAddTransaction(e, item.id)}
               >
-                <Icon name="plus-circle" />
-              </Button>
-              <Button
-                class={item.id === selected ? 'link-light' : 'link-primary'}
-                size="sm"
-                color="link"
+                +
+              </button>
+              <button
+                class="btn btn-sm btn-link default"
                 on:click={(e) => handleEditStock(e, item.id)}
               >
-                <Icon name="pencil" />
-              </Button>
+                E
+              </button>
             </div>
           </div>
-        </ListGroupItem>
+        </li>
       {/if}
     {/each}
     {#if filter}
-      <ListGroupItem
-        {tabindex}
-        action
-        tag="button"
-        on:click={handleAddStockWithTransaction}
-      >
-        <Icon name="plus-circle" />
+      <li {tabindex} on:click={handleAddStockWithTransaction}>
+        +
         {$t('addStock', filter.toUpperCase())}
-      </ListGroupItem>
+      </li>
     {/if}
-  </ListGroup>
+  </ul>
 </div>
-
-<style>
-  .acao {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  :global(.btn.link-light:focus) {
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgb(255 255 255 / 50%);
-  }
-</style>

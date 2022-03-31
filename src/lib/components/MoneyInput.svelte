@@ -3,6 +3,7 @@
   import InputGroup from './InputGroup.svelte'
 
   export let value: number | undefined
+  export let id: string | undefined = undefined
   export let name: string | undefined = undefined
   export let tabindex: number | undefined = undefined
   export let placeholder: string | undefined = undefined
@@ -34,6 +35,7 @@
   <span slot="before text-sm text-gray-700">{currency}</span>
   <input
     class="input"
+    {id}
     {name}
     {tabindex}
     {placeholder}

@@ -1,8 +1,7 @@
 <script lang="ts">
   import { useTranslate } from '$lib/config'
-  import CurrencyText from '$lib/domain/components/CurrencyText.svelte'
-  import NumberChange from '$lib/domain/components/NumberChange.svelte'
-  import { Table } from 'sveltestrap'
+  import CurrencyText from '$lib/components/CurrencyText.svelte'
+  import NumberChange from '$lib/components/NumberChange.svelte'
   import { mergeSummaries, type Summary } from './Summary'
   import i18n from './SummaryChangeTable.i18n.json'
 
@@ -17,7 +16,7 @@
   const t = useTranslate(i18n)
 </script>
 
-<Table borderless responsive striped>
+<table class="overflow-x-auto">
   <thead>
     <tr>
       <th>{$t('stockId')}</th>
@@ -57,4 +56,4 @@
       </tr>
     {/each}
   </tbody>
-</Table>
+</table>

@@ -1,6 +1,9 @@
 <script lang="ts">
+  import InputContainer from '$lib/components/InputContainer.svelte'
+  import Modal from '$lib/components/Modal.svelte'
+
   import { useTranslate } from '$lib/config'
-  import MoneyInput from '$lib/domain/components/MoneyInput.svelte'
+  import MoneyInput from '$lib/components/MoneyInput.svelte'
   import { toDate, toISODateString } from '$lib/util/date'
   import {
     all,
@@ -11,17 +14,6 @@
     required,
   } from '$lib/util/validate'
   import { createEventDispatcher } from 'svelte'
-  import {
-    Button,
-    Form,
-    FormGroup,
-    Input,
-    Label,
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-  } from 'sveltestrap'
   import type {
     SubmitTransaction,
     Transaction,
@@ -121,102 +113,109 @@
 </script>
 
 <Modal {isOpen} on:open={handleOpen} on:close={clear}>
-  <ModalHeader toggle={close}>Adicionar movimentação</ModalHeader>
-  <ModalBody>
-    <div on:keydown={handleKeyDown}>
-      <Form on:submit={handleSubmit}>
-        <FormGroup>
-          <Label for="stockId">{$t('stockId')}</Label>
-          <Input
-            {tabindex}
-            name="stockId"
-            type="text"
-            feedback={stockIdErrors}
-            invalid={dirty.stockId && stockIdErrors.length > 0}
-            disabled={!editStockId}
-            placeholder={$t('stockId.placeholder')}
-            bind:inner={stockIdInput}
-            bind:value={stockId}
-            on:input={() => (dirty = { ...dirty, stockId: true })}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label for="date">{$t('date')}</Label>
-          <Input
-            {tabindex}
-            name="date"
-            type="date"
-            feedback={dateErrors}
-            invalid={dirty.date && dateErrors.length > 0}
-            placeholder={$t('date.placeholder')}
-            bind:inner={dateInput}
-            bind:value={date}
-            on:input={() => (dirty = { ...dirty, date: true })}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label for="type">{$t('type')}</Label>
-          <Input
-            {tabindex}
-            name="type"
-            type="select"
-            feedback={typeErrors}
-            invalid={dirty.type && typeErrors.length > 0}
-            placeholder={$t('type.placeholder')}
-            bind:value={type}
-            on:input={() => (dirty = { ...dirty, type: true })}
-          >
-            <option value="PURCHASE">{$t('PURCHASE')}</option>
-            <option value="SELL">{$t('SELL')}</option>
-          </Input>
-        </FormGroup>
-        <FormGroup>
-          <Label for="quantity">{$t('quantity')}</Label>
-          <Input
-            {tabindex}
-            name="quantity"
-            type="number"
-            feedback={quantityErrors}
-            invalid={dirty.quantity && quantityErrors.length > 0}
-            placeholder={$t('quantity.placeholder')}
-            bind:value={quantity}
-            on:input={() => (dirty = { ...dirty, quantity: true })}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label for="unitPrice">{$t('unitPrice')}</Label>
-          <MoneyInput
-            {tabindex}
-            name="unitPrice"
-            feedback={unitPriceErrors}
-            invalid={dirty.unitPrice && unitPriceErrors.length > 0}
-            placeholder={$t('unitPrice.placeholder')}
-            bind:value={unitPrice}
-            on:input={() => (dirty = { ...dirty, unitPrice: true })}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Input
-            {tabindex}
-            type="checkbox"
-            name="addNew"
-            label={$t('continue')}
-            bind:checked={addMore}
-          />
-        </FormGroup>
-        <button type="submit" hidden />
-      </Form>
-    </div>
-  </ModalBody>
-  <ModalFooter>
-    <Button {tabindex} outline on:click={close}>{$t('cancel')}</Button>
-    <Button
-      {tabindex}
-      color="primary"
-      disabled={!valid}
-      on:click={handleSubmit}
-    >
-      {$t('save')}
-    </Button>
-  </ModalFooter>
+  <div slot="header">Adicionar movimentação</div>
+  <div on:keydown={handleKeyDown}>
+    <form on:submit={handleSubmit}>
+      <InputContainer
+        labelFor="stockId"
+        label={$t('stockId')}
+        errors={dirty.stockId && stockIdErrors}
+      >
+        <input
+          {tabindex}
+          id="stockId"
+          name="stockId"
+          type="text"
+          disabled={!editStockId}
+          placeholder={$t('stockId.placeholder')}
+          bind:this={stockIdInput}
+          bind:value={stockId}
+          on:input={() => (dirty = { ...dirty, stockId: true })}
+        />
+      </InputContainer>
+      <InputContainer
+        labelFor="date"
+        label={$t('date')}
+        errors={dirty.date && dateErrors}
+      >
+        <input
+          {tabindex}
+          id="date"
+          name="date"
+          type="date"
+          placeholder={$t('date.placeholder')}
+          bind:this={dateInput}
+          bind:value={date}
+          on:input={() => (dirty = { ...dirty, date: true })}
+        />
+      </InputContainer>
+      <InputContainer
+        labelFor="type"
+        label={$t('type')}
+        errors={dirty.type && typeErrors}
+      >
+        <select
+          {tabindex}
+          id="type"
+          name="type"
+          type="select"
+          placeholder={$t('type.placeholder')}
+          bind:value={type}
+          on:input={() => (dirty = { ...dirty, type: true })}
+        >
+          <option value="PURCHASE">{$t('PURCHASE')}</option>
+          <option value="SELL">{$t('SELL')}</option>
+        </select>
+      </InputContainer>
+      <InputContainer
+        labelFor="quantity"
+        label={$t('quantity')}
+        errors={dirty.quantity && quantityErrors}
+      >
+        <input
+          {tabindex}
+          id="quantity"
+          name="quantity"
+          type="number"
+          placeholder={$t('quantity.placeholder')}
+          bind:value={quantity}
+          on:input={() => (dirty = { ...dirty, quantity: true })}
+        />
+      </InputContainer>
+      <InputContainer
+        labelFor="unitPrice"
+        label={$t('unitPrice')}
+        errors={dirty.unitPrice && unitPriceErrors}
+      >
+        <MoneyInput
+          {tabindex}
+          id="unitPrice"
+          name="unitPrice"
+          placeholder={$t('unitPrice.placeholder')}
+          bind:value={unitPrice}
+          on:input={() => (dirty = { ...dirty, unitPrice: true })}
+        />
+      </InputContainer>
+      <InputContainer labelFor="addNew" label={$t('continue')}>
+        <input
+          {tabindex}
+          id="addNew"
+          name="addNew"
+          type="checkbox"
+          bind:checked={addMore}
+        />
+      </InputContainer>
+      <div class="mt-6 flex flex-row-reverse gap-2">
+        <button
+          {tabindex}
+          type="submit"
+          disabled={!valid}
+          on:click={handleSubmit}
+        >
+          {$t('save')}
+        </button>
+        <button {tabindex} on:click={close}>{$t('cancel')}</button>
+      </div>
+    </form>
+  </div>
 </Modal>

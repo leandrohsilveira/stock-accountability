@@ -1,8 +1,9 @@
 <script lang="ts">
+  import Card from '$lib/components/Card.svelte'
+  import NumberChange from '$lib/components/NumberChange.svelte'
+  import Page from '$lib/components/Page.svelte'
+  import YearInput from '$lib/components/YearInput.svelte'
   import { useTranslate } from '$lib/config'
-  import NumberChange from '$lib/domain/components/NumberChange.svelte'
-  import Page from '$lib/domain/components/Page.svelte'
-  import YearInput from '$lib/domain/components/YearInput.svelte'
   import { findCustomerById } from '$lib/domain/customer/customer.store'
   import {
     addErrorMessage,
@@ -29,7 +30,6 @@
   import TransactionForm from '$lib/domain/transaction/TransactionForm.svelte'
   import TransactionTable from '$lib/domain/transaction/TransactionTable.svelte'
   import { createEventDispatcher } from 'svelte'
-  import { Card, CardBody, Col, Row } from 'sveltestrap'
 
   export let customerId: string
   export let year: number
@@ -121,60 +121,45 @@
 </script>
 
 <Page
-  title={$t('transactionOfCustomer', customer.name)}
+  title={$t('transactionOfCustomer', customer?.name)}
   back
   on:back={handleBackClick}
 >
-  <Row>
-    <Col>
-      <YearInput tabindex={3} value={year} on:change={handleChangeYear} />
-    </Col>
-  </Row>
-  <Row>
-    <Col class="mt-3" md="12" lg="3">
-      <StockList
-        tabindex={2}
-        items={$stockStore}
-        bind:selected={stockId}
-        on:addTransaction={handleAddTransaction}
-        on:addStockWithTransaction={handleAddStockWithTransaction}
-        on:editStock={handleEditStock}
-      />
-    </Col>
-    <Col class="mt-3" md="12" lg="9">
-      <Row>
-        <Col>
-          <Card>
-            <CardBody>
-              <strong><NumberChange start={year - 1} end={year} /></strong>
-              <SummaryChangeTable
-                previousSummaries={$previousSummaryStore}
-                currentSummaries={$summaryStore}
-              />
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-      <Row class="mt-3">
-        <Col>
-          <Card>
-            <CardBody>
-              <h4>Movimentações</h4>
-              <TransactionTable
-                tabindex={4}
-                items={$computedTransactionStore}
-                {stockId}
-                computed
-                on:edit={handleEditTransaction}
-                on:delete={handleDeleteTransaction}
-              />
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    </Col>
-  </Row>
+  <div class="flex justify-center">
+    <YearInput tabindex={3} value={year} on:change={handleChangeYear} />
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-3 pt-3">
+    <StockList
+      tabindex={2}
+      items={$stockStore}
+      bind:selected={stockId}
+      on:addTransaction={handleAddTransaction}
+      on:addStockWithTransaction={handleAddStockWithTransaction}
+      on:editStock={handleEditStock}
+    />
+    <div class="lg:col-span-3 flex flex-col gap-3">
+      <Card>
+        <strong><NumberChange start={year - 1} end={year} /></strong>
+        <SummaryChangeTable
+          previousSummaries={$previousSummaryStore}
+          currentSummaries={$summaryStore}
+        />
+      </Card>
+      <Card>
+        <h4>Movimentações</h4>
+        <TransactionTable
+          tabindex={4}
+          items={$computedTransactionStore}
+          {stockId}
+          computed
+          on:edit={handleEditTransaction}
+          on:delete={handleDeleteTransaction}
+        />
+      </Card>
+    </div>
+  </div>
 </Page>
+
 <TransactionForm
   {customerId}
   {year}
