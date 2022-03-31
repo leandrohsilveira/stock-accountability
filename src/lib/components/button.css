@@ -1,0 +1,120 @@
+@layer base {
+  .btn {
+    min-width: 100px;
+    @apply p-2 text-xs transition-colors ease-in-out duration-300 rounded-full uppercase text-center;
+    @apply focus-visible:outline-violet-500 focus-visible:ring-offset-1 focus-visible:ring focus-visible:ring-offset-violet-500 focus-visible:ring-violet-500;
+  }
+  .btn.btn-sm {
+    @apply p-1;
+  }
+  .btn.btn-fit {
+    @apply min-w-fit;
+  }
+  .btn:disabled {
+    @apply opacity-20 cursor-not-allowed;
+  }
+
+  .btn-icon {
+    @apply flex items-center gap-1;
+  }
+
+  .btn-link.primary {
+    @apply text-violet-500 hover:text-violet-700 disabled:text-violet-500;
+  }
+  .btn-link.primary .icon-fill {
+    @apply fill-violet-500 hover:fill-violet-700 disabled:fill-violet-500;
+  }
+  .btn-link.primary .icon-stroke {
+    @apply stroke-violet-500 hover:stroke-violet-700 disabled:stroke-violet-500;
+  }
+  .btn-link.primary .icon-rounded {
+    @apply border-violet-500 hover:border-violet-700 disabled:border-violet-500;
+  }
+  .btn-link.default {
+    @apply text-gray-600 hover:text-gray-900 disabled:text-gray-600;
+  }
+  .btn-link.default .icon-fill {
+    @apply fill-gray-500 hover:fill-gray-700 disabled:fill-gray-500;
+  }
+  .btn-link.default .icon-stroke {
+    @apply stroke-gray-500 hover:stroke-gray-700 disabled:stroke-gray-500;
+  }
+  .btn-link.default .icon-rounded {
+    @apply border-gray-500 hover:border-gray-700 disabled:border-gray-500;
+  }
+  .btn-link.danger {
+    @apply text-red-600 hover:text-red-900 disabled:text-red-600;
+  }
+  .btn-link.danger .icon-fill {
+    @apply fill-red-500 hover:fill-red-700 disabled:fill-red-500;
+  }
+  .btn-link.danger .icon-stroke {
+    @apply stroke-red-500 hover:stroke-red-700 disabled:stroke-red-500;
+  }
+  .btn-link.danger .icon-rounded {
+    @apply border-red-500 hover:border-red-700 disabled:border-gray-500;
+  }
+
+  .btn-outline {
+    @apply border;
+  }
+  .btn-outline.primary {
+    @apply border-violet-500 text-violet-500 hover:border-violet-700 hover:text-violet-700  hover:bg-violet-100 disabled:border-violet-500 disabled:text-violet-500 disabled:bg-transparent;
+  }
+  .btn-outline.primary .icon-fill {
+    @apply fill-violet-500 hover:fill-violet-700 disabled:fill-violet-500;
+  }
+  .btn-outline.primary .icon-stroke {
+    @apply stroke-violet-500 hover:stroke-violet-700 disabled:stroke-violet-500;
+  }
+  .btn-outline.primary .icon-rounded {
+    @apply border-violet-500 hover:border-violet-700 disabled:border-violet-500;
+  }
+  .btn-outline.default {
+    @apply border-gray-600 text-gray-600 hover:border-gray-900 hover:text-gray-900 hover:bg-gray-100 disabled:border-gray-600 disabled:text-gray-600 disabled:bg-transparent;
+  }
+  .btn-outline.default .icon-fill {
+    @apply fill-gray-500 hover:fill-gray-700 disabled:fill-gray-500;
+  }
+  .btn-outline.default .icon-stroke {
+    @apply stroke-gray-500 hover:stroke-gray-700 disabled:stroke-gray-500;
+  }
+  .btn-outline.default .icon-rounded {
+    @apply border-gray-500 hover:border-gray-700 disabled:border-gray-500;
+  }
+
+  .btn-outline.danger {
+    @apply border-red-600 text-red-600 hover:border-red-900 hover:text-red-900 hover:bg-red-100 disabled:border-red-600 disabled:text-red-600 disabled:bg-transparent;
+  }
+  .btn-outline.danger .icon-fill {
+    @apply fill-red-500 hover:fill-red-700 disabled:fill-red-500;
+  }
+  .btn-outline.danger .icon-stroke {
+    @apply stroke-red-500 hover:stroke-red-700 disabled:stroke-red-500;
+  }
+  .btn-outline.danger .icon-rounded {
+    @apply border-red-500 hover:border-red-700 disabled:border-red-500;
+  }
+
+  .btn-full {
+    @apply text-white focus-visible:outline-white focus-visible:ring focus-visible:ring-violet-500 focus-visible:ring-offset-violet-500 focus-visible:ring-offset-1;
+  }
+  .btn-full .icon-fill {
+    @apply fill-white;
+  }
+  .btn-full .icon-stroke {
+    @apply stroke-white;
+  }
+  .btn-full .icon-rounded {
+    @apply border-white;
+  }
+  .btn-full.primary {
+    @apply bg-violet-500 hover:bg-violet-400 disabled:bg-violet-500;
+  }
+  .btn-full.default {
+    @apply bg-gray-600 hover:bg-gray-500 disabled:bg-gray-600;
+  }
+  .btn-full.danger {
+    @apply bg-red-600 hover:bg-red-500 disabled:bg-red-600;
+  }
+}

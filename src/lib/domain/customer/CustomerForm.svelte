@@ -27,7 +27,7 @@
   const dispatch = createEventDispatcher<{ submit: SubmitCustomer }>()
 
   function handleOpen() {
-    nameInputRef?.focus()
+    nameInputRef.focus()
     name = edit?.name
     document = edit?.document
   }
@@ -67,9 +67,14 @@
   }
 </script>
 
-<Modal bind:isOpen={open} on:open={handleOpen} on:close={clear}>
+<Modal
+  bind:isOpen={open}
+  on:open={handleOpen}
+  on:close={clear}
+  --modal-width="350px"
+>
   <h3 slot="header">{$t('addClient')}</h3>
-  <form on:submit={handleSubmit}>
+  <form class="flex flex-col gap-6" on:submit={handleSubmit}>
     <InputContainer
       label={$t('name')}
       labelFor="name"
@@ -95,7 +100,7 @@
         bind:value={document}
       />
     </InputContainer>
-    <InputContainer label={$t('continue')} labelFor="addNew">
+    <div class="w-full checkbox">
       <input
         tabindex={3}
         type="checkbox"
@@ -103,8 +108,9 @@
         name="addNew"
         bind:checked={addMore}
       />
-    </InputContainer>
-    <div class="w-full p-6 flex flex-row-reverse gap-2">
+      <label for="addNew" class="label">{$t('continue')}</label>
+    </div>
+    <div class="w-full flex flex-row-reverse gap-2">
       <button
         class="btn btn-full primary"
         type="submit"

@@ -1,4 +1,9 @@
 <script lang="ts">
+  import Card from '$lib/components/Card.svelte'
+  import AddIcon from '$lib/icons/add.svg?component'
+  import PencilIcon from '$lib/icons/pencil.svg?component'
+  import CheckIcon from '$lib/icons/check.svg?component'
+  import CrossCircleIcon from '$lib/icons/cross-circle.svg?component'
   import InputGroup from '$lib/components/InputGroup.svelte'
 
   import { useTranslate } from '$lib/config'
@@ -84,80 +89,91 @@
 </script>
 
 <div on:keydown={handleKeyDown}>
-  <ul>
-    <li>
-      <input
-        {tabindex}
-        type="search"
-        placeholder={$t('findStock')}
-        bind:this={filterInput}
-        bind:value={filter}
-      />
-    </li>
-    {#if !filter && items.length === 0}
-      <li disabled>
-        {$t('noStockFoundTypeAnIdToAddNewTransaction')}
+  <Card noPadding>
+    <ul class="list">
+      <li>
+        <input
+          {tabindex}
+          class="input"
+          type="search"
+          placeholder={$t('findStock')}
+          bind:this={filterInput}
+          bind:value={filter}
+        />
       </li>
-    {/if}
-    {#each filtered as item}
-      {#if editing === item.id}
-        <li>
-          <form on:submit={handleSaveStock}>
-            <InputGroup>
-              <input
-                {tabindex}
-                type="text"
-                bind:this={inputEditStock}
-                bind:value={newStockId}
-              />
-              <div slot="after">
-                <button
-                  class="btn btn-sm btn-link primary"
+      {#if !filter && items.length === 0}
+        <button disabled>
+          {$t('noStockFoundTypeAnIdToAddNewTransaction')}
+        </button>
+      {/if}
+      {#each filtered as item}
+        {#if editing === item.id}
+          <li>
+            <form on:submit={handleSaveStock}>
+              <InputGroup --addon-after-width="70px">
+                <input
                   {tabindex}
-                  type="submit"
-                  on:click={handleSaveStock}
-                >
-                  S
-                </button>
-                <button
-                  class="btn btn-sm btn-link default"
-                  {tabindex}
-                  on:click={handleCancelEditStock}
-                >
-                  C
-                </button>
-              </div>
-            </InputGroup>
-          </form>
-        </li>
-      {:else}
-        <li {tabindex} on:click={() => handleFilterTransactions(item.id)}>
-          <div class="flex justify-between">
+                  class="input"
+                  type="text"
+                  bind:this={inputEditStock}
+                  bind:value={newStockId}
+                />
+                <div slot="after" class="flex">
+                  <button
+                    class="btn btn-fit btn-link primary"
+                    {tabindex}
+                    type="submit"
+                    on:click={handleSaveStock}
+                  >
+                    <CheckIcon class="icon-sm icon-fill icon-rounded" />
+                  </button>
+                  <button
+                    class="btn btn-fit btn-link default"
+                    {tabindex}
+                    on:click={handleCancelEditStock}
+                  >
+                    <CrossCircleIcon class="icon-sm icon-fill" />
+                  </button>
+                </div>
+              </InputGroup>
+            </form>
+          </li>
+        {:else}
+          <button
+            {tabindex}
+            class="flex justify-between"
+            class:selected={selected === item.id}
+            on:click={() => handleFilterTransactions(item.id)}
+          >
             <p>{item.id}</p>
             <div class="flex flex-row">
               <button
-                class="btn btn-sm btn-link primary"
+                class="btn btn-fit btn-link primary"
                 {tabindex}
                 on:click={(e) => handleAddTransaction(e, item.id)}
               >
-                +
+                <AddIcon class="icon-sm icon-fill" />
               </button>
               <button
-                class="btn btn-sm btn-link default"
+                class="btn btn-fit btn-link default"
                 on:click={(e) => handleEditStock(e, item.id)}
               >
-                E
+                <PencilIcon class="icon-sm icon-fill" />
               </button>
             </div>
-          </div>
-        </li>
+          </button>
+        {/if}
+      {/each}
+      {#if filter}
+        <button
+          {tabindex}
+          class="flex items-center gap-2"
+          on:click={handleAddStockWithTransaction}
+        >
+          <AddIcon class="icon-sm icon-fill" />
+          {$t('addStock', filter.toUpperCase())}
+        </button>
       {/if}
-    {/each}
-    {#if filter}
-      <li {tabindex} on:click={handleAddStockWithTransaction}>
-        +
-        {$t('addStock', filter.toUpperCase())}
-      </li>
-    {/if}
-  </ul>
+    </ul>
+  </Card>
 </div>

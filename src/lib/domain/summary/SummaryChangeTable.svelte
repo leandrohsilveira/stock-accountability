@@ -16,44 +16,49 @@
   const t = useTranslate(i18n)
 </script>
 
-<table class="overflow-x-auto">
-  <thead>
-    <tr>
-      <th>{$t('stockId')}</th>
-      <th class="text-center">{$t('amount')}</th>
-      <th class="text-center">{$t('accruedCost')}</th>
-      <th class="text-center">{$t('averageCost')}</th>
-      <th>{$t('totalProfit')}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {#if !summaries.length}
+<div class="table-responsive">
+  <table>
+    <thead>
       <tr>
-        <td colspan="5">{$t('noRecordMessage')}</td>
+        <th>{$t('stockId')}</th>
+        <th class="text-center">{$t('amount')}</th>
+        <th class="text-center">{$t('accruedCost')}</th>
+        <th class="text-center">{$t('averageCost')}</th>
+        <th>{$t('totalProfit')}</th>
       </tr>
-    {/if}
-    {#each summaries as item (item.stockId)}
-      <tr>
-        <td>{item.stockId}</td>
-        <td>
-          <NumberChange start={item.previousAmount} end={item.currentAmount} />
-        </td>
-        <td>
-          <NumberChange
-            start={item.previousAccruedCost}
-            end={item.currentAccruedCost}
-            currency
-          />
-        </td>
-        <td>
-          <NumberChange
-            start={item.previousAverageCost}
-            end={item.currentAverageCost}
-            currency
-          />
-        </td>
-        <td><CurrencyText value={item.totalProfit} /></td>
-      </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#if !summaries.length}
+        <tr>
+          <td colspan="5">{$t('noRecordMessage')}</td>
+        </tr>
+      {/if}
+      {#each summaries as item (item.stockId)}
+        <tr>
+          <td>{item.stockId}</td>
+          <td>
+            <NumberChange
+              start={item.previousAmount}
+              end={item.currentAmount}
+            />
+          </td>
+          <td>
+            <NumberChange
+              start={item.previousAccruedCost}
+              end={item.currentAccruedCost}
+              currency
+            />
+          </td>
+          <td>
+            <NumberChange
+              start={item.previousAverageCost}
+              end={item.currentAverageCost}
+              currency
+            />
+          </td>
+          <td><CurrencyText value={item.totalProfit} /></td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>

@@ -112,110 +112,120 @@
   }
 </script>
 
-<Modal {isOpen} on:open={handleOpen} on:close={clear}>
-  <div slot="header">Adicionar movimentação</div>
-  <div on:keydown={handleKeyDown}>
-    <form on:submit={handleSubmit}>
-      <InputContainer
-        labelFor="stockId"
-        label={$t('stockId')}
-        errors={dirty.stockId && stockIdErrors}
+<Modal {isOpen} on:open={handleOpen} on:close={clear} --modal-width="500px">
+  <h3 slot="header">Adicionar movimentação</h3>
+  <form
+    class="flex flex-col gap-6"
+    on:keydown={handleKeyDown}
+    on:submit={handleSubmit}
+  >
+    <InputContainer
+      labelFor="stockId"
+      label={$t('stockId')}
+      errors={dirty.stockId && stockIdErrors}
+    >
+      <input
+        {tabindex}
+        class="input"
+        id="stockId"
+        name="stockId"
+        type="text"
+        disabled={!editStockId}
+        placeholder={$t('stockId.placeholder')}
+        bind:this={stockIdInput}
+        bind:value={stockId}
+        on:input={() => (dirty = { ...dirty, stockId: true })}
+      />
+    </InputContainer>
+    <InputContainer
+      labelFor="date"
+      label={$t('date')}
+      errors={dirty.date && dateErrors}
+    >
+      <input
+        {tabindex}
+        class="input"
+        id="date"
+        name="date"
+        type="date"
+        placeholder={$t('date.placeholder')}
+        bind:this={dateInput}
+        bind:value={date}
+        on:input={() => (dirty = { ...dirty, date: true })}
+      />
+    </InputContainer>
+    <InputContainer
+      labelFor="type"
+      label={$t('type')}
+      errors={dirty.type && typeErrors}
+    >
+      <select
+        {tabindex}
+        class="input"
+        id="type"
+        name="type"
+        type="select"
+        placeholder={$t('type.placeholder')}
+        bind:value={type}
+        on:input={() => (dirty = { ...dirty, type: true })}
       >
-        <input
-          {tabindex}
-          id="stockId"
-          name="stockId"
-          type="text"
-          disabled={!editStockId}
-          placeholder={$t('stockId.placeholder')}
-          bind:this={stockIdInput}
-          bind:value={stockId}
-          on:input={() => (dirty = { ...dirty, stockId: true })}
-        />
-      </InputContainer>
-      <InputContainer
-        labelFor="date"
-        label={$t('date')}
-        errors={dirty.date && dateErrors}
+        <option value="PURCHASE">{$t('PURCHASE')}</option>
+        <option value="SELL">{$t('SELL')}</option>
+      </select>
+    </InputContainer>
+    <InputContainer
+      labelFor="quantity"
+      label={$t('quantity')}
+      errors={dirty.quantity && quantityErrors}
+    >
+      <input
+        {tabindex}
+        class="input"
+        id="quantity"
+        name="quantity"
+        type="number"
+        placeholder={$t('quantity.placeholder')}
+        bind:value={quantity}
+        on:input={() => (dirty = { ...dirty, quantity: true })}
+      />
+    </InputContainer>
+    <InputContainer
+      labelFor="unitPrice"
+      label={$t('unitPrice')}
+      errors={dirty.unitPrice && unitPriceErrors}
+    >
+      <MoneyInput
+        {tabindex}
+        id="unitPrice"
+        name="unitPrice"
+        placeholder={$t('unitPrice.placeholder')}
+        bind:value={unitPrice}
+        on:input={() => (dirty = { ...dirty, unitPrice: true })}
+      />
+    </InputContainer>
+    <div class="checkbox">
+      <input
+        {tabindex}
+        id="addNew"
+        name="addNew"
+        type="checkbox"
+        bind:checked={addMore}
+      />
+      <label for="addNew" class="label">{$t('continue')}</label>
+    </div>
+    <div class="flex flex-row-reverse gap-2">
+      <button
+        {tabindex}
+        class="btn btn-full primary"
+        type="submit"
+        disabled={!valid}
+        on:click={handleSubmit}
       >
-        <input
-          {tabindex}
-          id="date"
-          name="date"
-          type="date"
-          placeholder={$t('date.placeholder')}
-          bind:this={dateInput}
-          bind:value={date}
-          on:input={() => (dirty = { ...dirty, date: true })}
-        />
-      </InputContainer>
-      <InputContainer
-        labelFor="type"
-        label={$t('type')}
-        errors={dirty.type && typeErrors}
-      >
-        <select
-          {tabindex}
-          id="type"
-          name="type"
-          type="select"
-          placeholder={$t('type.placeholder')}
-          bind:value={type}
-          on:input={() => (dirty = { ...dirty, type: true })}
-        >
-          <option value="PURCHASE">{$t('PURCHASE')}</option>
-          <option value="SELL">{$t('SELL')}</option>
-        </select>
-      </InputContainer>
-      <InputContainer
-        labelFor="quantity"
-        label={$t('quantity')}
-        errors={dirty.quantity && quantityErrors}
-      >
-        <input
-          {tabindex}
-          id="quantity"
-          name="quantity"
-          type="number"
-          placeholder={$t('quantity.placeholder')}
-          bind:value={quantity}
-          on:input={() => (dirty = { ...dirty, quantity: true })}
-        />
-      </InputContainer>
-      <InputContainer
-        labelFor="unitPrice"
-        label={$t('unitPrice')}
-        errors={dirty.unitPrice && unitPriceErrors}
-      >
-        <MoneyInput
-          {tabindex}
-          id="unitPrice"
-          name="unitPrice"
-          placeholder={$t('unitPrice.placeholder')}
-          bind:value={unitPrice}
-          on:input={() => (dirty = { ...dirty, unitPrice: true })}
-        />
-      </InputContainer>
-      <InputContainer labelFor="addNew" label={$t('continue')}>
-        <input
-          {tabindex}
-          id="addNew"
-          name="addNew"
-          type="checkbox"
-          bind:checked={addMore}
-        />
-      </InputContainer>
-      <div class="mt-6 flex flex-row-reverse gap-2">
-        <button
-          {tabindex}
-          type="submit"
-          disabled={!valid}
-          on:click={handleSubmit}
-        >
-          {$t('save')}
-        </button>
-        <button {tabindex} on:click={close}>{$t('cancel')}</button>
-      </div>
-    </form>
-  </div>
+        {$t('save')}
+      </button>
+      <button {tabindex} class="btn btn-outline default" on:click={close}>
+        {$t('cancel')}
+      </button>
+    </div>
+  </form>
 </Modal>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import IconAdd from '$lib/icons/add.svg?component'
   import Card from '$lib/components/Card.svelte'
   import Page from '$lib/components/Page.svelte'
   import { useTranslate } from '$lib/config'
@@ -63,7 +64,12 @@
 </script>
 
 <Page title={$t('customers')}>
-  <button class="btn btn-full primary" tabindex={1} on:click={handleAddClick}>
+  <button
+    class="btn btn-full btn-icon primary"
+    tabindex={1}
+    on:click={handleAddClick}
+  >
+    <IconAdd class="icon icon-fill" />
     {$t('addCustomer')}
   </button>
   <div class="mt-2">

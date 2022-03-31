@@ -2,7 +2,7 @@
   import { formatNumber, parseNumber } from '$lib/util/number'
   import InputGroup from './InputGroup.svelte'
 
-  export let value: number | undefined
+  export let value: number | undefined = undefined
   export let id: string | undefined = undefined
   export let name: string | undefined = undefined
   export let tabindex: number | undefined = undefined
@@ -32,9 +32,12 @@
 </script>
 
 <InputGroup>
-  <span slot="before text-sm text-gray-700">{currency}</span>
+  <span slot="before" class="w-8 text-center text-sm text-gray-700">
+    {currency}
+  </span>
   <input
     class="input"
+    type="text"
     {id}
     {name}
     {tabindex}

@@ -19,46 +19,48 @@
   const t = useTranslate(i18n)
 </script>
 
-<table class="overflow-x-auto">
-  <thead>
-    <tr>
-      {#if showYear}
-        <th>{$t('year')}</th>
-      {/if}
-      {#if showCustomerId}
-        <th>{$t('customerId')}</th>
-      {/if}
-      <th>{$t('stockId')}</th>
-      <th>{$t('amount')}</th>
-      <th>{$t('accruedCost')}</th>
-      <th>{$t('averageCost')}</th>
-      {#if showProfit}
-        <th>{$t('totalProfit')}</th>
-      {/if}
-    </tr>
-  </thead>
-  <tbody>
-    {#if !filtered.length}
-      <tr>
-        <td colspan={cols}>{$t('noRecordMessage')}</td>
-      </tr>
-    {/if}
-    {#each filtered as item (item.stockId)}
+<div class="table-responsive">
+  <table>
+    <thead>
       <tr>
         {#if showYear}
-          <td>{item.year}</td>
+          <th>{$t('year')}</th>
         {/if}
         {#if showCustomerId}
-          <td>{item.customerId}</td>
+          <th>{$t('customerId')}</th>
         {/if}
-        <td>{item.stockId}</td>
-        <td>{item.amount}</td>
-        <td><CurrencyText value={item.accruedCost} /></td>
-        <td><CurrencyText value={item.averageCost} /></td>
+        <th>{$t('stockId')}</th>
+        <th>{$t('amount')}</th>
+        <th>{$t('accruedCost')}</th>
+        <th>{$t('averageCost')}</th>
         {#if showProfit}
-          <td><CurrencyText value={item.totalProfit} /></td>
+          <th>{$t('totalProfit')}</th>
         {/if}
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#if !filtered.length}
+        <tr>
+          <td colspan={cols}>{$t('noRecordMessage')}</td>
+        </tr>
+      {/if}
+      {#each filtered as item (item.stockId)}
+        <tr>
+          {#if showYear}
+            <td>{item.year}</td>
+          {/if}
+          {#if showCustomerId}
+            <td>{item.customerId}</td>
+          {/if}
+          <td>{item.stockId}</td>
+          <td>{item.amount}</td>
+          <td><CurrencyText value={item.accruedCost} /></td>
+          <td><CurrencyText value={item.averageCost} /></td>
+          {#if showProfit}
+            <td><CurrencyText value={item.totalProfit} /></td>
+          {/if}
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>

@@ -6,7 +6,7 @@
   export let isOpen = false
 
   function mount(node) {
-    dispatch('open')
+    setTimeout(() => dispatch('open'))
     return {
       destroy: () => dispatch('close'),
     }
@@ -21,7 +21,7 @@
   {#if isOpen}
     <div use:mount class="modal bg-white rounded w-[95%]">
       {#if $$slots.header}
-        <div class="w-full p-6 border-b-1 border-gray-400">
+        <div class="w-full p-6 border-b border-gray-100">
           <slot name="header" />
         </div>
       {/if}

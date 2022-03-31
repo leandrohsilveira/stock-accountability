@@ -3,6 +3,8 @@
 
   import { useTranslate } from '$lib/config'
   import CurrencyText from '$lib/components/CurrencyText.svelte'
+  import PencilIcon from '$lib/icons/pencil.svg?component'
+  import TrashIcon from '$lib/icons/trash.svg?component'
   import { createEventDispatcher } from 'svelte'
   import {
     isComputedTransaction,
@@ -57,10 +59,13 @@
 </script>
 
 <form>
-  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+  <div
+    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2"
+  >
     <InputContainer labelFor="month" label={$t('month')}>
       <select
         {tabindex}
+        class="input"
         type="select"
         name="month"
         placeholder={$t('month.placeholder')}
@@ -84,6 +89,7 @@
     <InputContainer labelFor="type" label={$t('operation')}>
       <select
         {tabindex}
+        class="input"
         type="select"
         name="type"
         placeholder={$t('operation.placeholder')}
@@ -97,64 +103,66 @@
   </div>
 </form>
 
-<table>
-  <thead>
-    <tr>
-      <th>#</th>
-      {#if showId}
-        <th>{$t('id')}</th>
-      {/if}
-      <th>{$t('date')}</th>
-      <th>{$t('stock')}</th>
-      <th>{$t('operation')}</th>
-      <th>{$t('price')}</th>
-      <th>{$t('quantity')}</th>
-      {#if computed}
-        <th>{$t('totalValue')}</th>
-        <th>{$t('accruedCost')}</th>
-        <th>{$t('averageCost')}</th>
-        <th>{$t('profit')}</th>
-      {/if}
-    </tr>
-  </thead>
-  <tbody>
-    {#if filtered.length === 0}
-      <tr><td colspan={cols}>{$t('noTransactionFound')}</td></tr>
-    {/if}
-    {#each filtered as transaction (transaction.id)}
+<div class="table-responsive">
+  <table>
+    <thead>
       <tr>
-        <td width="100">
-          <button
-            class="btn btn-sm btn-link primary"
-            {tabindex}
-            on:click={() => handleEditTransaction(transaction)}
-          >
-            E
-          </button>
-          <button
-            class="btn btn-sm btn-link default"
-            on:click={() => handleDeleteTransaction(transaction)}
-          >
-            x
-          </button>
-        </td>
+        <th>#</th>
         {#if showId}
-          <th>{transaction.id}</th>
+          <th>{$t('id')}</th>
         {/if}
-        <td>{transaction.date.toLocaleDateString('pt-br')}</td>
-        <td>{transaction.stockId}</td>
-        <td>{$t(transaction.type)}</td>
-        <td><CurrencyText value={transaction.unitPrice} /></td>
-        {#if computed && isComputedTransaction(transaction)}
-          <td width="150"><TransactionAmountChange value={transaction} /></td>
-          <td><CurrencyText value={transaction.total} /></td>
-          <td><CurrencyText value={transaction.accruedCost} /></td>
-          <td><CurrencyText value={transaction.averageCost} /></td>
-          <td><CurrencyText value={transaction.profit} /></td>
-        {:else}
-          <td colspan={computed ? 5 : 1}>{transaction.quantity}</td>
+        <th>{$t('date')}</th>
+        <th>{$t('stock')}</th>
+        <th>{$t('operation')}</th>
+        <th>{$t('price')}</th>
+        <th>{$t('quantity')}</th>
+        {#if computed}
+          <th>{$t('totalValue')}</th>
+          <th>{$t('accruedCost')}</th>
+          <th>{$t('averageCost')}</th>
+          <th>{$t('profit')}</th>
         {/if}
       </tr>
-    {/each}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {#if filtered.length === 0}
+        <tr><td colspan={cols}>{$t('noTransactionFound')}</td></tr>
+      {/if}
+      {#each filtered as transaction (transaction.id)}
+        <tr>
+          <td width="100">
+            <button
+              class="btn btn-fit btn-link primary"
+              {tabindex}
+              on:click={() => handleEditTransaction(transaction)}
+            >
+              <PencilIcon class="icon icon-sm icon-fill" />
+            </button>
+            <button
+              class="btn btn-fit btn-link danger"
+              on:click={() => handleDeleteTransaction(transaction)}
+            >
+              <TrashIcon class="icon icon-sm icon-fill" />
+            </button>
+          </td>
+          {#if showId}
+            <th>{transaction.id}</th>
+          {/if}
+          <td>{transaction.date.toLocaleDateString('pt-br')}</td>
+          <td>{transaction.stockId}</td>
+          <td>{$t(transaction.type)}</td>
+          <td><CurrencyText value={transaction.unitPrice} /></td>
+          {#if computed && isComputedTransaction(transaction)}
+            <td width="150"><TransactionAmountChange value={transaction} /></td>
+            <td><CurrencyText value={transaction.total} /></td>
+            <td><CurrencyText value={transaction.accruedCost} /></td>
+            <td><CurrencyText value={transaction.averageCost} /></td>
+            <td><CurrencyText value={transaction.profit} /></td>
+          {:else}
+            <td colspan={computed ? 5 : 1}>{transaction.quantity}</td>
+          {/if}
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>
