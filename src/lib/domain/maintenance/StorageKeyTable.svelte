@@ -50,12 +50,14 @@
           {#each item.entities as entity (entity.key)}
             <tr>
               <td>
-                <button
-                  class="btn btn-link primary"
-                  on:click={() => handleViewClick(entity)}
-                >
-                  <EyeIcon class="icon icon-sm icon-fill" />
-                </button>
+                {#if entity.entity !== 'unknown'}
+                  <button
+                    class="btn btn-link primary"
+                    on:click={() => handleViewClick(entity)}
+                  >
+                    <EyeIcon class="icon icon-sm icon-fill" />
+                  </button>
+                {/if}
               </td>
               <td
                 class="customer"

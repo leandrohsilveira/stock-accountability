@@ -58,7 +58,7 @@
             </button>
           </td>
           {#if showId}
-            <th>{item.id}</th>
+            <td class="font-bold">{item.id}</td>
           {/if}
           <td>{item.name}</td>
           <td>{item.document ?? ''}</td>
