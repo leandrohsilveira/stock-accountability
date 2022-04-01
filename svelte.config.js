@@ -1,6 +1,7 @@
 import adapter from '@sveltejs/adapter-auto'
 import preprocess from 'svelte-preprocess'
 import svg from '@poppanator/sveltekit-svg'
+import { VitePWA } from 'vite-plugin-pwa'
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -17,7 +18,7 @@ const config = {
     },
 
     vite: {
-      plugins: [svg()],
+      plugins: [svg(), VitePWA({ manifest: false })],
     },
   },
 }
