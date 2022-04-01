@@ -113,7 +113,7 @@
 </script>
 
 <Modal {isOpen} on:open={handleOpen} on:close={clear} --modal-width="500px">
-  <h3 slot="header">Adicionar movimentação</h3>
+  <h4 slot="header">Adicionar movimentação</h4>
   <form
     class="flex flex-col gap-6"
     on:keydown={handleKeyDown}

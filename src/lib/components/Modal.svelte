@@ -11,12 +11,17 @@
       destroy: () => dispatch('close'),
     }
   }
+
+  function handleOverlayClick() {
+    isOpen = false
+    dispatch('close')
+  }
 </script>
 
 <div
   class="flex justify-center items-center"
   class:overlay={isOpen}
-  on:click|self={() => (isOpen = false)}
+  on:click|self={handleOverlayClick}
 >
   {#if isOpen}
     <div use:mount class="modal bg-white rounded w-[95%]">

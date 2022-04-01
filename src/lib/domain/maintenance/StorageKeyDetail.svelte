@@ -37,7 +37,7 @@
 </script>
 
 <Modal bind:isOpen on:close={close}>
-  <h3 slot="header">{$t('key')}: {item.key}</h3>
+  <h5 slot="header">{$t('key')}: {item.key}</h5>
   {#if item?.entity === 'transactions'}
     <TransactionTable showId tabindex={1} items={transactions} />
   {/if}
@@ -50,4 +50,9 @@
   {#if item?.entity === 'summaries'}
     <SummaryTable items={summaries} showYear showCustomerId showProfit />
   {/if}
+  <div slot="footer" class="flex flex-row-reverse">
+    <button class="btn btn-full default" type="button" on:click={close}>
+      Close
+    </button>
+  </div>
 </Modal>
