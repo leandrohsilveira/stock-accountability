@@ -1,0 +1,120 @@
+@layer base {
+  .btn {
+    min-width: 100px;
+    @apply p-2 text-xs transition-colors ease-in-out duration-300 rounded-full uppercase text-center;
+    @apply focus-visible:outline-primary-base focus-visible:ring-offset-1 focus-visible:ring focus-visible:ring-offset-primary-base focus-visible:ring-primary-base;
+  }
+  .btn.btn-sm {
+    @apply p-1;
+  }
+  .btn.btn-fit {
+    @apply min-w-fit;
+  }
+  .btn:disabled {
+    @apply opacity-20 cursor-not-allowed;
+  }
+
+  .btn-icon {
+    @apply flex items-center gap-1;
+  }
+
+  .btn-link.primary {
+    @apply text-primary-base hover:text-primary-darker disabled:text-primary-base;
+  }
+  .btn-link.primary .icon-fill {
+    @apply fill-primary-base hover:fill-primary-darker disabled:fill-primary-base;
+  }
+  .btn-link.primary .icon-stroke {
+    @apply stroke-primary-base hover:stroke-primary-darker disabled:stroke-primary-base;
+  }
+  .btn-link.primary .icon-rounded {
+    @apply border-primary-base hover:border-primary-darker disabled:border-primary-base;
+  }
+  .btn-link.default {
+    @apply text-default-dark hover:text-default-darkest disabled:text-default-dark;
+  }
+  .btn-link.default .icon-fill {
+    @apply fill-default-base hover:fill-default-darker disabled:fill-default-base;
+  }
+  .btn-link.default .icon-stroke {
+    @apply stroke-default-base hover:stroke-default-darker disabled:stroke-default-base;
+  }
+  .btn-link.default .icon-rounded {
+    @apply border-default-base hover:border-default-darker disabled:border-default-base;
+  }
+  .btn-link.danger {
+    @apply text-danger-dark hover:text-danger-darkest disabled:text-danger-dark;
+  }
+  .btn-link.danger .icon-fill {
+    @apply fill-danger-base hover:fill-danger-darker disabled:fill-danger-base;
+  }
+  .btn-link.danger .icon-stroke {
+    @apply stroke-danger-base hover:stroke-danger-darker disabled:stroke-danger-base;
+  }
+  .btn-link.danger .icon-rounded {
+    @apply border-danger-base hover:border-danger-darker disabled:border-default-base;
+  }
+
+  .btn-outline {
+    @apply border;
+  }
+  .btn-outline.primary {
+    @apply border-primary-base text-primary-base hover:border-primary-darker hover:text-primary-darker  hover:bg-primary-lighter disabled:border-primary-base disabled:text-primary-base disabled:bg-transparent;
+  }
+  .btn-outline.primary .icon-fill {
+    @apply fill-primary-base hover:fill-primary-darker disabled:fill-primary-base;
+  }
+  .btn-outline.primary .icon-stroke {
+    @apply stroke-primary-base hover:stroke-primary-darker disabled:stroke-primary-base;
+  }
+  .btn-outline.primary .icon-rounded {
+    @apply border-primary-base hover:border-primary-darker disabled:border-primary-base;
+  }
+  .btn-outline.default {
+    @apply border-default-dark text-default-dark hover:border-default-darkest hover:text-default-darkest hover:bg-default-lighter disabled:border-default-dark disabled:text-default-dark disabled:bg-transparent;
+  }
+  .btn-outline.default .icon-fill {
+    @apply fill-default-base hover:fill-default-darker disabled:fill-default-base;
+  }
+  .btn-outline.default .icon-stroke {
+    @apply stroke-default-base hover:stroke-default-darker disabled:stroke-default-base;
+  }
+  .btn-outline.default .icon-rounded {
+    @apply border-default-base hover:border-default-darker disabled:border-default-base;
+  }
+
+  .btn-outline.danger {
+    @apply border-danger-dark text-danger-dark hover:border-danger-darkest hover:text-danger-darkest hover:bg-danger-lighter disabled:border-danger-dark disabled:text-danger-dark disabled:bg-transparent;
+  }
+  .btn-outline.danger .icon-fill {
+    @apply fill-danger-base hover:fill-danger-darker disabled:fill-danger-base;
+  }
+  .btn-outline.danger .icon-stroke {
+    @apply stroke-danger-base hover:stroke-danger-darker disabled:stroke-danger-base;
+  }
+  .btn-outline.danger .icon-rounded {
+    @apply border-danger-base hover:border-danger-darker disabled:border-danger-base;
+  }
+
+  .btn-full {
+    @apply text-white focus-visible:outline-white focus-visible:ring focus-visible:ring-primary-base focus-visible:ring-offset-primary-base focus-visible:ring-offset-1;
+  }
+  .btn-full .icon-fill {
+    @apply fill-white;
+  }
+  .btn-full .icon-stroke {
+    @apply stroke-white;
+  }
+  .btn-full .icon-rounded {
+    @apply border-white;
+  }
+  .btn-full.primary {
+    @apply bg-primary-base hover:bg-primary-light disabled:bg-primary-base;
+  }
+  .btn-full.default {
+    @apply bg-default-dark hover:bg-default-base disabled:bg-default-dark;
+  }
+  .btn-full.danger {
+    @apply bg-danger-dark hover:bg-danger-base disabled:bg-danger-dark;
+  }
+}

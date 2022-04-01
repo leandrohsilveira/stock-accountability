@@ -1,0 +1,24 @@
+{
+  "id": "stock-accounting",
+  "name": "Stock Accounting",
+  "short_name": "SA",
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "orientation": "any",
+  "start_url": "/",
+  "theme_color": "#8b5cf6",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

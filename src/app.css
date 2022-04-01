@@ -1,0 +1,17 @@
+@import '@fontsource/fira-mono';
+@import './lib/components/button.css';
+@import './lib/components/field.css';
+@import './lib/components/icon.css';
+@import './lib/components/alert.css';
+@import './lib/components/modal.css';
+@import './lib/components/table.css';
+@import './lib/components/list.css';
+@import './lib/components/typo.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #fcfcfd;
+}

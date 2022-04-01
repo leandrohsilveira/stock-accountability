@@ -1,8 +1,0 @@
-* {
-  box-sizing: border-box;
-}
-
-.table-responsive th,
-.table-responsive td {
-  white-space: nowrap;
-}

@@ -1,0 +1,46 @@
+@layer base {
+  .table-responsive {
+    @apply w-full overflow-x-auto;
+  }
+
+  .table-responsive > table {
+    @apply w-full whitespace-nowrap;
+  }
+
+  table th {
+    @apply text-left text-primary-base;
+  }
+
+  table tr {
+    @apply p-0;
+  }
+
+  table tr > th,
+  table tr > td {
+    @apply px-3 py-1;
+  }
+
+  table tr:first-child > td:first-child {
+    @apply rounded-tl-2xl;
+  }
+
+  table tr:first-child > td:last-child {
+    @apply rounded-tr-2xl;
+  }
+
+  table tr:last-child > td:first-child {
+    @apply rounded-bl-2xl;
+  }
+
+  table tr:last-child > td:last-child {
+    @apply rounded-br-2xl;
+  }
+
+  table tr td {
+    @apply bg-primary-lightest;
+  }
+
+  table.stripped tr:nth-child(even) td {
+    @apply bg-primary-lighter;
+  }
+}

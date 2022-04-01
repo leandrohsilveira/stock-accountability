@@ -1,9 +1,3 @@
 {
-  "extends": "@tsconfig/svelte/tsconfig.json",
-
-  "compilerOptions": {
-    "resolveJsonModule": true
-  },
-  "include": ["src/**/*", "public/serviceWorker.js"],
-  "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
+	"extends": "./.svelte-kit/tsconfig.json"
 }

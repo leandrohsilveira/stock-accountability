@@ -1,0 +1,46 @@
+@layer base {
+  .list {
+    @apply w-full;
+  }
+  .list > button,
+  .list > li {
+    @apply w-full p-3 focus-visible:outline-primary-base;
+  }
+
+  .list > button:first-child,
+  .list > li:first-child {
+    @apply rounded-t;
+  }
+
+  .list > button:last-child,
+  .list > li:last-child {
+    @apply rounded-b;
+  }
+
+  .list > button:not(:last-child),
+  .list > li:not(:last-child) {
+    @apply border-b border-default-lighter;
+  }
+  .list > button:not(:disabled) {
+    @apply hover:bg-default-lighter hover:cursor-pointer;
+  }
+
+  .list > button:disabled {
+    @apply opacity-30 hover:cursor-not-allowed;
+  }
+
+  .list > button.selected,
+  .list > li.selected {
+    @apply bg-primary-base hover:bg-primary-base hover:text-white text-white transition-colors ease-in-out duration-300;
+  }
+
+  .list > button.selected .icon-fill,
+  .list > li.selected .icon-fill {
+    @apply fill-white hover:fill-default-lighter;
+  }
+
+  .list > button.selected .icon-stroke,
+  .list > li.selected .icon-stroke {
+    @apply stroke-white hover:stroke-default-lighter;
+  }
+}
