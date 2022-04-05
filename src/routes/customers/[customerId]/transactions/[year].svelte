@@ -13,6 +13,7 @@
   import CustomerTransactions from '$lib/domain/transaction/CustomerTransactions.svelte'
   import { goto } from '$app/navigation'
   import { ROUTES } from '$lib/router'
+  import Guard from '$lib/domain/auth/Guard.svelte'
 
   export let customerId: string
   export let year: number
@@ -26,9 +27,11 @@
   }
 </script>
 
-<CustomerTransactions
-  {year}
-  {customerId}
-  on:back={handleBack}
-  on:changeYear={handleChangeYear}
-/>
+<Guard>
+  <CustomerTransactions
+    {year}
+    {customerId}
+    on:back={handleBack}
+    on:changeYear={handleChangeYear}
+  />
+</Guard>

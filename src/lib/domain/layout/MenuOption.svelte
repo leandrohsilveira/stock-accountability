@@ -15,7 +15,7 @@
   class:text-white={active}
   class:text-primary-base={!active}
   class:hover:bg-default-lightest={!active}
-  class="py-2 px-6 text-base font-medium transition-colors ease-in-out duration-500 rounded-full"
+  class="py-1 px-4 sm:py-2 sm:px-6 text-base font-medium transition-colors ease-in-out duration-500 rounded-full"
 >
   <slot />
 </a>
