@@ -20,10 +20,10 @@ export function addCustomer(customer: SubmitCustomer) {
   customerStore.update((customers) =>
     customerStorage.persist(
       create(
-        customer,
+        { ...customer, userId: undefined },
         customers,
         unique(
-          { ...customer, id: undefined },
+          { ...customer, id: undefined, userId: undefined },
           customers,
           'document',
           t('thereIsAlreadyCustomerWithProvidedDocument')
@@ -39,10 +39,10 @@ export function updateCustomer(id: string, customer: SubmitCustomer) {
     customerStorage.persist(
       update(
         id,
-        customer,
+        { ...customer, userId: undefined },
         customers,
         unique(
-          { id, ...customer },
+          { ...customer, id: undefined, userId: undefined },
           customers,
           'document',
           t('thereIsAnotherCustomerWithProvidedDocument')
