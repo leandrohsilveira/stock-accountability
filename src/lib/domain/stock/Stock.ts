@@ -1,9 +1,10 @@
 export interface Stock {
   id: string
-  quantity: number
+  name: string
+  customerId: string
 }
 
 export interface EditStock {
-  previousId: string
-  newId: string
+  previousName: string
+  newName: string
 }

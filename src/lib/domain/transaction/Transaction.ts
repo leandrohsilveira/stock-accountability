@@ -2,6 +2,7 @@ import { lastItem } from '$lib/util/array'
 import { toDate } from '$lib/util/date'
 import { findBy } from '$lib/util/storage'
 import type { Summary } from '$lib/domain/summary/Summary'
+import type { Stock } from '../stock/Stock'
 
 export type TransactionType = 'PURCHASE' | 'SELL'
 
@@ -23,7 +24,9 @@ export interface ComputedTransaction extends Transaction {
   profit?: number
 }
 
-export type SubmitTransaction = Omit<Transaction, 'id'>
+export type SubmitTransaction = Omit<Transaction, 'id' | 'stockId'> & {
+  stock: Stock | string
+}
 
 export function calculate(acc: number, value: number, type: TransactionType) {
   switch (type) {

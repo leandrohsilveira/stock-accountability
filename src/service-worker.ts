@@ -1,4 +1,4 @@
-import { files, build } from '$service-worker'
+import { build, files } from '$service-worker'
 
 interface SWEvent extends Event {
   request: Request
