@@ -4,9 +4,7 @@ import {
   collection,
   deleteDoc,
   doc,
-  DocumentReference,
   enableIndexedDbPersistence,
-  Firestore,
   getDoc,
   getDocFromCache,
   getDocs,
@@ -18,6 +16,8 @@ import {
   setDoc,
   updateDoc,
   where,
+  type DocumentReference,
+  type Firestore,
   type FirestoreDataConverter,
   type UpdateData,
 } from 'firebase/firestore'
