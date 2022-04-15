@@ -1,14 +1,20 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "npm",
-			"script": "start",
-			"problemMatcher": [
-				"$tsc"
-			],
-			"label": "npm: start",
-			"detail": "ts-node src/index.ts"
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "start",
+      "problemMatcher": ["$tsc"],
+      "label": "npm: start",
+      "detail": "ts-node src/index.ts"
+    },
+    {
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": ["$tsc-watch"],
+      "label": "npm: dev",
+      "detail": "svelte-kit dev",
+      "isBackground": true
+    }
+  ]
 }

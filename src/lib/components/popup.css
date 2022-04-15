@@ -1,0 +1,29 @@
+@layer base {
+  .popup-overlay {
+    @apply fixed top-0 right-0 left-0 bottom-0;
+  }
+
+  .popup .popup-btn {
+    @apply flex gap-2 items-center justify-start rounded-full hover:bg-primary-lighter hover:cursor-pointer;
+  }
+
+  .popup .popup-options {
+    @apply hidden bg-white shadow-lg;
+  }
+
+  .popup.popup-open .popup-options {
+    @apply flex fixed h-fit w-fit rounded-xl border border-primary-lightest z-10;
+  }
+
+  .popup .popup-options > button {
+    @apply px-3 py-2 text-primary-base hover:bg-primary-lighter transition-colors duration-300;
+  }
+
+  .popup .popup-options > button:not(:last-child) {
+    @apply border-b border-default-light;
+  }
+
+  .popup .popup-options > button:first-child {
+    @apply hover:rounded-xl;
+  }
+}

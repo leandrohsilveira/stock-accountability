@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
+  import Guard from '$lib/domain/auth/Guard.svelte'
 
   import Customers from '$lib/domain/customer/Customers.svelte'
   import { ROUTES } from '$lib/router'
@@ -11,4 +12,6 @@
   }
 </script>
 
-<Customers on:view={handleView} />
+<Guard>
+  <Customers on:view={handleView} />
+</Guard>

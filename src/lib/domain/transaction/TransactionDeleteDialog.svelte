@@ -15,6 +15,7 @@
 
   function handleConfirm() {
     dispatch('confirm', transaction)
+    close()
   }
 
   function close() {
@@ -23,14 +24,18 @@
 </script>
 
 <Modal {isOpen}>
-  <div slot="header">{$t('deleteTransaction')}</div>
+  <h4 slot="header">{$t('deleteTransaction')}</h4>
   {$t(
     'confirmMessage',
     transaction.stockId,
     transaction.date.toLocaleDateString()
   )}
-  <div slot="footer">
-    <button on:click={close}>{$t('cancel')}</button>
-    <button on:click={handleConfirm}>{$t('delete')}</button>
+  <div slot="footer" class="flex flex-row-reverse gap-2">
+    <button class="btn btn-full danger" on:click={handleConfirm}>
+      {$t('delete')}
+    </button>
+    <button class="btn btn-outline default" on:click={close}>
+      {$t('cancel')}
+    </button>
   </div>
 </Modal>

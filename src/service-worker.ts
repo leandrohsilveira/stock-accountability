@@ -1,4 +1,17 @@
-import { files } from '$service-worker'
+import { build, files } from '$service-worker'
+
+interface SWEvent extends Event {
+  request: Request
+  waitUntil<T>(promise: Promise<T>)
+  respondWith<T>(promise: Promise<T>)
+}
+
+type SW = Window &
+  typeof globalThis & {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    clients: any
+    skipWaiting(): () => Promise<void>
+  }
 
 /*
  Copyright 2016 Google Inc. All Rights Reserved.
@@ -20,20 +33,22 @@ const PRECACHE = 'precache-v1'
 const RUNTIME = 'runtime'
 
 // A list of local resources we always want to be cached.
-const PRECACHE_URLS = files
+const PRECACHE_URLS = [...files, ...build]
+
+const _self: SW = self as unknown as SW
 
 // The install handler takes care of precaching the resources we always need.
-self.addEventListener('install', (event) => {
+_self.addEventListener('install', (event: SWEvent) => {
   event.waitUntil(
     caches
       .open(PRECACHE)
       .then((cache) => cache.addAll(PRECACHE_URLS))
-      .then(self.skipWaiting())
+      .then(_self.skipWaiting())
   )
 })
 
 // The activate handler takes care of cleaning up old caches.
-self.addEventListener('activate', (event) => {
+_self.addEventListener('activate', (event: SWEvent) => {
   const currentCaches = [PRECACHE, RUNTIME]
   event.waitUntil(
     caches
@@ -50,16 +65,16 @@ self.addEventListener('activate', (event) => {
           })
         )
       })
-      .then(() => self.clients.claim())
+      .then(() => _self.clients.claim())
   )
 })
 
 // The fetch handler serves responses for same-origin resources from a cache.
 // If no response is found, it populates the runtime cache with the response
 // from the network before returning it to the page.
-self.addEventListener('fetch', (event) => {
+_self.addEventListener('fetch', (event: SWEvent) => {
   // Skip cross-origin requests, like those for Google Analytics.
-  if (event.request.url.startsWith(self.location.origin)) {
+  if (event.request.url.startsWith(_self.location.origin)) {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
         if (cachedResponse) {

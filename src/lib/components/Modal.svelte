@@ -13,11 +13,7 @@
   }
 </script>
 
-<div
-  class="flex justify-center items-center"
-  class:overlay={isOpen}
-  on:click|self={() => (isOpen = false)}
->
+<div class="flex justify-center items-center" class:overlay={isOpen}>
   {#if isOpen}
     <div use:mount class="modal bg-white rounded w-[95%]">
       {#if $$slots.header}

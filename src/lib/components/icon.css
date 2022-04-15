@@ -1,22 +1,50 @@
 @layer base {
   .icon {
-    @apply w-5 h-auto;
+    @apply w-5 h-fit;
+  }
+
+  .icon-xl {
+    @apply w-12 h-fit;
+  }
+
+  .icon-2xl {
+    @apply w-24 h-fit;
+  }
+
+  .icon-3xl {
+    @apply w-48 h-fit;
   }
 
   .icon-sm {
-    @apply w-4 h-auto;
+    @apply w-4 h-fit;
   }
 
   .icon-xs {
-    @apply w-3 h-auto;
+    @apply w-3 h-fit;
   }
 
   .icon-fill {
-    @apply fill-default-darker;
+    @apply fill-default-base;
   }
 
   .icon-stroke {
-    @apply stroke-default-darker;
+    @apply stroke-default-base;
+  }
+
+  .icon-fill.primary {
+    @apply fill-primary-base;
+  }
+
+  .icon-stroke.primary {
+    @apply stroke-primary-base;
+  }
+
+  .icon-fill.danger {
+    @apply fill-danger-base;
+  }
+
+  .icon-stroke.danger {
+    @apply stroke-danger-base;
   }
 
   .icon-rounded {

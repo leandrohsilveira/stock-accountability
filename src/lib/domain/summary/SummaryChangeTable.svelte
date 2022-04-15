@@ -4,7 +4,10 @@
   import NumberChange from '$lib/components/NumberChange.svelte'
   import { mergeSummaries, type Summary } from './Summary'
   import i18n from './SummaryChangeTable.i18n.json'
+  import type { Stock } from '../stock/Stock'
+  import StockRef from '../stock/StockRef.svelte'
 
+  export let stocks: Stock[]
   export let previousSummaries: Summary[]
   export let currentSummaries: Summary[]
   export let stockId: string | undefined = undefined
@@ -35,7 +38,7 @@
       {/if}
       {#each summaries as item (item.stockId)}
         <tr>
-          <td>{item.stockId}</td>
+          <td><StockRef id={item.stockId} {stocks} /></td>
           <td>
             <NumberChange
               start={item.previousAmount}

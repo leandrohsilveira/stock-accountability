@@ -28,9 +28,9 @@
   <span class="number text-right">{previousAmount}</span>
   <div
     class="arrow"
-    class:fill-green-600={previousAmount < value.quantity}
-    class:fill-danger-base={previousAmount > value.quantity}
-    class:fill-default-darker={previousAmount === value.quantity}
+    class:fill-green-600={previousAmount < value.amount}
+    class:fill-danger-base={previousAmount > value.amount}
+    class:fill-default-darker={previousAmount === value.amount}
   >
     <CaretRightIcon class="icon icon-sm" />
   </div>

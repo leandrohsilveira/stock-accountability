@@ -13,9 +13,12 @@
   } from './Transaction'
   import TransactionAmountChange from './TransactionAmountChange.svelte'
   import i18n from './TransactionTable.i18n.json'
+  import type { Stock } from '../stock/Stock'
+  import StockRef from '../stock/StockRef.svelte'
 
   export let tabindex: number
-  export let stockId: string | undefined = undefined
+  export let stocks: Stock[] = []
+  export let stock: Stock | undefined = undefined
   export let items: (ComputedTransaction | Transaction)[] = []
   export let computed = false
   export let showId = false
@@ -28,7 +31,7 @@
     delete: Transaction
   }>()
 
-  $: filtered = filter(items, stockId, month, type)
+  $: filtered = filter(items, stock?.id, month, type)
   $: cols = computed ? (showId ? 11 : 10) : showId ? 7 : 6
 
   const t = useTranslate(i18n)
@@ -39,10 +42,10 @@
     _month: number | null,
     _type: string | null
   ) {
-    if (stockId || _month !== undefined)
+    if (search || _month !== undefined)
       return collection.filter(
         (item) =>
-          (!stockId || item.stockId === search) &&
+          (!search || item.stockId === search) &&
           (_month === null || item.date.getMonth() === _month) &&
           (_type === null || item.type === _type)
       )
@@ -149,7 +152,7 @@
             <th>{transaction.id}</th>
           {/if}
           <td>{transaction.date.toLocaleDateString('pt-br')}</td>
-          <td>{transaction.stockId}</td>
+          <td><StockRef {stocks} id={transaction.stockId} /></td>
           <td>{$t(transaction.type)}</td>
           <td><CurrencyText value={transaction.unitPrice} /></td>
           {#if computed && isComputedTransaction(transaction)}

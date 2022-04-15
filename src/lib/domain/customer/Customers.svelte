@@ -4,12 +4,6 @@
   import Page from '$lib/components/Page.svelte'
   import { useTranslate } from '$lib/config'
   import type { Customer, SubmitCustomer } from '$lib/domain/customer/Customer'
-  import {
-    addCustomer,
-    customerStore,
-    loadCustomers,
-    updateCustomer,
-  } from '$lib/domain/customer/customer.store'
   import CustomerForm from '$lib/domain/customer/CustomerForm.svelte'
   import CustomerTable from '$lib/domain/customer/CustomerTable.svelte'
   import {
@@ -17,9 +11,9 @@
     addSuccessMessage,
   } from '$lib/domain/message/message.store'
   import { createEventDispatcher } from 'svelte'
+  import { getCustomerServiceInstance } from './CustomerService'
 
-  let edit: Customer | undefined = undefined
-  let adding = false
+  const customerService = getCustomerServiceInstance()
 
   const dispatch = createEventDispatcher<{ view: string }>()
 
@@ -32,9 +26,10 @@
     },
   })
 
-  $: {
-    loadCustomers()
-  }
+  let edit: Customer | undefined = undefined
+  let adding = false
+
+  $: customers$ = customerService.findAll()
 
   function handleAddClick() {
     adding = true
@@ -48,15 +43,16 @@
     edit = e.detail
   }
 
-  function handleSubmit(e: CustomEvent<SubmitCustomer>) {
+  async function handleSubmit(e: CustomEvent<SubmitCustomer>) {
     try {
       if (edit) {
-        updateCustomer(edit.id, e.detail)
+        await customerService.update(edit.id, e.detail)
         addSuccessMessage($t('updateCustomerSuccessful'))
       } else {
-        addCustomer(e.detail)
+        await customerService.create(e.detail)
         addSuccessMessage($t('addCustomerSuccessful'))
       }
+      customers$ = customerService.findAll()
     } catch (e) {
       addErrorMessage(e.message)
     }
@@ -76,11 +72,13 @@
           {$t('addCustomer')}
         </button>
       </div>
-      <CustomerTable
-        items={$customerStore}
-        on:view={handleViewClick}
-        on:edit={handleEditClick}
-      />
+      {#await customers$ then customers}
+        <CustomerTable
+          items={customers}
+          on:view={handleViewClick}
+          on:edit={handleEditClick}
+        />
+      {/await}
     </div>
   </Card>
 </Page>

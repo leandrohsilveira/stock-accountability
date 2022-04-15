@@ -56,7 +56,7 @@ export function computeStorageKeys(keys: string[]): StorageKey[] {
         default:
           return {
             key,
-            entity: 'unknonw',
+            entity: 'unknown',
           }
       }
     })

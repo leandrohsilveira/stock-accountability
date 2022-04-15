@@ -73,7 +73,7 @@
   on:close={clear}
   --modal-width="350px"
 >
-  <h3 slot="header">{$t('addClient')}</h3>
+  <h4 slot="header">{$t('addClient')}</h4>
   <form class="flex flex-col gap-6" on:submit={handleSubmit}>
     <InputContainer
       label={$t('name')}
