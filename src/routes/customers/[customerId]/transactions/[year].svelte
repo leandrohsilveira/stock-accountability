@@ -14,6 +14,9 @@
   import { goto } from '$app/navigation'
   import { ROUTES } from '$lib/router'
   import Guard from '$lib/domain/auth/Guard.svelte'
+  import Synchronizer from '$lib/components/Synchronizer.svelte'
+  import { getTransactionServiceInstance } from '$lib/domain/transaction/TransactionService'
+  const transactionService = getTransactionServiceInstance()
 
   export let customerId: string
   export let year: number
@@ -28,10 +31,12 @@
 </script>
 
 <Guard>
-  <CustomerTransactions
-    {year}
-    {customerId}
-    on:back={handleBack}
-    on:changeYear={handleChangeYear}
-  />
+  <Synchronizer sync={() => transactionService.syncChanges(customerId)}>
+    <CustomerTransactions
+      {year}
+      {customerId}
+      on:back={handleBack}
+      on:changeYear={handleChangeYear}
+    />
+  </Synchronizer>
 </Guard>

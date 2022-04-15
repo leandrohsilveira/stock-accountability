@@ -12,22 +12,22 @@
   import i18n from './StockList.i18n.json'
 
   export let tabindex: number
-  export let selected: string | undefined = undefined
+  export let selected: Stock | undefined = undefined
   export let items: Stock[] = []
   let filter = ''
-  let editing: string | undefined = undefined
+  let editing: Stock | undefined = undefined
   let newStockId: string | undefined = undefined
   let inputEditStock: HTMLInputElement
   let filterInput: HTMLInputElement
 
   const dispatch = createEventDispatcher<{
-    addTransaction: string
+    addTransaction: Stock
     addStockWithTransaction: string
     editStock: EditStock
   }>()
 
   $: filtered = items.filter(
-    (item) => item.id.toUpperCase().indexOf(filter.toUpperCase()) >= 0
+    (item) => item.name.toUpperCase().indexOf(filter.toUpperCase()) >= 0
   )
 
   $: if (inputEditStock) {
@@ -40,30 +40,30 @@
     filterInput.focus()
   })
 
-  function handleAddTransaction(event: Event, stockId: string) {
+  function handleAddTransaction(event: Event, stock: Stock) {
     event.stopPropagation()
-    dispatch('addTransaction', stockId)
+    dispatch('addTransaction', stock)
   }
 
   function handleAddStockWithTransaction() {
     dispatch('addStockWithTransaction', filter.toUpperCase())
   }
 
-  function handleFilterTransactions(stockId: string) {
-    selected = selected !== stockId ? stockId : undefined
+  function handleFilterTransactions(stock: Stock) {
+    selected = selected?.id !== stock.id ? stock : undefined
   }
 
-  function handleEditStock(event: Event, stockId: string) {
+  function handleEditStock(event: Event, stock: Stock) {
     event.stopPropagation()
-    editing = stockId
-    newStockId = stockId
+    editing = stock
+    newStockId = stock.name
   }
 
   function handleSaveStock(event: Event) {
     event.stopPropagation()
     dispatch('editStock', {
-      previousId: editing,
-      newId: newStockId,
+      previousName: editing.id,
+      newName: newStockId,
     })
     closeEditStock()
   }
@@ -107,7 +107,7 @@
         </button>
       {/if}
       {#each filtered as item}
-        {#if editing === item.id}
+        {#if editing?.id === item.id}
           <li>
             <form on:submit={handleSaveStock}>
               <InputGroup --addon-after-width="70px">
@@ -142,21 +142,21 @@
           <button
             {tabindex}
             class="flex justify-between items-center"
-            class:selected={selected === item.id}
-            on:click={() => handleFilterTransactions(item.id)}
+            class:selected={selected?.id === item.id}
+            on:click={() => handleFilterTransactions(item)}
           >
-            <p>{item.id}</p>
+            <p>{item.name}</p>
             <div class="flex flex-row">
               <button
                 class="btn btn-fit btn-link primary"
                 {tabindex}
-                on:click={(e) => handleAddTransaction(e, item.id)}
+                on:click={(e) => handleAddTransaction(e, item)}
               >
                 <AddIcon class="icon-sm icon-fill" />
               </button>
               <button
                 class="btn btn-fit btn-link default"
-                on:click={(e) => handleEditStock(e, item.id)}
+                on:click={(e) => handleEditStock(e, item)}
               >
                 <PencilIcon class="icon-sm icon-fill" />
               </button>

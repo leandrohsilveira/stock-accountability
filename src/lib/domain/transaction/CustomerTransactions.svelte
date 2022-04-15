@@ -4,40 +4,30 @@
   import Page from '$lib/components/Page.svelte'
   import YearInput from '$lib/components/YearInput.svelte'
   import { useTranslate } from '$lib/config'
-  import { findCustomerById } from '$lib/domain/customer/customer.store'
   import {
     addErrorMessage,
     addSuccessMessage,
   } from '$lib/domain/message/message.store'
-  import type { EditStock } from '$lib/domain/stock/Stock'
-  import { editStock, stockStore } from '$lib/domain/stock/stock.store'
+  import type { EditStock, Stock } from '$lib/domain/stock/Stock'
   import StockList from '$lib/domain/stock/StockList.svelte'
   import SummaryChangeTable from '$lib/domain/summary/SummaryChangeTable.svelte'
   import type {
     SubmitTransaction,
     Transaction,
   } from '$lib/domain/transaction/Transaction'
-  import {
-    addTransaction,
-    computedTransactionStore,
-    deleteTransaction,
-    loadTransactions,
-    previousSummaryStore,
-    summaryStore,
-    updateTransaction,
-  } from '$lib/domain/transaction/transaction.store'
   import TransactionDeleteDialog from '$lib/domain/transaction/TransactionDeleteDialog.svelte'
   import TransactionForm from '$lib/domain/transaction/TransactionForm.svelte'
   import TransactionTable from '$lib/domain/transaction/TransactionTable.svelte'
   import { createEventDispatcher } from 'svelte'
+  import { getCustomerServiceInstance } from '../customer/CustomerService'
+  import { getStockServiceInstance } from '../stock/StockService'
+  import { getSummaryServiceInstance } from '../summary/SummaryService'
+  import { getTransactionServiceInstance } from './TransactionService'
 
-  export let customerId: string
-  export let year: number
-
-  let transactionToEdit: Transaction | undefined = undefined
-  let transactionToDelete: Transaction | undefined = undefined
-  let addTransactionStockId: string | undefined = undefined
-  let stockId: string | undefined = undefined
+  const stockService = getStockServiceInstance()
+  const customerService = getCustomerServiceInstance()
+  const transactionService = getTransactionServiceInstance()
+  const summaryService = getSummaryServiceInstance()
 
   const dispatch = createEventDispatcher<{
     back: undefined
@@ -50,68 +40,101 @@
       updateTransactionSuccessful: 'Movimentação atualizada com sucesso',
       deleteTransactionSuccessful: 'Movimentação excluída com sucesso',
       stockRenameSuccessful: 'Ação renomeada com sucesso',
-      transactionOfCustomer: 'Movimentações de {0}',
+      transactionsOfCustomer: 'Movimentações de {0}',
+      transactions: 'Movimentações',
     },
   })
 
-  $: customer = findCustomerById(customerId)
+  export let customerId: string
+  export let year: number
 
-  $: {
-    loadTransactions(customerId, year)
-  }
+  let transactionToEdit: Transaction | undefined = undefined
+  let transactionToDelete: Transaction | undefined = undefined
+  let transactionStock: Stock | string | undefined = undefined
+  let stock: Stock | undefined = undefined
+
+  $: data$ = Promise.all([
+    transactionService.findAll(customerId, year),
+    stockService.findAll(customerId),
+    customerService.findById(customerId),
+    summaryService.findAll(customerId, year),
+    summaryService.findAllPreviousYear(customerId, year),
+  ])
 
   function handleChangeYear(e: CustomEvent<number>) {
     year = e.detail
     dispatch('changeYear', year)
   }
 
-  function handleAddTransaction(event: CustomEvent<string>) {
-    addTransactionStockId = event.detail
-    stockId = event.detail
+  function handleAddTransaction(event: CustomEvent<Stock>) {
+    transactionStock = event.detail
+    stock = event.detail
   }
 
   function handleAddStockWithTransaction(event: CustomEvent<string>) {
-    addTransactionStockId = event.detail
+    transactionStock = event.detail
   }
 
-  function handleSubmitTransaction(event: CustomEvent<SubmitTransaction>) {
+  async function handleSubmitTransaction(
+    event: CustomEvent<SubmitTransaction>
+  ) {
     try {
       if (transactionToEdit) {
-        updateTransaction(transactionToEdit.id, event.detail)
+        await transactionService.update(transactionToEdit.id, event.detail)
+        await refresh()
         addSuccessMessage($t('updateTransactionSuccessful'))
       } else {
-        addTransaction(event.detail)
+        await transactionService.create(event.detail)
+        await refresh()
         addSuccessMessage($t('addTransactionSuccessful'))
-        stockId = event.detail.stockId
+        stock = undefined
       }
     } catch (e) {
       addErrorMessage(e.message)
     }
   }
 
+  async function refresh() {
+    const [, , customer] = await data$
+    data$ = Promise.all([
+      transactionService.findAll(customerId, year),
+      stockService.findAll(customerId),
+      Promise.resolve(customer),
+      summaryService.findAll(customerId, year),
+      summaryService.findAllPreviousYear(customerId, year),
+    ])
+    await data$
+  }
+
   function handleDeleteTransaction(event: CustomEvent<Transaction>) {
     transactionToDelete = event.detail
   }
 
-  function handleConfirmTransactionDelete(event: CustomEvent<Transaction>) {
+  async function handleConfirmTransactionDelete(
+    event: CustomEvent<Transaction>
+  ) {
     try {
-      deleteTransaction(event.detail.id)
+      await transactionService.delete(event.detail.id)
+      await refresh()
       addSuccessMessage($t('deleteTransactionSuccessful'))
     } catch (e) {
       addErrorMessage(e.message)
     }
   }
 
-  function handleEditStock(event: CustomEvent<EditStock>) {
+  async function handleEditStock(event: CustomEvent<EditStock>) {
     try {
-      editStock(event.detail)
+      await stockService.update(event.detail)
+      await refresh()
       addSuccessMessage($t('stockRenameSuccessful'))
     } catch (error) {
       addErrorMessage(error.message)
     }
   }
 
-  function handleEditTransaction(event: CustomEvent<Transaction>) {
+  async function handleEditTransaction(event: CustomEvent<Transaction>) {
+    const [, stocks] = await data$
+    transactionStock = stocks.find((s) => s.id === event.detail.stockId)
     transactionToEdit = event.detail
   }
 
@@ -120,58 +143,64 @@
   }
 </script>
 
-<Page
-  title={$t('transactionOfCustomer', customer?.name)}
-  back
-  on:back={handleBackClick}
->
-  <div class="flex justify-center">
-    <YearInput tabindex={3} value={year} on:change={handleChangeYear} />
-  </div>
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 pt-3">
-    <StockList
-      tabindex={2}
-      items={$stockStore}
-      bind:selected={stockId}
-      on:addTransaction={handleAddTransaction}
-      on:addStockWithTransaction={handleAddStockWithTransaction}
-      on:editStock={handleEditStock}
-    />
-    <div class="lg:col-span-3 flex flex-col gap-6">
-      <Card>
-        <div class="flex flex-col justify-center gap-6">
-          <strong class="text-primary-base">
-            <NumberChange start={year - 1} end={year} />
-          </strong>
-          <SummaryChangeTable
-            previousSummaries={$previousSummaryStore}
-            currentSummaries={$summaryStore}
-          />
-        </div>
-      </Card>
-      <Card>
-        <div class="flex flex-col gap-6">
-          <h4>Movimentações</h4>
-          <TransactionTable
-            tabindex={4}
-            items={$computedTransactionStore}
-            {stockId}
-            computed
-            on:edit={handleEditTransaction}
-            on:delete={handleDeleteTransaction}
-          />
-        </div>
-      </Card>
+{#await data$ then [transactions, stocks, customer, summaries, previousSummaries]}
+  <Page
+    title={$t('transactionsOfCustomer', customer?.name)}
+    back
+    on:back={handleBackClick}
+  >
+    <div class="flex justify-center">
+      <YearInput tabindex={3} value={year} on:change={handleChangeYear} />
     </div>
-  </div>
-</Page>
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 pt-3">
+      <StockList
+        tabindex={2}
+        items={stocks}
+        bind:selected={stock}
+        on:addTransaction={handleAddTransaction}
+        on:addStockWithTransaction={handleAddStockWithTransaction}
+        on:editStock={handleEditStock}
+      />
+      <div class="lg:col-span-3 flex flex-col gap-6">
+        <Card>
+          <div class="flex flex-col justify-center gap-6">
+            <strong class="text-primary-base">
+              <NumberChange start={year - 1} end={year} />
+            </strong>
+            <SummaryChangeTable
+              {stocks}
+              {previousSummaries}
+              currentSummaries={summaries.length
+                ? summaries
+                : previousSummaries}
+            />
+          </div>
+        </Card>
+        <Card>
+          <div class="flex flex-col gap-6">
+            <h4>{$t('transactions')}</h4>
+            <TransactionTable
+              tabindex={4}
+              items={transactions}
+              {stock}
+              {stocks}
+              computed
+              on:edit={handleEditTransaction}
+              on:delete={handleDeleteTransaction}
+            />
+          </div>
+        </Card>
+      </div>
+    </div>
+  </Page>
+{/await}
 
 <TransactionForm
   {customerId}
   {year}
   tabindex={3}
   bind:edit={transactionToEdit}
-  bind:stockId={addTransactionStockId}
+  bind:stock={transactionStock}
   on:submit={handleSubmitTransaction}
 />
 <TransactionDeleteDialog

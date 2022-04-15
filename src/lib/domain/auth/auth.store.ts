@@ -38,7 +38,7 @@ class FirebaseAuthReadable implements AuthReadable {
   private _auth: Auth | undefined
 
   get user(): User | undefined {
-    if (this.auth.currentUser) {
+    if (this.auth?.currentUser) {
       return {
         id: this.auth.currentUser.uid,
         name: this.auth.currentUser.displayName,
@@ -49,7 +49,8 @@ class FirebaseAuthReadable implements AuthReadable {
   }
 
   private get auth() {
-    if (this._auth === undefined) this._auth = getAuth(this.firebase.app)
+    if (this._auth === undefined && browser)
+      this._auth = getAuth(this.firebase.app)
     return this._auth
   }
 

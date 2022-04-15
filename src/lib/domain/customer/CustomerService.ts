@@ -1,7 +1,7 @@
 import {
-  getFirebaseInstance,
   FireStoreCollection,
   type StoreCollection,
+  getFireStoreInstance,
 } from '$lib/config'
 import type {
   FirestoreDataConverter,
@@ -35,11 +35,19 @@ export class CustomerService {
     private collection: StoreCollection<Customer>
   ) {}
 
+  ref(id: string): unknown {
+    return this.collection.ref(id)
+  }
+
   findAll() {
     return this.collection.findAll({
-      field: 'userId',
-      op: '==',
-      value: this.auth.user.id,
+      conditions: [
+        {
+          field: 'userId',
+          op: '==',
+          value: this.auth.user.id,
+        },
+      ],
     })
   }
 
@@ -73,7 +81,7 @@ export function getCustomerServiceInstance() {
     setCustomerServiceInstance(
       new CustomerService(
         getAuthStoreInstance(),
-        new FireStoreCollection(getFirebaseInstance(), 'customers', converter)
+        new FireStoreCollection(getFireStoreInstance(), 'customers', converter)
       )
     )
   return instance

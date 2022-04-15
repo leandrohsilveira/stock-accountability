@@ -12,14 +12,21 @@ export interface Properties {
   firebase: FirebaseProperties
 }
 
-export const properties = {
+export const properties: Properties = {
   firebase: {
-    apiKey: 'AIzaSyBNaSmR2IbLlfpw8_GbqWvaIFDBgKfvll8',
-    authDomain: 'stock-accounting-ac7ff.firebaseapp.com',
-    projectId: 'stock-accounting-ac7ff',
-    storageBucket: 'stock-accounting-ac7ff.appspot.com',
-    messagingSenderId: '1040796570593',
-    appId: '1:1040796570593:web:7ebcf6c62507e82694f8a0',
-    measurementId: 'G-QYZ92D5LQ6',
+    apiKey: to(import.meta.env.VITE_FIREBASE_API_KEY, String),
+    authDomain: to(import.meta.env.VITE_FIREBASE_AUTH_DOMAIN, String),
+    projectId: to(import.meta.env.VITE_FIREBASE_PROJECT_ID, String),
+    storageBucket: to(import.meta.env.VITE_FIREBASE_STORAGE_BUCKET, String),
+    messagingSenderId: to(
+      import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+      String
+    ),
+    appId: to(import.meta.env.VITE_FIREBASE_APP_ID, String),
+    measurementId: to(import.meta.env.VITE_FIREBASE_MEASUREMENT_ID, String),
   },
+}
+
+function to<T>(val: string | boolean, parser: (val: unknown) => T) {
+  return val ? parser(val) : undefined
 }

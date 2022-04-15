@@ -20,11 +20,12 @@
     TransactionType,
   } from './Transaction'
   import i18n from './TransactionForm.i18n.json'
+  import type { Stock } from '../stock/Stock'
 
   export let tabindex: number
   export let customerId: string
   export let edit: Transaction | undefined = undefined
-  export let stockId: string | undefined = undefined
+  export let stock: Stock | string | undefined = undefined
   export let year: number = new Date().getFullYear()
   export let editStockId = false
 
@@ -34,27 +35,24 @@
   let type: TransactionType | undefined
   let addMore = false
   let dirty: Partial<Record<keyof SubmitTransaction, boolean>> = {}
-  let stockIdInput: HTMLInputElement
+  let stockNameInput: HTMLInputElement
   let dateInput: HTMLInputElement
 
   const dispatcher = createEventDispatcher<{ submit: SubmitTransaction }>()
 
-  $: stockIdErrors = messages(all(required())(stockId))
+  $: stockName = typeof stock === 'string' ? stock : stock?.name
+  $: stockNameErrors = messages(all(required())(stockName))
   $: dateErrors = messages(all(required(), fixedYear(year))(date))
   $: quantityErrors = messages(all(required(), min(1))(quantity))
   $: unitPriceErrors = messages(all(required(), min(0.01))(unitPrice))
   $: typeErrors = messages(all(required())(type))
   $: valid = isValid(dateErrors, quantityErrors, unitPriceErrors, typeErrors)
-  $: isOpen = stockId !== undefined
-
-  $: if (edit) {
-    stockId = edit.stockId
-  }
+  $: isOpen = stock !== undefined
 
   const t = useTranslate(i18n)
 
   function focus() {
-    if (editStockId) stockIdInput.focus()
+    if (editStockId) stockNameInput.focus()
     else dateInput.focus()
   }
 
@@ -68,7 +66,7 @@
   }
 
   function close() {
-    stockId = undefined
+    stock = undefined
     addMore = false
   }
 
@@ -79,7 +77,7 @@
         customerId,
         quantity,
         unitPrice,
-        stockId,
+        stock,
         type,
       })
       return true
@@ -120,21 +118,21 @@
     on:submit={handleSubmit}
   >
     <InputContainer
-      labelFor="stockId"
-      label={$t('stockId')}
-      errors={dirty.stockId && stockIdErrors}
+      labelFor="stockName"
+      label={$t('stockName')}
+      errors={dirty.stock && stockNameErrors}
     >
       <input
         {tabindex}
         class="input"
-        id="stockId"
-        name="stockId"
+        id="stockName"
+        name="stockName"
         type="text"
         disabled={!editStockId}
-        placeholder={$t('stockId.placeholder')}
-        bind:this={stockIdInput}
-        bind:value={stockId}
-        on:input={() => (dirty = { ...dirty, stockId: true })}
+        placeholder={$t('stockName.placeholder')}
+        bind:this={stockNameInput}
+        bind:value={stockName}
+        on:input={() => (dirty = { ...dirty, stock: true })}
       />
     </InputContainer>
     <InputContainer
