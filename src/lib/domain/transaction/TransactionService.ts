@@ -16,6 +16,7 @@ import {
   getCustomerServiceInstance,
   type CustomerService,
 } from '../customer/CustomerService'
+import { notify } from '../event/eventStore'
 import type { Stock } from '../stock/Stock'
 import {
   getStockServiceInstance,
@@ -106,6 +107,7 @@ export class TransactionService {
               await this.availableYearsService.create(customerId, year)
               await this.updateNextYears(customerId, year)
             }
+            notify('transactions')
             run()
           })
       },
@@ -187,7 +189,7 @@ export class TransactionService {
     const availableYears = await this.availableYearsService.findAll(customerId)
     const index = availableYears.indexOf(fromYear)
     if (index >= 0)
-      availableYears.slice(index).forEach(async (year) => {
+      for (const year of availableYears.slice(index)) {
         const transactions = await this.findAll(customerId, year)
 
         const previousSummaries = await this.summaryService.findAllPreviousYear(
@@ -203,7 +205,7 @@ export class TransactionService {
           year,
           updateSummaries(year, computedTransactions, previousSummaries)
         )
-      })
+      }
   }
 }
 

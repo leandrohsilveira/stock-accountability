@@ -18,8 +18,9 @@
   import TransactionDeleteDialog from '$lib/domain/transaction/TransactionDeleteDialog.svelte'
   import TransactionForm from '$lib/domain/transaction/TransactionForm.svelte'
   import TransactionTable from '$lib/domain/transaction/TransactionTable.svelte'
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, onMount } from 'svelte'
   import { getCustomerServiceInstance } from '../customer/CustomerService'
+import { on } from '../event/eventStore';
   import { getStockServiceInstance } from '../stock/StockService'
   import { getSummaryServiceInstance } from '../summary/SummaryService'
   import { getTransactionServiceInstance } from './TransactionService'
@@ -61,6 +62,20 @@
     summaryService.findAllPreviousYear(customerId, year),
   ])
 
+  onMount(() =>
+    on('transactions', async () => {
+      const [, , customer] = await data$
+      data$ = Promise.all([
+        transactionService.findAll(customerId, year),
+        stockService.findAll(customerId),
+        Promise.resolve(customer),
+        summaryService.findAll(customerId, year),
+        summaryService.findAllPreviousYear(customerId, year),
+      ])
+      await data$
+    })
+  )
+
   function handleChangeYear(e: CustomEvent<number>) {
     year = e.detail
     dispatch('changeYear', year)
@@ -81,29 +96,15 @@
     try {
       if (transactionToEdit) {
         await transactionService.update(transactionToEdit.id, event.detail)
-        await refresh()
         addSuccessMessage($t('updateTransactionSuccessful'))
       } else {
         await transactionService.create(event.detail)
-        await refresh()
         addSuccessMessage($t('addTransactionSuccessful'))
         stock = undefined
       }
     } catch (e) {
       addErrorMessage(e.message)
     }
-  }
-
-  async function refresh() {
-    const [, , customer] = await data$
-    data$ = Promise.all([
-      transactionService.findAll(customerId, year),
-      stockService.findAll(customerId),
-      Promise.resolve(customer),
-      summaryService.findAll(customerId, year),
-      summaryService.findAllPreviousYear(customerId, year),
-    ])
-    await data$
   }
 
   function handleDeleteTransaction(event: CustomEvent<Transaction>) {
@@ -115,7 +116,6 @@
   ) {
     try {
       await transactionService.delete(event.detail.id)
-      await refresh()
       addSuccessMessage($t('deleteTransactionSuccessful'))
     } catch (e) {
       addErrorMessage(e.message)
@@ -125,7 +125,6 @@
   async function handleEditStock(event: CustomEvent<EditStock>) {
     try {
       await stockService.update(event.detail)
-      await refresh()
       addSuccessMessage($t('stockRenameSuccessful'))
     } catch (error) {
       addErrorMessage(error.message)
