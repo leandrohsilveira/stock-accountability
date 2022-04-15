@@ -1,5 +1,4 @@
-import { getAuthStoreInstance } from '$lib/domain/auth/auth.store'
-import { files, build } from '$service-worker'
+import { build, files } from '$service-worker'
 
 interface SWEvent extends Event {
   request: Request
@@ -76,26 +75,21 @@ _self.addEventListener('activate', (event: SWEvent) => {
 _self.addEventListener('fetch', (event: SWEvent) => {
   // Skip cross-origin requests, like those for Google Analytics.
   if (event.request.url.startsWith(_self.location.origin)) {
-    getAuthStoreInstance()
-      .getToken()
-      .then((token) => {
-        if (token) event.request.headers.set('Authorization', token)
-        event.respondWith(
-          caches.match(event.request).then((cachedResponse) => {
-            if (cachedResponse) {
-              return cachedResponse
-            }
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse
+        }
 
-            return caches.open(RUNTIME).then((cache) => {
-              return fetch(event.request).then((response) => {
-                // Put a copy of the response in the runtime cache.
-                return cache.put(event.request, response.clone()).then(() => {
-                  return response
-                })
-              })
+        return caches.open(RUNTIME).then((cache) => {
+          return fetch(event.request).then((response) => {
+            // Put a copy of the response in the runtime cache.
+            return cache.put(event.request, response.clone()).then(() => {
+              return response
             })
           })
-        )
+        })
       })
+    )
   }
 })
