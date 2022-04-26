@@ -1,25 +1,29 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
-import { properties, type FirebaseProperties } from './properties'
+import type DIContainer from 'rsdi'
+import { object, use } from 'rsdi'
+import { useModule } from './di'
+import {
+  PropertiesToken,
+  PropertiesModule,
+  type Properties,
+} from './properties'
 
 export class FirebaseRef {
-  constructor(properties: FirebaseProperties) {
+  constructor({ firebase }: Properties) {
     // Initialize Firebase
-    this.app = initializeApp(properties)
+    this.app = initializeApp(firebase)
   }
 
   app: FirebaseApp
 }
 
-let instance: FirebaseRef | undefined = undefined
-
-export function setFirebaseInstance(ref: FirebaseRef) {
-  instance = ref
-}
-
-export function getFirebaseInstance() {
-  if (instance === undefined)
-    setFirebaseInstance(new FirebaseRef(properties.firebase))
-  return instance
-}
-
 // const analytics = getAnalytics(app);
+
+export class FirebaseModule {
+  constructor(di: DIContainer) {
+    useModule(PropertiesModule)
+    di.add({
+      FirebaseRef: object(FirebaseRef).construct(use(PropertiesToken)),
+    })
+  }
+}

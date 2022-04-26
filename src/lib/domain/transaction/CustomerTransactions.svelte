@@ -1,9 +1,23 @@
+<script context="module" lang="ts">
+  import { useModule } from '$lib/config/di'
+  import { CustomerModule } from '../customer/CustomerModule'
+  import { StockModule } from '../stock/StockModule'
+  import { SummaryModule } from '../summary/SummaryModule'
+  import { TransactionModule } from './TransactionModule'
+
+  useModule(StockModule)
+  useModule(CustomerModule)
+  useModule(SummaryModule)
+  useModule(TransactionModule)
+</script>
+
 <script lang="ts">
   import Card from '$lib/components/Card.svelte'
   import NumberChange from '$lib/components/NumberChange.svelte'
   import Page from '$lib/components/Page.svelte'
   import YearInput from '$lib/components/YearInput.svelte'
   import { useTranslate } from '$lib/config'
+  import { getInstance } from '$lib/config/di'
   import {
     addErrorMessage,
     addSuccessMessage,
@@ -19,16 +33,16 @@
   import TransactionForm from '$lib/domain/transaction/TransactionForm.svelte'
   import TransactionTable from '$lib/domain/transaction/TransactionTable.svelte'
   import { createEventDispatcher, onMount } from 'svelte'
-  import { getCustomerServiceInstance } from '../customer/CustomerService'
-import { on } from '../event/eventStore';
-  import { getStockServiceInstance } from '../stock/StockService'
-  import { getSummaryServiceInstance } from '../summary/SummaryService'
-  import { getTransactionServiceInstance } from './TransactionService'
+  import { CustomerService } from '../customer/CustomerService'
+  import { on } from '../event/eventStore'
+  import { StockService } from '../stock/StockService'
+  import { SummaryService } from '../summary/SummaryService'
+  import { TransactionService } from './TransactionService'
 
-  const stockService = getStockServiceInstance()
-  const customerService = getCustomerServiceInstance()
-  const transactionService = getTransactionServiceInstance()
-  const summaryService = getSummaryServiceInstance()
+  const stockService = getInstance(StockService)
+  const customerService = getInstance(CustomerService)
+  const transactionService = getInstance(TransactionService)
+  const summaryService = getInstance(SummaryService)
 
   const dispatch = createEventDispatcher<{
     back: undefined

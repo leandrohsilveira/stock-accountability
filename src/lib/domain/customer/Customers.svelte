@@ -1,3 +1,10 @@
+<script context="module" lang="ts">
+  import { useModule } from '$lib/config/di'
+  import { CustomerModule } from './CustomerModule'
+
+  useModule(CustomerModule)
+</script>
+
 <script lang="ts">
   import IconAdd from '$lib/icons/add.svg?component'
   import Card from '$lib/components/Card.svelte'
@@ -11,10 +18,10 @@
     addSuccessMessage,
   } from '$lib/domain/message/message.store'
   import { createEventDispatcher } from 'svelte'
-  import { getCustomerServiceInstance } from './CustomerService'
+  import { getInstance } from '$lib/config/di'
+  import { CustomerService } from './CustomerService'
 
-  const customerService = getCustomerServiceInstance()
-
+  const customerService = getInstance(CustomerService)
   const dispatch = createEventDispatcher<{ view: string }>()
 
   const t = useTranslate({

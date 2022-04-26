@@ -1,41 +1,25 @@
-import {
-  FireStoreCollection,
-  getFireStoreInstance,
-  type StoreCollection,
-} from '$lib/config'
+import type { StoreCollection } from '$lib/config'
 import type {
   FirestoreDataConverter,
   QueryDocumentSnapshot,
 } from 'firebase/firestore'
 import type { Readable } from 'svelte/store'
-import {
-  getAvailableYearsServiceInstance,
-  type AvailableYearsService,
-} from '../availableYear/AvailableYearsService'
-import {
-  getCustomerServiceInstance,
-  type CustomerService,
-} from '../customer/CustomerService'
+import type { AvailableYearsService } from '../availableYear/AvailableYearsService'
+import type { CustomerService } from '../customer/CustomerService'
 import { notify } from '../event/eventStore'
 import type { Stock } from '../stock/Stock'
-import {
-  getStockServiceInstance,
-  type StockService,
-} from '../stock/StockService'
+import type { StockService } from '../stock/StockService'
 import { updateSummaries } from '../summary/Summary'
-import {
-  getSummaryServiceInstance,
-  type SummaryService,
-} from '../summary/SummaryService'
+import type { SummaryService } from '../summary/SummaryService'
 import {
   computeTransactions,
   type SubmitTransaction,
   type Transaction,
 } from './Transaction'
 
-let instance: TransactionService | undefined = undefined
-
-class TransactionConverter implements FirestoreDataConverter<Transaction> {
+export class TransactionConverter
+  implements FirestoreDataConverter<Transaction>
+{
   constructor(
     private customerService: CustomerService,
     private stockService: StockService
@@ -207,29 +191,4 @@ export class TransactionService {
         )
       }
   }
-}
-
-export function setTransactionServiceInstance(service: TransactionService) {
-  instance = service
-}
-
-export function getTransactionServiceInstance() {
-  if (instance === undefined)
-    setTransactionServiceInstance(
-      new TransactionService(
-        getCustomerServiceInstance(),
-        getStockServiceInstance(),
-        getSummaryServiceInstance(),
-        getAvailableYearsServiceInstance(),
-        new FireStoreCollection(
-          getFireStoreInstance(),
-          'transactions',
-          new TransactionConverter(
-            getCustomerServiceInstance(),
-            getStockServiceInstance()
-          )
-        )
-      )
-    )
-  return instance
 }

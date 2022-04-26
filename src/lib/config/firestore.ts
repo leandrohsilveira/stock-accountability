@@ -21,8 +21,11 @@ import {
   type FirestoreDataConverter,
   type UpdateData,
 } from 'firebase/firestore'
+import type DIContainer from 'rsdi'
+import { object, use } from 'rsdi'
 import type { Readable } from 'svelte/store'
-import { getFirebaseInstance, type FirebaseRef } from './firebase'
+import { useModule } from './di'
+import { FirebaseModule, FirebaseRef } from './firebase'
 
 export interface StoreQuery {
   conditions?: StoreQueryCondition[]
@@ -56,8 +59,6 @@ export interface StoreCollection<T, Ref = unknown> {
   delete(id: string): Promise<void>
   patch(id: string, data: UpdateData<T>): Promise<void>
 }
-
-let instance: FireStoreRef | undefined = undefined
 
 export class FireStoreCollection<T>
   implements StoreCollection<T, DocumentReference<T>>
@@ -147,7 +148,7 @@ export class FireStoreCollection<T>
   }
 }
 
-class FireStoreRef {
+export class FireStoreRef {
   constructor(public firebaseRef: FirebaseRef) {
     this.store = getFirestore(firebaseRef.app)
     browser && enableIndexedDbPersistence(this.store)
@@ -156,12 +157,11 @@ class FireStoreRef {
   store: Firestore
 }
 
-export function setFireStoreInstance(newInstance: FireStoreRef) {
-  instance = newInstance
-}
-
-export function getFireStoreInstance() {
-  if (instance === undefined)
-    setFireStoreInstance(new FireStoreRef(getFirebaseInstance()))
-  return instance
+export class FireStoreModule {
+  constructor(di: DIContainer) {
+    useModule(FirebaseModule)
+    di.add({
+      FireStoreRef: object(FireStoreRef).construct(use(FirebaseRef)),
+    })
+  }
 }

@@ -1,3 +1,5 @@
+import type DIContainer from 'rsdi'
+
 export interface FirebaseProperties {
   apiKey: string
   authDomain: string
@@ -11,6 +13,8 @@ export interface FirebaseProperties {
 export interface Properties {
   firebase: FirebaseProperties
 }
+
+export const PropertiesToken = 'properties'
 
 export const properties: Properties = {
   firebase: {
@@ -29,4 +33,12 @@ export const properties: Properties = {
 
 function to<T>(val: string | boolean, parser: (val: unknown) => T) {
   return val ? parser(val) : undefined
+}
+
+export class PropertiesModule {
+  constructor(di: DIContainer) {
+    di.add({
+      [PropertiesToken]: properties,
+    })
+  }
 }

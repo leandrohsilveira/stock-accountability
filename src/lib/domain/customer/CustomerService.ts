@@ -1,18 +1,12 @@
-import {
-  FireStoreCollection,
-  type StoreCollection,
-  getFireStoreInstance,
-} from '$lib/config'
+import type { StoreCollection } from '$lib/config'
 import type {
   FirestoreDataConverter,
   QueryDocumentSnapshot,
 } from 'firebase/firestore'
-import { getAuthStoreInstance, type AuthReadable } from '../auth/auth.store'
+import type { AuthReadable } from '../auth/auth.store'
 import type { Customer, SubmitCustomer } from './Customer'
 
-let instance: CustomerService | undefined = undefined
-
-const converter: FirestoreDataConverter<Customer> = {
+export const customerConverter: FirestoreDataConverter<Customer> = {
   toFirestore(customer: Customer) {
     return {
       name: customer.name,
@@ -70,19 +64,4 @@ export class CustomerService {
       id,
     })
   }
-}
-
-export function setCustomerServiceInstance(service: CustomerService) {
-  instance = service
-}
-
-export function getCustomerServiceInstance() {
-  if (instance === undefined)
-    setCustomerServiceInstance(
-      new CustomerService(
-        getAuthStoreInstance(),
-        new FireStoreCollection(getFireStoreInstance(), 'customers', converter)
-      )
-    )
-  return instance
 }

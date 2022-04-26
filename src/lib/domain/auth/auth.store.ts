@@ -1,8 +1,7 @@
 import { browser } from '$app/env'
-import { getFirebaseInstance, type FirebaseRef } from '$lib/config/firebase'
+import type { FirebaseRef } from '$lib/config'
 import {
   getAuth,
-  GoogleAuthProvider,
   signInWithRedirect,
   type Auth,
   type AuthProvider,
@@ -26,7 +25,7 @@ export interface AuthReadable extends Readable<User> {
   logout(): Promise<void>
 }
 
-class FirebaseAuthReadable implements AuthReadable {
+export class FirebaseAuthReadable implements AuthReadable {
   constructor(private firebase: FirebaseRef, private provider: AuthProvider) {
     this.loading = writable(browser)
     this.isLoggedIn = derived(this, (value) => value !== undefined)
@@ -87,18 +86,4 @@ class FirebaseAuthReadable implements AuthReadable {
       //
     }
   }
-}
-
-let authStore: AuthReadable | undefined = undefined
-
-export function setAuthStoreInstance(instance: AuthReadable) {
-  authStore = instance
-}
-
-export function getAuthStoreInstance() {
-  if (authStore === undefined)
-    setAuthStoreInstance(
-      new FirebaseAuthReadable(getFirebaseInstance(), new GoogleAuthProvider())
-    )
-  return authStore
 }

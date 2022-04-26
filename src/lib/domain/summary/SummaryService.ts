@@ -1,11 +1,6 @@
-import { PersistentStorage } from '$lib/util/storage'
-import {
-  getAvailableYearsServiceInstance,
-  type AvailableYearsService,
-} from '../availableYear/AvailableYearsService'
+import type { PersistentStorage } from '$lib/util/storage'
+import type { AvailableYearsService } from '../availableYear/AvailableYearsService'
 import type { Summary } from './Summary'
-
-let instance: SummaryService | undefined = undefined
 
 export class SummaryService {
   constructor(
@@ -42,19 +37,4 @@ export class SummaryService {
       totalProfit: 0,
     }))
   }
-}
-
-export function setSummaryServiceInstance(newInstance: SummaryService) {
-  instance = newInstance
-}
-
-export function getSummaryServiceInstance() {
-  if (instance === undefined)
-    setSummaryServiceInstance(
-      new SummaryService(
-        new PersistentStorage<Summary, [string, number]>('summaries#{0}#{1}'),
-        getAvailableYearsServiceInstance()
-      )
-    )
-  return instance
 }
