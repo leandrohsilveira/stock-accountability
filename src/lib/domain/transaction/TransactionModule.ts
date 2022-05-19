@@ -1,42 +1,36 @@
-import { FireStoreCollection, FireStoreModule, FireStoreRef } from '$lib/config'
-import { useModule } from '$lib/config/di'
-import type DIContainer from 'rsdi'
-import { object, use } from 'rsdi'
-import { AvailableYearsModule } from '../availableYear/AvailableYearsModule'
-import { AvailableYearsService } from '../availableYear/AvailableYearsService'
-import { CustomerModule } from '../customer/CustomerModule'
-import { CustomerService } from '../customer/CustomerService'
-import { StockModule } from '../stock/StockModule'
-import { StockService } from '../stock/StockService'
-import { SummaryModule } from '../summary/SummaryModule'
-import { SummaryService } from '../summary/SummaryService'
+import { FireStoreCollection, FireStoreRef } from '$lib/config'
+import { SingletonFactory, type Factory } from '$lib/util/di'
+import type { AvailableYearsService } from '../availableYear/AvailableYearsService'
+import type { CustomerService } from '../customer/CustomerService'
+import type { StockService } from '../stock/StockService'
+import type { SummaryService } from '../summary/SummaryService'
 import { TransactionConverter, TransactionService } from './TransactionService'
 
-export class TransactionModule {
-  constructor(di: DIContainer) {
-    useModule(FireStoreModule)
-    useModule(CustomerModule)
-    useModule(StockModule)
-    useModule(SummaryModule)
-    useModule(AvailableYearsModule)
+export class TransactionServiceFactory extends SingletonFactory<TransactionService> {
+  constructor(
+    private customerService: Factory<CustomerService>,
+    private stockService: Factory<StockService>,
+    private summaryService: Factory<SummaryService>,
+    private availableYearsService: Factory<AvailableYearsService>,
+    private fireStore: Factory<FireStoreRef>
+  ) {
+    super()
+  }
 
-    di.add({
-      TransactionConverter: object(TransactionConverter).construct(
-        use(CustomerService),
-        use(StockService)
-      ),
-      TransactionStoreCollection: object(FireStoreCollection).construct(
-        use(FireStoreRef),
+  protected create(): TransactionService {
+    return new TransactionService(
+      this.customerService.get(),
+      this.stockService.get(),
+      this.summaryService.get(),
+      this.availableYearsService.get(),
+      new FireStoreCollection(
+        this.fireStore.get(),
         'transactions',
-        use(TransactionConverter)
-      ),
-      TransactionService: object(TransactionService).construct(
-        use(CustomerService),
-        use(StockService),
-        use(SummaryService),
-        use(AvailableYearsService),
-        use('TransactionStoreCollection')
-      ),
-    })
+        new TransactionConverter(
+          this.customerService.get(),
+          this.stockService.get()
+        )
+      )
+    )
   }
 }

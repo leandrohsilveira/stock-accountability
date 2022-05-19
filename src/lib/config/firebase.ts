@@ -1,12 +1,6 @@
+import { SingletonFactory, type Factory } from '$lib/util/di'
 import { initializeApp, type FirebaseApp } from 'firebase/app'
-import type DIContainer from 'rsdi'
-import { object, use } from 'rsdi'
-import { useModule } from './di'
-import {
-  PropertiesToken,
-  PropertiesModule,
-  type Properties,
-} from './properties'
+import type { Properties } from './properties'
 
 export class FirebaseRef {
   constructor({ firebase }: Properties) {
@@ -19,11 +13,12 @@ export class FirebaseRef {
 
 // const analytics = getAnalytics(app);
 
-export class FirebaseModule {
-  constructor(di: DIContainer) {
-    useModule(PropertiesModule)
-    di.add({
-      FirebaseRef: object(FirebaseRef).construct(use(PropertiesToken)),
-    })
+export class FirebaseFactory extends SingletonFactory<FirebaseRef> {
+  constructor(private propertiesFactory: Factory<Properties>) {
+    super()
+  }
+
+  protected create(): FirebaseRef {
+    return new FirebaseRef(this.propertiesFactory.get())
   }
 }

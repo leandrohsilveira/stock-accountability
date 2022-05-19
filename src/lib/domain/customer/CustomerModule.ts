@@ -1,24 +1,24 @@
-import { FireStoreCollection, FireStoreModule, FireStoreRef } from '$lib/config'
-import { useModule } from '$lib/config/di'
-import type DIContainer from 'rsdi'
-import { factory, object, use } from 'rsdi'
-import { AuthModule } from '../auth/AuthModule'
+import { FireStoreCollection, FireStoreRef } from '$lib/config'
+import { SingletonFactory, type Factory } from '$lib/util/di'
+import type { AuthReadable } from '../auth/auth.store'
 import { customerConverter, CustomerService } from './CustomerService'
 
-export class CustomerModule {
-  constructor(di: DIContainer) {
-    useModule(FireStoreModule)
-    useModule(AuthModule)
-    di.add({
-      CustomerStoreCollection: object(FireStoreCollection).construct(
-        use(FireStoreRef),
+export class CustomerServiceFactory extends SingletonFactory<CustomerService> {
+  constructor(
+    private authFactory: Factory<AuthReadable>,
+    private fireStoreFactory: Factory<FireStoreRef>
+  ) {
+    super()
+  }
+
+  protected create(): CustomerService {
+    return new CustomerService(
+      this.authFactory.get(),
+      new FireStoreCollection(
+        this.fireStoreFactory.get(),
         'customers',
-        factory(() => customerConverter)
-      ),
-      CustomerService: object(CustomerService).construct(
-        use('AuthReadable'),
-        use('CustomerStoreCollection')
-      ),
-    })
+        customerConverter
+      )
+    )
   }
 }

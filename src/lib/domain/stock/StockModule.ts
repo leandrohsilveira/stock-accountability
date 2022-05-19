@@ -1,27 +1,24 @@
-import { FireStoreCollection, FireStoreModule, FireStoreRef } from '$lib/config'
-import { useModule } from '$lib/config/di'
-import type DIContainer from 'rsdi'
-import { object, use } from 'rsdi'
-import { CustomerModule } from '../customer/CustomerModule'
-import { CustomerService } from '../customer/CustomerService'
+import { FireStoreCollection, FireStoreRef } from '$lib/config'
+import { SingletonFactory, type Factory } from '$lib/util/di'
+import type { CustomerService } from '../customer/CustomerService'
 import { StockConverter, StockService } from './StockService'
 
-export class StockModule {
-  constructor(di: DIContainer) {
-    useModule(FireStoreModule)
-    useModule(CustomerModule)
+export class StockServiceFactory extends SingletonFactory<StockService> {
+  constructor(
+    private customerServiceFactory: Factory<CustomerService>,
+    private fireStoreFactory: Factory<FireStoreRef>
+  ) {
+    super()
+  }
 
-    di.add({
-      StockConverter: object(StockConverter).construct(use(CustomerService)),
-      StockStoreCollection: object(FireStoreCollection).construct(
-        use(FireStoreRef),
+  protected create(): StockService {
+    return new StockService(
+      this.customerServiceFactory.get(),
+      new FireStoreCollection(
+        this.fireStoreFactory.get(),
         'stocks',
-        use(StockConverter)
-      ),
-      StockService: object(StockService).construct(
-        use(CustomerService),
-        use('StockStoreCollection')
-      ),
-    })
+        new StockConverter(this.customerServiceFactory.get())
+      )
+    )
   }
 }

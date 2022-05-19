@@ -1,4 +1,5 @@
 import { browser } from '$app/env'
+import { SingletonFactory, type Factory } from '$lib/util/di'
 import {
   addDoc,
   collection,
@@ -21,11 +22,8 @@ import {
   type FirestoreDataConverter,
   type UpdateData,
 } from 'firebase/firestore'
-import type DIContainer from 'rsdi'
-import { object, use } from 'rsdi'
 import type { Readable } from 'svelte/store'
-import { useModule } from './di'
-import { FirebaseModule, FirebaseRef } from './firebase'
+import type { FirebaseRef } from './firebase'
 
 export interface StoreQuery {
   conditions?: StoreQueryCondition[]
@@ -157,11 +155,12 @@ export class FireStoreRef {
   store: Firestore
 }
 
-export class FireStoreModule {
-  constructor(di: DIContainer) {
-    useModule(FirebaseModule)
-    di.add({
-      FireStoreRef: object(FireStoreRef).construct(use(FirebaseRef)),
-    })
+export class FireStoreFactory extends SingletonFactory<FireStoreRef> {
+  constructor(private firebaseFactory: Factory<FirebaseRef>) {
+    super()
+  }
+
+  protected create(): FireStoreRef {
+    return new FireStoreRef(this.firebaseFactory.get())
   }
 }

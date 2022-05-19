@@ -1,21 +1,17 @@
-import { FirebaseModule, FirebaseRef } from '$lib/config'
-import { useModule } from '$lib/config/di'
+import type { FirebaseRef } from '$lib/config'
+import { SingletonFactory, type Factory } from '$lib/util/di'
 import { GoogleAuthProvider } from 'firebase/auth'
-import type DIContainer from 'rsdi'
-import { object, use } from 'rsdi'
-import { FirebaseAuthReadable } from './auth.store'
+import { FirebaseAuthReadable, type AuthReadable } from './auth.store'
 
-export const AuthReadableToken = 'AuthReadable'
+export class AuthFactory extends SingletonFactory<AuthReadable> {
+  constructor(private firebaseFactory: Factory<FirebaseRef>) {
+    super()
+  }
 
-export class AuthModule {
-  constructor(di: DIContainer) {
-    useModule(FirebaseModule)
-    di.add({
-      AuthProvider: object(GoogleAuthProvider),
-      [AuthReadableToken]: object(FirebaseAuthReadable).construct(
-        use(FirebaseRef),
-        use('AuthProvider')
-      ),
-    })
+  protected create(): AuthReadable {
+    return new FirebaseAuthReadable(
+      this.firebaseFactory.get(),
+      new GoogleAuthProvider()
+    )
   }
 }

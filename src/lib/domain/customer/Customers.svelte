@@ -1,15 +1,8 @@
-<script context="module" lang="ts">
-  import { useModule } from '$lib/config/di'
-  import { CustomerModule } from './CustomerModule'
-
-  useModule(CustomerModule)
-</script>
-
 <script lang="ts">
-  import IconAdd from '$lib/icons/add.svg?component'
   import Card from '$lib/components/Card.svelte'
   import Page from '$lib/components/Page.svelte'
   import { useTranslate } from '$lib/config'
+  import { customerServiceFactory } from '$lib/config/di'
   import type { Customer, SubmitCustomer } from '$lib/domain/customer/Customer'
   import CustomerForm from '$lib/domain/customer/CustomerForm.svelte'
   import CustomerTable from '$lib/domain/customer/CustomerTable.svelte'
@@ -17,11 +10,10 @@
     addErrorMessage,
     addSuccessMessage,
   } from '$lib/domain/message/message.store'
+  import IconAdd from '$lib/icons/add.svg?component'
   import { createEventDispatcher } from 'svelte'
-  import { getInstance } from '$lib/config/di'
-  import { CustomerService } from './CustomerService'
 
-  const customerService = getInstance(CustomerService)
+  const customerService = customerServiceFactory.get()
   const dispatch = createEventDispatcher<{ view: string }>()
 
   const t = useTranslate({
