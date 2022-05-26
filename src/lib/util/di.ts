@@ -10,5 +10,9 @@ export abstract class SingletonFactory<T> implements Factory<T> {
     return this.instance
   }
 
+  set(instance: T): void {
+    this.instance = instance
+  }
+
   protected abstract create(): T
 }
