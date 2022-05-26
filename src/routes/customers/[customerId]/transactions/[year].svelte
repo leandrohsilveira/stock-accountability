@@ -1,4 +1,10 @@
 <script context="module" lang="ts">
+  import { goto } from '$app/navigation'
+  import Synchronizer from '$lib/components/Synchronizer.svelte'
+  import { transactionServiceFactory } from '$lib/config/di'
+  import Guard from '$lib/domain/auth/Guard.svelte'
+  import CustomerTransactions from '$lib/domain/transaction/CustomerTransactions.svelte'
+  import { ROUTES } from '$lib/router'
   import type { Load } from '@sveltejs/kit'
 
   export const load: Load = ({ params }) => ({
@@ -10,13 +16,7 @@
 </script>
 
 <script lang="ts">
-  import CustomerTransactions from '$lib/domain/transaction/CustomerTransactions.svelte'
-  import { goto } from '$app/navigation'
-  import { ROUTES } from '$lib/router'
-  import Guard from '$lib/domain/auth/Guard.svelte'
-  import Synchronizer from '$lib/components/Synchronizer.svelte'
-  import { getTransactionServiceInstance } from '$lib/domain/transaction/TransactionService'
-  const transactionService = getTransactionServiceInstance()
+  const transactionService = transactionServiceFactory.get()
 
   export let customerId: string
   export let year: number

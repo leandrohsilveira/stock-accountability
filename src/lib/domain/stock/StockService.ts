@@ -1,23 +1,13 @@
-import {
-  FireStoreCollection,
-  getFirebaseInstance,
-  getFireStoreInstance,
-  type StoreCollection,
-} from '$lib/config'
+import type { StoreCollection } from '$lib/config'
 import type {
   DocumentData,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
 } from 'firebase/firestore'
-import {
-  getCustomerServiceInstance,
-  type CustomerService,
-} from '../customer/CustomerService'
+import type { CustomerService } from '../customer/CustomerService'
 import type { EditStock, Stock } from './Stock'
 
-let instance: StockService | undefined = undefined
-
-class StockConverter implements FirestoreDataConverter<Stock> {
+export class StockConverter implements FirestoreDataConverter<Stock> {
   constructor(private customerService: CustomerService) {}
   fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>): Stock {
     const data = snapshot.data()
@@ -94,23 +84,4 @@ export class StockService {
       name: stock.newName,
     })
   }
-}
-
-export function setStockServiceInstance(service: StockService) {
-  instance = service
-}
-
-export function getStockServiceInstance() {
-  if (instance === undefined)
-    setStockServiceInstance(
-      new StockService(
-        getCustomerServiceInstance(),
-        new FireStoreCollection(
-          getFireStoreInstance(),
-          'stocks',
-          new StockConverter(getCustomerServiceInstance())
-        )
-      )
-    )
-  return instance
 }

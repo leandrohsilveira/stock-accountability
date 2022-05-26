@@ -1,4 +1,5 @@
 import { browser } from '$app/env'
+import { SingletonFactory, type Factory } from '$lib/util/di'
 import {
   addDoc,
   collection,
@@ -22,7 +23,7 @@ import {
   type UpdateData,
 } from 'firebase/firestore'
 import type { Readable } from 'svelte/store'
-import { getFirebaseInstance, type FirebaseRef } from './firebase'
+import type { FirebaseRef } from './firebase'
 
 export interface StoreQuery {
   conditions?: StoreQueryCondition[]
@@ -56,8 +57,6 @@ export interface StoreCollection<T, Ref = unknown> {
   delete(id: string): Promise<void>
   patch(id: string, data: UpdateData<T>): Promise<void>
 }
-
-let instance: FireStoreRef | undefined = undefined
 
 export class FireStoreCollection<T>
   implements StoreCollection<T, DocumentReference<T>>
@@ -147,7 +146,7 @@ export class FireStoreCollection<T>
   }
 }
 
-class FireStoreRef {
+export class FireStoreRef {
   constructor(public firebaseRef: FirebaseRef) {
     this.store = getFirestore(firebaseRef.app)
     browser && enableIndexedDbPersistence(this.store)
@@ -156,12 +155,12 @@ class FireStoreRef {
   store: Firestore
 }
 
-export function setFireStoreInstance(newInstance: FireStoreRef) {
-  instance = newInstance
-}
+export class FireStoreFactory extends SingletonFactory<FireStoreRef> {
+  constructor(private firebaseFactory: Factory<FirebaseRef>) {
+    super()
+  }
 
-export function getFireStoreInstance() {
-  if (instance === undefined)
-    setFireStoreInstance(new FireStoreRef(getFirebaseInstance()))
-  return instance
+  protected create(): FireStoreRef {
+    return new FireStoreRef(this.firebaseFactory.get())
+  }
 }

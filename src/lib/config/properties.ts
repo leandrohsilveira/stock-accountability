@@ -1,3 +1,5 @@
+import { SingletonFactory } from '$lib/util/di'
+
 export interface FirebaseProperties {
   apiKey: string
   authDomain: string
@@ -12,21 +14,25 @@ export interface Properties {
   firebase: FirebaseProperties
 }
 
-export const properties: Properties = {
-  firebase: {
-    apiKey: to(import.meta.env.VITE_FIREBASE_API_KEY, String),
-    authDomain: to(import.meta.env.VITE_FIREBASE_AUTH_DOMAIN, String),
-    projectId: to(import.meta.env.VITE_FIREBASE_PROJECT_ID, String),
-    storageBucket: to(import.meta.env.VITE_FIREBASE_STORAGE_BUCKET, String),
-    messagingSenderId: to(
-      import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-      String
-    ),
-    appId: to(import.meta.env.VITE_FIREBASE_APP_ID, String),
-    measurementId: to(import.meta.env.VITE_FIREBASE_MEASUREMENT_ID, String),
-  },
-}
-
 function to<T>(val: string | boolean, parser: (val: unknown) => T) {
   return val ? parser(val) : undefined
+}
+
+export class PropertiesFactory extends SingletonFactory<Properties> {
+  protected create(): Properties {
+    return {
+      firebase: {
+        apiKey: to(import.meta.env.VITE_FIREBASE_API_KEY, String),
+        authDomain: to(import.meta.env.VITE_FIREBASE_AUTH_DOMAIN, String),
+        projectId: to(import.meta.env.VITE_FIREBASE_PROJECT_ID, String),
+        storageBucket: to(import.meta.env.VITE_FIREBASE_STORAGE_BUCKET, String),
+        messagingSenderId: to(
+          import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+          String
+        ),
+        appId: to(import.meta.env.VITE_FIREBASE_APP_ID, String),
+        measurementId: to(import.meta.env.VITE_FIREBASE_MEASUREMENT_ID, String),
+      },
+    }
+  }
 }

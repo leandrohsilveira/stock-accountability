@@ -1,12 +1,10 @@
 <script lang="ts">
   import { browser } from '$app/env'
-
   import { goto } from '$app/navigation'
   import { page } from '$app/stores'
+  import { authFactory } from '$lib/config/di'
 
-  import { getAuthStoreInstance } from './auth.store'
-
-  const authStore = getAuthStoreInstance()
+  const authStore = authFactory.get()
   const isLoggedIn = authStore.isLoggedIn
   const loading = authStore.loading
 

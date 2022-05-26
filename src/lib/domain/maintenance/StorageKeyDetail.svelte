@@ -1,15 +1,17 @@
 <script lang="ts">
   import Modal from '$lib/components/Modal.svelte'
   import { useTranslate } from '$lib/config'
+  import {
+    availableYearsServiceFactory,
+    summaryServiceFactory,
+  } from '$lib/config/di'
   import SummaryTable from '$lib/domain/summary/SummaryTable.svelte'
-  import { getAvailableYearsServiceInstance } from '../availableYear/AvailableYearsService'
-  import { getSummaryServiceInstance } from '../summary/SummaryService'
   import type { StorageKey } from './Maintenance'
   import i18n from './StorageKeyDetail.i18n.json'
   import YearTable from './YearTable.svelte'
 
-  const summaryService = getSummaryServiceInstance()
-  const availableYearsService = getAvailableYearsServiceInstance()
+  const summaryService = summaryServiceFactory.get()
+  const availableYearsService = availableYearsServiceFactory.get()
 
   export let item: StorageKey | undefined = undefined
 

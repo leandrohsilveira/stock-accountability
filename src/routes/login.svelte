@@ -1,25 +1,27 @@
 <script context="module" lang="ts">
+  import { goto } from '$app/navigation'
+  import { authFactory } from '$lib/config/di'
+  import Login from '$lib/domain/auth/Login.svelte'
+  import { ROUTES } from '$lib/router'
   import type { Load } from '@sveltejs/kit'
 
   export const load: Load = ({ url }) => {
+    const param = url.searchParams.get('href')
+    let hrefURL = param ? new URL(param, url) : undefined
+    if (hrefURL && hrefURL.origin !== url.origin) hrefURL = undefined
+
     return {
       props: {
-        href: url.searchParams.get('href'),
+        href: hrefURL?.pathname,
       },
     }
   }
 </script>
 
 <script lang="ts">
-  import { getAuthStoreInstance } from '$lib/domain/auth/auth.store'
-  import { goto } from '$app/navigation'
-  import Login from '$lib/domain/auth/Login.svelte'
-  import { onMount } from 'svelte'
-  import { ROUTES } from '$lib/router'
-
   export let href: string
 
-  const authStore = getAuthStoreInstance()
+  const authStore = authFactory.get()
   const isLoggedIn = authStore.isLoggedIn
   const loading = authStore.loading
 

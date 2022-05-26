@@ -5,6 +5,12 @@
   import YearInput from '$lib/components/YearInput.svelte'
   import { useTranslate } from '$lib/config'
   import {
+    customerServiceFactory,
+    stockServiceFactory,
+    summaryServiceFactory,
+    transactionServiceFactory,
+  } from '$lib/config/di'
+  import {
     addErrorMessage,
     addSuccessMessage,
   } from '$lib/domain/message/message.store'
@@ -19,16 +25,12 @@
   import TransactionForm from '$lib/domain/transaction/TransactionForm.svelte'
   import TransactionTable from '$lib/domain/transaction/TransactionTable.svelte'
   import { createEventDispatcher, onMount } from 'svelte'
-  import { getCustomerServiceInstance } from '../customer/CustomerService'
-import { on } from '../event/eventStore';
-  import { getStockServiceInstance } from '../stock/StockService'
-  import { getSummaryServiceInstance } from '../summary/SummaryService'
-  import { getTransactionServiceInstance } from './TransactionService'
+  import { on } from '../event/eventStore'
 
-  const stockService = getStockServiceInstance()
-  const customerService = getCustomerServiceInstance()
-  const transactionService = getTransactionServiceInstance()
-  const summaryService = getSummaryServiceInstance()
+  const stockService = stockServiceFactory.get()
+  const customerService = customerServiceFactory.get()
+  const summaryService = summaryServiceFactory.get()
+  const transactionService = transactionServiceFactory.get()
 
   const dispatch = createEventDispatcher<{
     back: undefined

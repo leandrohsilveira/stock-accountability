@@ -1,6 +1,4 @@
-import { PersistentStorage } from '$lib/util/storage'
-
-let instance: AvailableYearsService | undefined = undefined
+import type { PersistentStorage } from '$lib/util/storage'
 
 export class AvailableYearsService {
   constructor(private storage: PersistentStorage<number, [string]>) {}
@@ -20,22 +18,4 @@ export class AvailableYearsService {
       [customerId]
     )
   }
-}
-
-export function setAvailableYearsServiceInstance(
-  newInstance: AvailableYearsService
-) {
-  instance = newInstance
-}
-
-export function getAvailableYearsServiceInstance() {
-  if (instance === undefined)
-    setAvailableYearsServiceInstance(
-      new AvailableYearsService(
-        new PersistentStorage<number, [string]>('years#{0}', {
-          beforePersist: (years) => [...new Set(years)].sort(),
-        })
-      )
-    )
-  return instance
 }
