@@ -27,7 +27,7 @@ export class CustomerService {
   constructor(
     private auth: AuthReadable,
     private collection: StoreCollection<Customer>
-  ) {}
+  ) { }
 
   ref(id: string): unknown {
     return this.collection.ref(id)

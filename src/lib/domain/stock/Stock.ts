@@ -1,10 +1,10 @@
-export interface Stock {
+export type Stock = {
   id: string
   name: string
   customerId: string
 }
 
-export interface EditStock {
+export type EditStock = {
   previousName: string
   newName: string
 }

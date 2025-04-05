@@ -6,7 +6,7 @@ import type { Stock } from '../stock/Stock'
 
 export type TransactionType = 'PURCHASE' | 'SELL'
 
-export interface Transaction {
+export type Transaction = {
   id: string
   stockId: string
   customerId: string
@@ -97,7 +97,7 @@ export function computeTransactions(
       profit:
         transaction.type === 'SELL'
           ? total -
-            (previousTransaction?.averageCost ?? 0) * transaction.quantity
+          (previousTransaction?.averageCost ?? 0) * transaction.quantity
           : undefined,
     })
   })

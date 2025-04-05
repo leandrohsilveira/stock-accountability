@@ -1,7 +1,7 @@
 import type { ComputedTransaction } from '$lib/domain/transaction/Transaction'
 import { findBy } from '$lib/util/storage'
 
-export interface Summary {
+export type Summary = {
   year: number
   stockId: string
   customerId: string
@@ -11,7 +11,7 @@ export interface Summary {
   totalProfit: number
 }
 
-export interface MergedSummary {
+export type MergedSummary = {
   stockId: string
   previousAmount: number
   currentAmount: number

@@ -42,12 +42,15 @@ export interface StoreQueryCondition {
   value: unknown
 }
 
-export interface SyncChange<T> {
+export interface SyncChange<T extends Record<string, unknown>> {
   data: T
   change: 'added' | 'removed' | 'modified'
 }
 
-export interface StoreCollection<T, Ref = unknown> {
+export interface StoreCollection<
+  T extends Record<string, unknown>,
+  Ref = unknown
+  > {
   ref(id: string): Ref
   syncChanges(query: StoreQuery): Readable<SyncChange<T>[]>
   findAll(query: StoreQuery): Promise<T[]>
@@ -58,14 +61,14 @@ export interface StoreCollection<T, Ref = unknown> {
   patch(id: string, data: UpdateData<T>): Promise<void>
 }
 
-export class FireStoreCollection<T>
+export class FireStoreCollection<T extends Record<string, unknown>>
   implements StoreCollection<T, DocumentReference<T>>
 {
   constructor(
     private firestore: FireStoreRef,
     private name: string,
     private converter: FirestoreDataConverter<T>
-  ) {}
+  ) { }
 
   private get store() {
     return this.firestore.store
